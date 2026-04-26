@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>מסע משפחת גלון · מאודסה אל תל אביב</title>
+<meta name="description" content="ארכיון משפחתי של פרופ׳ עזרא גלון (1927-2014) - גנטיקאי צמחים ישראלי. מסע משפחתי מאודסה דרך לייפציג לתל אביב, פלמ״ח ומכון ויצמן.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="מסע משפחת גלון · מאודסה אל תל אביב">
+<meta property="og:description" content="ארכיון משפחתי של פרופ׳ עזרא גלון (1927-2014) - גנטיקאי צמחים ישראלי.">
+<meta property="og:image" content="https://hemibl.github.io/family-galun-archive/img/c20.jpg">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%23f4f1ea'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-family='Georgia,serif' font-size='68' font-weight='700' fill='%232d6b58'%3Eג%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -11,13 +19,19 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{
-  --cream:#f4ede0;
-  --paper:#ebe1cd;
-  --ink:#1d1611;
-  --sepia:#6b4a2b;
-  --gold:#a07a3a;
-  --rust:#8a3a1f;
-  --shadow:rgba(29,22,17,0.18);
+  --cream:#F4EDE0;
+  --paper:#EDE3D0;
+  --ink:#1F1812;
+  --sepia:#5C4A38;
+  --muted:#8A7560;
+  --gold:#8B6F3D;
+  --gold-soft:#B59968;
+  --rust:#7A2E2E;
+  --accent-ink:#2C3E5A;
+  --bg-deep:#2A1F15;
+  --bg-deep-darker:#0E0907;
+  --shadow:rgba(58,32,18,0.18);
+  --shadow-deep:0 12px 40px rgba(14,9,7,0.28);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -37,18 +51,25 @@ img{max-width:100%;height:auto;display:block}
   display:flex;
   align-items:center;
   justify-content:center;
-  background:radial-gradient(ellipse at center, #2a1f15 0%, #0e0907 100%);
+  background:radial-gradient(ellipse at center, var(--bg-deep) 0%, var(--bg-deep-darker) 100%);
   overflow:hidden;
 }
 .hero::before{
   content:'';
   position:absolute;inset:0;
   background:url('img/a08.jpg') center/contain no-repeat;
-  opacity:.18;
+  opacity:.16;
   filter:sepia(.6) contrast(1.1);
+}
+.hero::after{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at center, rgba(14,9,7,0.55) 0%, rgba(14,9,7,0.85) 70%);
+  pointer-events:none;
 }
 .hero-content{
   position:relative;
+  z-index:2;
   text-align:center;
   color:var(--cream);
   padding:2rem;
@@ -60,32 +81,36 @@ img{max-width:100%;height:auto;display:block}
   letter-spacing:-0.02em;
   line-height:1.1;
   margin-bottom:1.5rem;
-  text-shadow:0 4px 30px rgba(0,0,0,.6);
+  text-shadow:0 4px 30px rgba(0,0,0,.7), 0 2px 8px rgba(0,0,0,.5);
   word-break:keep-all;
 }
 .hero h1 span{
   display:block;
   font-size:0.5em;
-  font-weight:400;
-  color:var(--gold);
+  font-weight:500;
+  color:var(--gold-soft);
   letter-spacing:0.08em;
   margin-bottom:1rem;
+  text-shadow:0 2px 12px rgba(0,0,0,.6);
 }
 .hero p{
   font-size:clamp(1rem,1.6vw,1.25rem);
-  font-weight:300;
-  color:#d8c8a8;
+  font-weight:400;
+  color:#EBDBC0;
   max-width:600px;
   margin:0 auto 3rem;
+  text-shadow:0 2px 10px rgba(0,0,0,.5);
 }
 .scroll-hint{
   position:absolute;
   bottom:3rem;
   left:50%;
   transform:translateX(-50%);
-  color:var(--gold);
+  z-index:2;
+  color:var(--gold-soft);
   font-size:0.85rem;
   letter-spacing:0.3em;
+  text-shadow:0 2px 8px rgba(0,0,0,.6);
   animation:bounce 2.5s infinite;
 }
 .scroll-hint::after{
@@ -105,7 +130,7 @@ img{max-width:100%;height:auto;display:block}
   padding:9rem 2rem;
   position:relative;
 }
-.chapter:nth-of-type(even){background:var(--paper)}
+.chapter:nth-of-type(even):not(.chapter-dark){background:var(--paper)}
 
 .chapter-inner{
   max-width:1100px;
@@ -130,23 +155,26 @@ img{max-width:100%;height:auto;display:block}
   font-family:'Heebo',sans-serif;
   font-weight:300;
   font-size:1.5rem;
-  color:var(--sepia);
+  color:var(--accent-ink);
   margin-bottom:2.5rem;
   letter-spacing:0.05em;
 }
 .chapter p{
   font-size:1.15rem;
+  line-height:1.8;
   margin-bottom:1.5rem;
-  max-width:680px;
+  max-width:38em;
 }
 .chapter p.lead{
   font-size:1.4rem;
+  line-height:1.7;
   font-weight:400;
-  color:var(--sepia);
+  color:var(--accent-ink);
   font-style:italic;
   border-right:3px solid var(--gold);
   padding-right:1.25rem;
   margin:2rem 0;
+  max-width:36em;
 }
 
 /* ---------- LAYOUT BLOCKS ---------- */
@@ -169,7 +197,7 @@ img{max-width:100%;height:auto;display:block}
 }
 .photo:hover{transform:rotate(0) scale(1.02);z-index:5}
 .photo.r{transform:rotate(1.5deg)}
-.photo img{filter:sepia(.15) contrast(1.05);width:100%;height:auto;display:block;cursor:zoom-in}
+.photo img{filter:sepia(.15) contrast(1.05);width:100%;height:auto;display:block;cursor:zoom-in;aspect-ratio:auto}
 .photo .zoom-btn{
   position:absolute;top:1.2rem;left:1.2rem;
   background:rgba(29,22,17,.75);color:var(--cream);
@@ -190,9 +218,12 @@ img{max-width:100%;height:auto;display:block}
 
 .gallery{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+  grid-template-columns:repeat(2, 1fr);
   gap:2rem;
   margin-top:3rem;
+}
+@media(max-width:600px){
+  .gallery{grid-template-columns:1fr}
 }
 .gallery .photo{transform:rotate(0)}
 .gallery .photo:nth-child(odd){transform:rotate(-1deg)}
@@ -248,11 +279,25 @@ img{max-width:100%;height:auto;display:block}
   border-bottom:1px solid rgba(255,255,255,.1);
   display:flex;
   justify-content:space-between;
+  align-items:baseline;
+  gap:1rem;
   font-family:'Heebo',sans-serif;
   font-weight:300;
 }
 .factbox li:last-child{border:none}
-.factbox li b{font-weight:500;color:var(--gold);font-family:'Heebo',sans-serif}
+.factbox li span{flex:1;min-width:0}
+.factbox li b{
+  font-weight:500;color:var(--gold);font-family:'Heebo',sans-serif;
+  white-space:nowrap;flex:none;
+}
+@media(max-width:520px){
+  .factbox{padding:1.75rem 1.4rem}
+  .factbox li{
+    flex-direction:column;align-items:flex-start;gap:.2rem;
+    padding:.75rem 0;
+  }
+  .factbox li b{font-size:.95rem}
+}
 
 /* MAP */
 .map-section{
@@ -286,11 +331,36 @@ img{max-width:100%;height:auto;display:block}
 .galon-popup b{color:var(--gold);font-size:1.1rem;display:block;margin-bottom:.25rem}
 .galon-popup .yr{color:var(--gold);font-weight:300;font-size:.85rem}
 .galon-marker{
-  background:var(--gold);width:14px;height:14px;border-radius:50%;
-  border:3px solid var(--cream);box-shadow:0 0 0 2px var(--rust);
+  background:var(--gold);width:26px;height:26px;border-radius:50%;
+  border:2px solid var(--cream);box-shadow:0 0 0 2px var(--rust),0 4px 10px rgba(0,0,0,.35);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);font-family:'Heebo',sans-serif;font-weight:700;font-size:.78rem;
+  line-height:1;cursor:pointer;transition:transform .25s, box-shadow .25s;
 }
-.galon-marker.active{background:var(--rust);width:18px;height:18px}
-.galon-marker.current{background:var(--rust);box-shadow:0 0 0 2px var(--cream),0 0 0 6px var(--rust);transform:scale(1.3)}
+.galon-marker:hover{transform:scale(1.15)}
+.galon-marker.current{
+  background:var(--rust);color:var(--cream);
+  box-shadow:0 0 0 3px var(--cream),0 0 0 7px var(--rust),0 6px 16px rgba(0,0,0,.4);
+  transform:scale(1.18);
+}
+/* Animated path - fills as user scrolls through map section */
+.map svg path.galon-path{
+  stroke:var(--gold);stroke-width:3;fill:none;
+  stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000);
+  filter:drop-shadow(0 0 6px rgba(95,163,149,.4));
+  transition:stroke-dashoffset .12s linear;
+}
+.galon-popup .leaflet-popup-content{margin:0;width:240px}
+.galon-popup .pop-img{
+  width:100%;height:130px;object-fit:cover;display:block;
+  border-bottom:1px solid var(--gold);
+}
+.galon-popup .pop-body{padding:.7rem .9rem .8rem}
+.galon-popup .pop-body .num{
+  display:inline-block;width:22px;height:22px;border-radius:50%;
+  background:var(--gold);color:var(--ink);font-weight:700;
+  text-align:center;line-height:22px;font-size:.78rem;margin-left:.4rem;
+}
 .city-nav{
   display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;
   max-width:1100px;margin:0 auto 1.5rem;
@@ -401,16 +471,16 @@ img{max-width:100%;height:auto;display:block}
 }
 .tree .gen::before{
   content:'';position:absolute;top:-2rem;left:50%;
-  width:1px;height:2rem;background:var(--sepia);opacity:.5;
+  width:2px;height:2rem;background:var(--sepia);opacity:.85;
 }
 .tree .gen:first-child::before{display:none}
 .tree .person{
-  background:var(--cream);border:1px solid rgba(107,74,43,.3);
+  background:var(--cream);border:1px solid rgba(107,74,43,.35);
   padding:1rem 1.2rem .9rem;text-align:center;
   font-family:'Heebo',sans-serif;font-size:.95rem;
-  min-width:160px;cursor:pointer;
-  transition:all .25s;border-radius:6px;
-  box-shadow:0 2px 8px rgba(107,74,43,.06);
+  min-width:190px;max-width:200px;cursor:pointer;
+  transition:all .25s;border-radius:4px;
+  box-shadow:0 2px 8px rgba(107,74,43,.08);
   position:relative;
 }
 .tree .person:hover{
@@ -419,12 +489,21 @@ img{max-width:100%;height:auto;display:block}
   border-color:var(--gold);
 }
 .tree .person .avatar{
-  width:48px;height:48px;border-radius:50%;
-  background:var(--paper);border:2px solid var(--sepia);
+  width:54px;height:54px;border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.4), transparent 60%),
+    var(--paper);
+  border:2px solid var(--sepia);
   display:flex;align-items:center;justify-content:center;
-  font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:1.2rem;
-  color:var(--sepia);margin:0 auto .6rem;
+  color:var(--sepia);margin:0 auto .65rem;
   background-size:cover;background-position:center;
+  position:relative;overflow:hidden;
+}
+/* Generic silhouette for avatars without a photo (those not styled with background-image) */
+.tree .person .avatar:not([style*="background-image"])::before{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 54 54' fill='none'%3E%3Ccircle cx='27' cy='20' r='8' fill='%235C4A38' opacity='.55'/%3E%3Cpath d='M11 50 C11 38, 19 33, 27 33 C35 33, 43 38, 43 50 Z' fill='%235C4A38' opacity='.55'/%3E%3C/svg%3E");
+  background-size:contain;background-repeat:no-repeat;background-position:center bottom;
 }
 .tree .person.featured{
   background:var(--gold);color:var(--cream);
@@ -433,21 +512,29 @@ img{max-width:100%;height:auto;display:block}
 .tree .person.featured .avatar{
   background-color:var(--rust);color:var(--cream);border-color:var(--cream);
 }
+.tree .person.featured .avatar:not([style*="background-image"])::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 54 54' fill='none'%3E%3Ccircle cx='27' cy='20' r='8' fill='%23F4EDE0' opacity='.85'/%3E%3Cpath d='M11 50 C11 38, 19 33, 27 33 C35 33, 43 38, 43 50 Z' fill='%23F4EDE0' opacity='.85'/%3E%3C/svg%3E");
+}
 .tree .person.featured span{color:#f3e3c4 !important}
 .tree .person b{display:block;font-weight:600;font-size:1rem;margin-bottom:.25rem;line-height:1.3}
-.tree .person span{font-size:.78rem;color:var(--sepia);font-weight:300;display:block}
+.tree .person span{font-size:.78rem;color:var(--sepia);font-weight:300;display:block;direction:ltr;unicode-bidi:isolate}
+.tree .person.featured span{direction:ltr;unicode-bidi:isolate}
 .tree .person .more{
   font-size:.7rem;color:var(--gold);margin-top:.5rem;
   letter-spacing:.1em;opacity:0;transition:opacity .25s;
 }
 .tree .person:hover .more{opacity:1}
 .tree .couple{
-  display:flex;gap:1.5rem;align-items:center;position:relative;
+  display:flex;gap:1.8rem;align-items:center;position:relative;
 }
 .tree .couple::after{
   content:'∞';position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
-  font-size:1rem;color:var(--gold);opacity:.5;
+  font-size:1.5rem;font-weight:700;color:var(--gold);
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  background:var(--cream);border:1.5px solid var(--gold);border-radius:50%;
+  box-shadow:0 2px 6px rgba(107,74,43,.15);
+  z-index:2;
 }
 
 /* Person modal */
@@ -559,11 +646,126 @@ html[lang="en"] .res-btn{text-align:left}
 .reveal{
   opacity:0;
   transform:translateY(40px);
-  transition:opacity 1s ease, transform 1s ease;
+  transition:opacity .6s cubic-bezier(0.22,1,0.36,1), transform .6s cubic-bezier(0.22,1,0.36,1);
 }
 .reveal.in{opacity:1;transform:none}
 .reveal-d2{transition-delay:.15s}
 .reveal-d3{transition-delay:.3s}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:0.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.001ms !important;
+    transition-delay:0ms !important;
+    scroll-behavior:auto !important;
+  }
+  html{scroll-behavior:auto !important}
+  .reveal{opacity:1 !important;transform:none !important}
+  .gallery .photo,.photo{transform:none !important}
+  .map svg path.galon-path{stroke-dashoffset:0 !important;transition:none !important}
+  #progress{transition:none !important}
+  .tts-btn.playing .tts-bars rect{animation:none !important;transform:scaleY(.7) !important}
+}
+
+/* TOC SIDEBAR */
+.toc{
+  position:fixed;top:50%;left:1rem;transform:translateY(-50%);
+  z-index:1000;font-family:'Heebo',sans-serif;
+  display:flex;flex-direction:column;align-items:flex-start;gap:.4rem;
+}
+.toc-toggle{
+  background:rgba(31,24,18,.4);color:rgba(244,237,224,.7);
+  border:1px solid rgba(139,111,61,.4);border-radius:50%;
+  width:34px;height:34px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);transition:all .25s;
+  margin-bottom:.3rem;
+  opacity:.55;
+}
+.toc:hover .toc-toggle,
+.toc:focus-within .toc-toggle,
+.toc.open .toc-toggle,
+body.is-scrolling .toc .toc-toggle{
+  opacity:1;background:rgba(31,24,18,.85);color:var(--cream);
+  border-color:var(--gold);
+}
+.toc-toggle svg{width:18px;height:18px}
+.toc-toggle:hover{background:var(--gold);color:var(--ink)}
+.toc-list{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:.05rem;
+  opacity:0.22;transition:opacity .4s ease;
+}
+.toc:hover .toc-list,
+.toc:focus-within .toc-list,
+.toc.open .toc-list,
+body.is-scrolling .toc .toc-list{opacity:1}
+.toc-list li{position:relative}
+.toc-list a{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.3rem .55rem;
+  color:var(--sepia);text-decoration:none;
+  font-size:.82rem;font-weight:500;
+  border-radius:20px;transition:all .25s;
+  white-space:nowrap;
+}
+.toc-list a::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:rgba(120,90,60,0.35);border:1.5px solid transparent;
+  flex:none;transition:all .25s;
+}
+.toc-list a .toc-label{
+  opacity:0;max-width:0;overflow:hidden;
+  transition:opacity .25s, max-width .3s;
+}
+.toc:hover .toc-list a .toc-label,
+.toc:focus-within .toc-list a .toc-label,
+.toc.open .toc-list a .toc-label{opacity:1;max-width:240px}
+.toc:hover .toc-list a,
+.toc:focus-within .toc-list a,
+.toc.open .toc-list a{
+  background:rgba(244,237,224,.92);backdrop-filter:blur(8px);
+  box-shadow:0 2px 8px var(--shadow);
+}
+.toc-list a:hover{color:var(--ink)}
+.toc-list a:hover::before{width:7px;height:7px;background:var(--gold)}
+.toc-list li.current a{color:var(--ink);font-weight:700}
+.toc-list li.current a::before{
+  width:8px;height:8px;
+  background:var(--rust);border-color:transparent;
+  box-shadow:none;transform:none;
+}
+html[lang="en"] .toc{left:auto;right:1rem}
+@media(max-width:900px){.toc{display:none}}
+
+/* Back to top button */
+.to-top{
+  position:fixed;bottom:1.5rem;left:1.5rem;
+  z-index:1000;width:44px;height:44px;border-radius:50%;
+  background:rgba(31,24,18,.88);color:var(--cream);
+  border:1px solid var(--gold);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+  box-shadow:0 6px 20px rgba(0,0,0,.3);
+  opacity:0;transform:translateY(12px) scale(.9);pointer-events:none;
+  transition:opacity .25s, transform .25s, background .2s, color .2s;
+}
+.to-top svg{width:20px;height:20px}
+.to-top.visible{opacity:1;transform:none;pointer-events:auto}
+.to-top:hover{background:var(--gold);color:var(--ink)}
+html[lang="en"] .to-top{left:auto;right:1.5rem}
+@media(max-width:520px){
+  .to-top{bottom:5.5rem}
+}
+
+/* Reading progress bar */
+#progress{
+  position:fixed;top:0;left:0;height:3px;width:0;
+  background:linear-gradient(to left,var(--gold),var(--rust));
+  z-index:9998;transition:width .15s ease-out;
+  pointer-events:none;
+}
 
 /* DROP CAP */
 .dropcap::first-letter{
@@ -581,36 +783,90 @@ html[lang="en"] .dropcap::first-letter{
 
 /* AUDIO NARRATION */
 .tts-btn{
-  display:inline-flex;align-items:center;gap:.5rem;
+  display:inline-flex;align-items:center;gap:.55rem;
   background:transparent;border:1px solid var(--gold);
   color:var(--gold);padding:.45rem 1rem;border-radius:30px;
   font-family:'Heebo',sans-serif;font-size:.85rem;cursor:pointer;
   margin-top:1.5rem;margin-bottom:0;transition:all .2s;letter-spacing:.02em;
 }
 .tts-btn:hover{background:var(--gold);color:var(--cream)}
+.tts-btn:hover .tts-bars rect{fill:var(--cream)}
 .tts-btn.playing{background:var(--rust);border-color:var(--rust);color:var(--cream)}
-.tts-btn .ico{width:14px;height:14px;display:inline-block}
-.chapter[style*="ink"] .tts-btn{color:var(--gold);border-color:var(--gold)}
+.tts-btn.playing .tts-bars rect{fill:var(--cream)}
+.tts-btn .tts-bars{width:18px;height:18px;flex:none;display:block}
+.tts-btn .tts-bars rect{
+  fill:currentColor;transform-origin:center;
+  transform-box:fill-box;transform:scaleY(.4);
+}
+.tts-btn.playing .tts-bars rect{
+  animation:ttsBars 1s ease-in-out infinite;
+}
+.tts-btn.playing .tts-bars rect:nth-child(2){animation-delay:.15s}
+.tts-btn.playing .tts-bars rect:nth-child(3){animation-delay:.3s}
+.tts-btn.paused .tts-bars rect{animation:none;transform:scaleY(.4)}
+@keyframes ttsBars{
+  0%,100%{transform:scaleY(.35)}
+  50%{transform:scaleY(1)}
+}
+@media(prefers-reduced-motion:reduce){
+  .tts-btn.playing .tts-bars rect{animation:none;transform:scaleY(.7)}
+}
+.chapter-dark{background:var(--bg-deep);color:var(--cream)}
+.chapter-dark .chapter-num{color:var(--gold-soft)}
+.chapter-dark h2,.chapter-dark h3{color:var(--cream)}
+.chapter-dark .year{color:var(--gold-soft)}
+.chapter-dark p{color:var(--cream)}
+.chapter-dark p.lead{color:var(--gold-soft);border-color:var(--rust)}
+.chapter-dark .factbox{background:rgba(255,255,255,0.04);border-color:var(--gold)}
+.chapter-dark .factbox h4{color:var(--gold-soft)}
+.chapter-dark .factbox li{color:var(--cream);border-color:rgba(255,255,255,0.08)}
+.chapter-dark .factbox li b{color:var(--gold-soft)}
+.chapter-dark .tts-btn{color:var(--gold-soft);border-color:var(--gold-soft)}
+.chapter-dark .tts-btn:hover{background:var(--gold);color:var(--bg-deep);border-color:var(--gold)}
+.chapter-dark:nth-of-type(even){background:var(--bg-deep)}
 .tts-bar{
   position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);
-  background:rgba(29,22,17,.95);color:var(--cream);
-  border:1px solid var(--gold);border-radius:40px;
-  padding:.6rem 1rem;display:none;align-items:center;gap:.7rem;
-  z-index:9500;backdrop-filter:blur(10px);
+  background:rgba(29,22,17,.96);color:var(--cream);
+  border:1px solid var(--gold);border-radius:14px;
+  padding:.7rem 1rem;display:none;align-items:center;gap:.8rem;
+  z-index:9500;backdrop-filter:blur(12px);
   font-family:'Heebo',sans-serif;font-size:.9rem;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  box-shadow:0 14px 40px rgba(0,0,0,.45);
+  min-width:340px;
 }
 .tts-bar.visible{display:flex}
 .tts-bar button{
   background:transparent;border:none;color:var(--cream);
-  cursor:pointer;font-size:1.2rem;padding:.2rem .5rem;line-height:1;
+  cursor:pointer;padding:.25rem;line-height:0;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;width:34px;height:34px;transition:background .2s;
 }
-.tts-bar button:hover{color:var(--gold)}
-.tts-bar .label{padding:0 .5rem;color:#bba47a;font-size:.8rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tts-bar button:hover{background:rgba(255,255,255,.1);color:var(--gold)}
+.tts-bar button svg{width:18px;height:18px}
+.tts-bar .play-btn{background:var(--gold);color:var(--ink);width:38px;height:38px}
+.tts-bar .play-btn:hover{background:var(--rust);color:var(--cream)}
+.tts-bar .label{padding:0 .25rem;color:#bba47a;font-size:.78rem;font-variant-numeric:tabular-nums;min-width:78px;text-align:center}
+.tts-bar .seek-wrap{flex:1;display:flex;align-items:center;min-width:120px}
+.tts-bar input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:4px;
+  background:linear-gradient(to left,var(--gold) var(--p,0%),rgba(255,255,255,.18) var(--p,0%));
+  border-radius:2px;outline:none;cursor:pointer;
+}
+.tts-bar input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:14px;height:14px;
+  border-radius:50%;background:var(--cream);border:2px solid var(--gold);cursor:pointer;
+}
+.tts-bar input[type=range]::-moz-range-thumb{
+  width:14px;height:14px;border-radius:50%;background:var(--cream);border:2px solid var(--gold);cursor:pointer;border:none;
+}
 .tts-bar .speed{
-  background:transparent;border:1px solid rgba(255,255,255,.2);
-  color:var(--cream);border-radius:20px;padding:.15rem .6rem;
+  background:transparent;border:1px solid rgba(255,255,255,.25);
+  color:var(--cream);border-radius:14px;padding:.25rem .65rem;
   font-size:.75rem;font-family:'Heebo',sans-serif;cursor:pointer;
+  width:auto;height:auto;letter-spacing:.02em;
+}
+.tts-bar .speed:hover{background:rgba(255,255,255,.08);border-color:var(--gold)}
+@media(max-width:520px){
+  .tts-bar{min-width:0;width:calc(100% - 1.6rem);left:.8rem;transform:none;border-radius:14px}
 }
 .tts-reading{background:rgba(160,122,58,.15);transition:background .3s;border-radius:4px}
 
@@ -645,18 +901,37 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 </style>
 </head>
 <body>
+<div id="progress" aria-hidden="true"></div>
+<button id="toTop" class="to-top" aria-label="חזרה לראש העמוד">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
 <button class="lang-toggle" id="langToggle" aria-label="Switch language">English</button>
 
-<div class="tts-bar" id="ttsBar">
-  <button id="ttsPause" title="השהה/המשך">⏸</button>
-  <button id="ttsStop" title="עצור">⏹</button>
+<div class="tts-bar" id="ttsBar" role="region" aria-label="נגן קריינות">
+  <button class="play-btn" id="ttsPause" aria-label="השהה/המשך">
+    <svg id="ttsIconPlay" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="ttsIconPause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+  </button>
+  <button id="ttsStop" aria-label="עצור">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+  </button>
+  <div class="seek-wrap">
+    <input type="range" id="ttsSeek" min="0" max="100" value="0" aria-label="התקדמות">
+  </div>
   <span class="label" id="ttsLabel">0:00 / 0:00</span>
-  <input type="range" id="ttsSeek" min="0" max="100" value="0" style="width:140px;accent-color:#a07a3a;">
-  <button class="speed" id="ttsSpeed">1.25x</button>
+  <button class="speed" id="ttsSpeed" aria-label="מהירות">1.25x</button>
 </div>
 <audio id="ttsAudio" preload="none">
   <source id="ttsSrc" src="audio/story-he.mp3" type="audio/mpeg">
 </audio>
+
+<!-- TOC SIDEBAR -->
+<nav id="toc" class="toc" aria-label="תוכן עניינים">
+  <button class="toc-toggle" id="tocToggle" aria-label="פתח/סגור תוכן עניינים" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
+  <ol class="toc-list" id="tocList"></ol>
+</nav>
 
 <!-- HERO -->
 <section class="hero">
@@ -683,7 +958,7 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="split">
       <div class="reveal photo">
-        <img src="img/a08.jpg" alt="ברוך משה גלון עם בנו דוד">
+        <picture><source srcset="img/a08.webp" type="image/webp"><img src="img/a08.jpg" alt="ברוך משה גלון עם בנו דוד · אודסה, 1902" loading="lazy" decoding="async"></picture>
         <div class="caption">ברוך משה גלון עם בנו דוד · אודסה, 1902</div>
       </div>
       <div class="reveal reveal-d2">
@@ -705,15 +980,15 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/a09.jpg" alt="ברטה גרידן ולאזר מרקוס · קוטרוביץ 1895">
+        <picture><source srcset="img/a09.webp" type="image/webp"><img src="img/a09.jpg" alt="ברטה ולאזר מרקוס · 1895" loading="lazy" decoding="async"></picture>
         <div class="caption">ברטה ולאזר מרקוס · 1895</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/a10.jpg" alt="ארנה מרקוס · 1899">
+        <picture><source srcset="img/a10.webp" type="image/webp"><img src="img/a10.jpg" alt="ארנה מרקוס בת שנה · 1899" loading="lazy" decoding="async"></picture>
         <div class="caption">ארנה מרקוס בת שנה · 1899</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/b03.jpg" alt="ברטה מרקוס עם ילדיה · 1903">
+        <picture><source srcset="img/b03.webp" type="image/webp"><img src="img/b03.jpg" alt="ברטה מרקוס עם בנותיה · 1903" loading="lazy" decoding="async"></picture>
         <div class="caption">ברטה מרקוס עם בנותיה · 1903</div>
       </div>
     </div>
@@ -724,7 +999,7 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="split">
       <div class="reveal photo r">
-        <img src="img/b07.jpg" alt="ליבא גלון - לייפציג 1913">
+        <picture><source srcset="img/b07.webp" type="image/webp"><img src="img/b07.jpg" alt="משפחת גלון בלייפציג, 1913" loading="lazy" decoding="async"></picture>
         <div class="caption">משפחת גלון בלייפציג, 1913</div>
       </div>
       <div class="reveal reveal-d2">
@@ -734,19 +1009,19 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/b13.jpg" alt="דוד גלון 1922">
+        <picture><source srcset="img/b13.webp" type="image/webp"><img src="img/b13.jpg" alt="דוד גלון, 1922" loading="lazy" decoding="async"></picture>
         <div class="caption">דוד גלון, 1922</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/b12.jpg" alt="ארנה ודוד גלון 1920-21">
+        <picture><source srcset="img/b12.webp" type="image/webp"><img src="img/b12.jpg" alt="ארנה ודוד · 1920-1921" loading="lazy" decoding="async"></picture>
         <div class="caption">ארנה ודוד · 1920-1921</div>
       </div>
       <div class="reveal reveal-d3 photo r">
-        <img src="img/b14.jpg" alt="ארנה מרקוס 1923">
+        <picture><source srcset="img/b14.webp" type="image/webp"><img src="img/b14.jpg" alt="ארנה מרקוס · פורטרט, 1923" loading="lazy" decoding="async"></picture>
         <div class="caption">ארנה מרקוס · פורטרט, 1923</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/b16.jpg" alt="אנה ברנר 1928">
+        <picture><source srcset="img/b16.webp" type="image/webp"><img src="img/b16.jpg" alt="אנה נוימן לבית ברנר · 1928" loading="lazy" decoding="async"></picture>
         <div class="caption">אנה נוימן לבית ברנר · 1928</div>
       </div>
     </div>
@@ -766,30 +1041,30 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/b15.jpg" alt="ארנה עם אריה התינוק 1924">
+        <picture><source srcset="img/b15.webp" type="image/webp"><img src="img/b15.jpg" alt="ארנה עם אריה התינוק · 1924" loading="lazy" decoding="async"></picture>
         <div class="caption">ארנה עם אריה התינוק · 1924</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/c01.jpg" alt="אריה בעגלת תינוק קטוביץ 1924">
+        <picture><source srcset="img/c01.webp" type="image/webp"><img src="img/c01.jpg" alt="אריה ברוך בן דוד · קטוביץ, 1924" loading="lazy" decoding="async"></picture>
         <div class="caption">אריה ברוך בן דוד · קטוביץ, 1924</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/c02.jpg" alt="עזרא ואריה תינוקות">
+        <picture><source srcset="img/c02.webp" type="image/webp"><img src="img/c02.jpg" alt="עזרא ואריה · 1925" loading="lazy" decoding="async"></picture>
         <div class="caption">עזרא ואריה · 1925</div>
       </div>
       <div class="reveal photo r">
-        <img src="img/c03.jpg" alt="בית גלון בבאלסדורף">
+        <picture><source srcset="img/c03.webp" type="image/webp"><img src="img/c03.jpg" alt="בית משפחת גלון בבאלסדורף · 1926" loading="lazy" decoding="async"></picture>
         <div class="caption">בית משפחת גלון בבאלסדורף · 1926</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/c05.jpg" alt="אריה ועזרא בילדותם">
+        <picture><source srcset="img/c05.webp" type="image/webp"><img src="img/c05.jpg" alt="שני האחים, באלסדורף · 1927" loading="lazy" decoding="async"></picture>
         <div class="caption">שני האחים, באלסדורף · 1927</div>
       </div>
     </div>
 
     <div class="split" style="margin-top:4rem">
       <div class="reveal photo">
-        <img src="img/c08.jpg" alt="כיתה בבית הספר העברי בלייפציג">
+        <picture><source srcset="img/c08.webp" type="image/webp"><img src="img/c08.jpg" alt="כיתה בבית הספר העברי בלייפציג · 1930" loading="lazy" decoding="async"></picture>
         <div class="caption">כיתה בבית הספר העברי בלייפציג · 1930</div>
       </div>
       <div class="reveal reveal-d2">
@@ -800,19 +1075,19 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/c09.jpg" alt="אריה על הסוס 1929">
+        <picture><source srcset="img/c09.webp" type="image/webp"><img src="img/c09.jpg" alt="אריה על הסוס · 1929" loading="lazy" decoding="async"></picture>
         <div class="caption">אריה על הסוס · 1929</div>
       </div>
       <div class="reveal reveal-d2 photo r">
-        <img src="img/c10.jpg" alt="אריה ועזרא בלייפציג 1931">
+        <picture><source srcset="img/c10.webp" type="image/webp"><img src="img/c10.jpg" alt="אריה ועזרא · גן העיר לייפציג, 1931" loading="lazy" decoding="async"></picture>
         <div class="caption">אריה ועזרא · גן העיר לייפציג, 1931</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/c11.jpg" alt="לייפציג 1930-1931">
+        <picture><source srcset="img/c11.webp" type="image/webp"><img src="img/c11.jpg" alt="לייפציג · רחבת המלך אוגוסטוס, 1931" loading="lazy" decoding="async"></picture>
         <div class="caption">לייפציג · רחבת המלך אוגוסטוס, 1931</div>
       </div>
       <div class="reveal photo">
-        <img src="img/c12.jpg" alt="ארנה וילדים על הסלד">
+        <picture><source srcset="img/c12.webp" type="image/webp"><img src="img/c12.jpg" alt="חופשה משפחתית · 1932" loading="lazy" decoding="async"></picture>
         <div class="caption">חופשה משפחתית · 1932</div>
       </div>
     </div>
@@ -821,17 +1096,17 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
 <!-- FULL BLEED MOMENT -->
 <div class="fullbleed">
-  <img src="img/c13.jpg" alt="נופש משפחתי אחרון בגרמניה 1932">
+  <picture><source srcset="img/c13.webp" type="image/webp"><img src="img/c13.jpg" alt="אנו כאן בארצנו - ארנה ובניה, תל אביב 1933" loading="lazy" decoding="async"></picture>
   <div class="fullbleed-text">"נופש משפחתי אחרון בגרמניה · החוף הבלטי · אוגוסט 1932"</div>
 </div>
 
 <div class="fullbleed">
-  <img src="img/c14.jpg" alt="פסח אחרון בלייפציג 1933">
+  <picture><source srcset="img/c14.webp" type="image/webp"><img src="img/c14.jpg" alt="אפריל 1933 - העולם הישן מתחיל להתפרק. ינואר היה החודש שבו עלה היטלר. עכשיו צריך להחליט" loading="lazy" decoding="async"></picture>
   <div class="fullbleed-text">"אפריל 1933 - העולם הישן מתחיל להתפרק. ינואר היה החודש שבו עלה היטלר. עכשיו צריך להחליט."</div>
 </div>
 
 <!-- CHAPTER 4 - The Escape -->
-<section class="chapter" style="background:var(--ink);color:var(--cream)">
+<section class="chapter chapter-dark">
   <div class="chapter-inner">
     <div class="reveal">
       <div class="chapter-num" style="color:var(--rust)">פרק רביעי</div>
@@ -854,11 +1129,8 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="split">
       <div class="reveal photo">
-        <img src="img/c15.jpg" alt="ארנה ובניה - הגעה לתל אביב 1933">
+        <picture><source srcset="img/c15.webp" type="image/webp"><img src="img/c15.jpg" alt="אנו כאן בארצנו - ארנה ובניה בתל אביב, 1933" loading="lazy" decoding="async"></picture>
         <div class="caption">"אנו כאן בארצנו" · ארנה ובניה, תל אביב 1933</div>
-      </div>
-      <div class="reveal reveal-d2">
-        <p class="lead" style="color:var(--gold);border-color:var(--rust)">תמונה אחת אומרת הכל. אם, שני בנים, חולצות לבנות, מכנסיים קצרים. רקע של עצי דקל. ביטחון.</p>
       </div>
     </div>
   </div>
@@ -876,39 +1148,39 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/c16.jpg" alt="דוד גלון תל אביב 1934">
+        <picture><source srcset="img/c16.webp" type="image/webp"><img src="img/c16.jpg" alt="דוד גלון · תל אביב, 2.7.1934" loading="lazy" decoding="async"></picture>
         <div class="caption">דוד גלון · תל אביב, 2.7.1934</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/c17.jpg" alt="חברי כיתה ת״א">
+        <picture><source srcset="img/c17.webp" type="image/webp"><img src="img/c17.jpg" alt="חברי כיתה · משפחת גולדנברג ובני הילדים, תל אביב 1937" loading="lazy" decoding="async"></picture>
         <div class="caption">חברי כיתה · משפחת גולדנברג ובני הילדים, תל אביב 1937</div>
       </div>
       <div class="reveal reveal-d3 photo r">
-        <img src="img/c18.jpg" alt="אגודת הבריאות בית הפועל 1936">
+        <picture><source srcset="img/c18.webp" type="image/webp"><img src="img/c18.jpg" alt="אגודת הבריאות, בית הפועל - יולי 1936" loading="lazy" decoding="async"></picture>
         <div class="caption">אגודת הבריאות, "בית הפועל" · יולי 1936</div>
       </div>
       <div class="reveal photo">
-        <img src="img/c19.jpg" alt="דוד גלון על אנייה לארה״ב 1936">
+        <picture><source srcset="img/c19.webp" type="image/webp"><img src="img/c19.jpg" alt="דוד גלון על סיפון האנייה בדרך לארה״ב · 1936" loading="lazy" decoding="async"></picture>
         <div class="caption">דוד גלון על סיפון האנייה בדרך לארה"ב · 1936</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/c20.jpg" alt="עזרא בכרם הפועל">
+        <picture><source srcset="img/c20.webp" type="image/webp"><img src="img/c20.jpg" alt="עזרא בכרם המקצועי של בית הפועל · 1936" loading="lazy" decoding="async"></picture>
         <div class="caption">עזרא בכרם המקצועי של בית הפועל · 1936</div>
       </div>
     </div>
 
     <div class="reveal" style="margin-top:3rem">
-      <p class="lead">בקיץ 1941, בן 14, סיים עזרא את כיתה ח'. הוא יצא לעבוד שנה בכפר גדעון, להתכונן ללימודי חקלאות בכדורי. גרמניה הייתה כבר עולם רחוק, ארץ ישראל - הבית.</p>
+      <p class="lead">בקיץ 1941, בן 14, סיים עזרא את כיתה ח'. הוא יצא לעבוד שנה בכפר גדעון - שני משקים חקלאיים, ובמקביל שלוש שעות ביום של "לימודי המשך" אחר הצהריים, להתכונן לבחינות הכניסה ל"כדורי". גרמניה הייתה כבר עולם רחוק, ארץ ישראל - הבית.</p>
     </div>
   </div>
 </section>
 
 <!-- CHAPTER 6 - PALMACH -->
-<section class="chapter">
+<section class="chapter chapter-dark">
   <div class="chapter-inner">
     <div class="reveal">
       <div class="chapter-num">פרק שישי</div>
-      <h2>בית"ס כדורי, פלמ"ח, מלחמה</h2>
+      <h2>בית ספר כדורי, פלמ"ח, מלחמה</h2>
       <div class="year">1942-1949</div>
       <p>בסתיו 1942, בעוד מלחמת העולם השנייה בשיא, התקבל עזרא ל"כדורי" - בית הספר החקלאי האגדי על הר תבור. שנתיים לימודים, וב-1944, מיד עם סיום בית הספר - גיוס לפלמ"ח. תחילה בפלוגה א', אחר כך קורס מפקדי כיתה, ולבסוף - הפלוגה הימית.</p>
       <p>בקיץ 1947 השתחרר, ניגש לבחינות בגרות חיצוניות, והתקבל לפקולטה לחקלאות באוניברסיטה העברית. אבל אחרי חמישה שבועות של לימודים בלבד, חזר לקרבות מלחמת השחרור - הפעם בגדוד השישי, מפקד פורמנים שאחראיים על השיירות לירושלים בזמן המצור על העיר.</p>
@@ -941,7 +1213,7 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
       <h2>המדע, המעבדה, ליתי</h2>
       <div class="year">רחובות · 1953-1991</div>
       <p>ב-1953 סיים עזרא את התואר השני בפקולטה לחקלאות, התקבל לעבודה במכון ויצמן למדע במעבדה לגנטיקה של צמחים, ובמאי אותה שנה התחתן עם <b>ליתי כץ</b> - אהבת חייו, שתהיה לפרופ' לביולוגיה באוניברסיטת תל אביב.</p>
-      <p>ב-1959 קיבל את הדוקטורט מטעם האוניברסיטה העברית. ב-1960, מלגת פולברייט והמשפחה הצעירה עברה לפסדינה - לפוסט-דוקטורט במכון הטכנולוגי של קליפורניה (Caltech). שני בנים: <b>איתן</b> (1954) ו<b>אהוד</b> (1959). שניהם יקבלו אחר כך דוקטורטים בעצמם.</p>
+      <p>ב-1959, בעודו עובד במכון ויצמן, קיבל את הדוקטורט מטעם האוניברסיטה העברית. בסוף 1960, מלגת פולברייט והמשפחה הצעירה עברה לפסדינה - לפוסט-דוקטורט במכון הטכנולוגי של קליפורניה (Caltech). ב-1962 חזר למכון ויצמן וכבר אז שימש כממלא-מקום ראש המעבדה לגנטיקה של צמחים. שני בנים: <b>איתן</b> (1954) ו<b>אהוד</b> (1959).</p>
     </div>
 
     <div class="factbox">
@@ -951,13 +1223,16 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
         <li><span>תואר שני, האונ' העברית</span><b>1954</b></li>
         <li><span>ייסד המחלקה לגנטיקה של צמחים, ויצמן</span><b>1956</b></li>
         <li><span>דוקטורט (האונ' העברית, עבודת מחקר בויצמן)</span><b>1959</b></li>
-        <li><span>עמית מחקר, Caltech (פולברייט)</span><b>1960-63</b></li>
-        <li><span>עמית מחקר, מעבדות הביולוגיה בהארווארד</span><b>1967-68</b></li>
+        <li><span>עמית מחקר, Caltech (פולברייט)</span><b>1960-62</b></li>
+        <li><span>מ"מ ראש המעבדה לגנטיקה של צמחים</span><b>1962</b></li>
         <li><span>פרופסור חבר, ויצמן</span><b>1968</b></li>
+        <li><span>שבתון, מעבדות הביולוגיה בהארווארד</span><b>1967</b></li>
+        <li><span>ראש המחלקה לגנטיקה של צמחים</span><b>1970-88</b></li>
         <li><span>פרופסור מן המניין</span><b>1972</b></li>
-        <li><span>דיקן בית הספר על שם פיינברג ללימודים מתקדמים</span><b>1974</b></li>
-        <li><span>יו"ר המועצה הארצית למחקר ופיתוח</span><b>1982</b></li>
-        <li><span>מדען אורח, Hoffmann-La Roche, NJ</span><b>1985</b></li>
+        <li><span>דיקן מדרשת פיינברג ללימודים מתקדמים</span><b>1970-88</b></li>
+        <li><span>שבתון, USDA</span><b>1981</b></li>
+        <li><span>יו"ר המועצה הלאומית למחקר ופיתוח</span><b>1982-84</b></li>
+        <li><span>שבתון, Roche Institute, NJ</span><b>1985</b></li>
         <li><span>פטנטים: הסרת מתכות + זרעי קישוא</span><b>1986</b></li>
         <li><span>דיקן הפקולטה לביולוגיה</span><b>1988-91</b></li>
         <li><span>פרופסור אמריטוס</span><b>1991-</b></li>
@@ -968,9 +1243,20 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
     <p class="lead reveal">200 מאמרים מדעיים. שבעה ספרים בהוצאות בינלאומיות (Springer, World Scientific, Imperial College Press). מייסד החברה הישראלית לגנטיקה - ובהמשך נשיא כבוד שלה.</p>
 
     <div class="reveal" style="margin-top:2rem">
-      <p>הילד שברח מלייפציג ב-1933, שהבית שלו דיבר גרמנית - בנה כאן, בארץ, מעבדה שהפכה לאחת המובילות בעולם בגנטיקה של צמחים. שבתונים בהארווארד, USDA, Roche Institute. הזמנות, הרצאות, אגודות מדעיות שהוא ייסד - בארץ ובחו"ל.</p>
+      <p>הילד שברח מלייפציג ב-1933, שהבית שלו דיבר גרמנית - בנה כאן, בארץ, מעבדה שהפכה לאחת המובילות בעולם בגנטיקה של צמחים. שלושה שבתונים בארה"ב: סוף 1967 בהארווארד, 1981 ב-USDA, ו-1985 ב-Roche Institute. הזמנות, הרצאות, ואגודות מדעיות שהוא ייסד - בארץ ובחו"ל. את <b>החברה הישראלית לגנטיקה</b> ייסד יחד עם שני עמיתים, שימש כנשיאה ולקראת סוף חייו הוענקה לו "חברות כבוד" לכל החיים.</p>
+      <p>בין 1988 ל-1991 כיהן כדיקן הפקולטה לביולוגיה במכון ויצמן - פקולטה שמנתה אז כ-100 אנשי סגל מדעי. במקביל לראשות המחלקה לגנטיקה של צמחים (1970-1988) שירת גם כדיקן מדרשת פיינברג של מכון ויצמן, וכן כיו"ר המועצה הלאומית למחקר ופיתוח (1982-1984).</p>
       <p>חלוץ בחקר תרביות רקמה של צמחים. פיתח את זן המלפפון <b>"שמשון"</b> ואת זן המלון <b>"מיכל"</b> - גידולים שגדלים עד היום ברחבי העולם. מי שאוכל מלפפון ישראלי - אוכל מהמורשת שלו.</p>
       <p>ב-2009, חמש שנים לפני מותו, יעץ לחברת Roche לרכוש את ג'ננטק. העסקה התבצעה ב-47 מיליארד דולר - אחת העסקאות הגדולות בהיסטוריה של הביוטכנולוגיה.</p>
+    </div>
+
+    <div class="reveal" style="margin-top:2.5rem">
+      <h3 style="font-family:'Frank Ruhl Libre',serif;font-weight:300;color:var(--gold);margin-bottom:1rem">איתן ואהוד</h3>
+      <p>שני הבנים, איתן (1954) ואהוד (1959), המשיכו את שתי המסורות המשפחתיות - האקדמית והצבאית. שניהם שירתו ביחידות קרביות והתמנו לקצינים בכירים. <b>איתן</b> קיבל את הדוקטורט מאוניברסיטת תל אביב ולימים פרופסורה מטעם האוניברסיטה העברית. <b>אהוד</b> קיבל את הדוקטורט שלו ממכון ויצמן והפך לחוקר בכיר בחברת אלביט מערכות, מושאל למשרד הביטחון.</p>
+    </div>
+
+    <div class="reveal" style="margin-top:2.5rem">
+      <h3 style="font-family:'Frank Ruhl Libre',serif;font-weight:300;color:var(--gold);margin-bottom:1rem">ליתי</h3>
+      <p>ליתי - אהבת חייו של עזרא, פרופסור לביולוגיה באוניברסיטת תל אביב - חלתה בשנותיה האחרונות בלימפומה ובשבץ מוחי. היא נפטרה ב-16 באפריל 2012, פחות משנתיים לפני עזרא. ארבעים ותשע שנים של חיים משותפים, שני בנים, מעבדה אחת והמון אהבה.</p>
     </div>
 
     <p class="lead reveal">"מדען צריך להיות מענטש."</p>
@@ -1005,29 +1291,29 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
     <div class="tree" id="familyTree">
       <div class="reveal gen">
         <span class="gen-label">דור 1</span>
-        <div class="person" data-pid="bm"><div class="avatar">ב.מ</div><b>ברוך משה גלון</b><span>אודסה</span><div class="more">לחצו לפרטים</div></div>
-        <div class="person" data-pid="ab"><div class="avatar">א.ב</div><b>אנה ברנר</b><span>1849-1928</span><div class="more">לחצו לפרטים</div></div>
-        <div class="person" data-pid="lm"><div class="avatar">ל.מ</div><b>לאזר ולאוה מרקוס</b><span>קוטרוביץ</span><div class="more">לחצו לפרטים</div></div>
+        <div class="person" data-pid="bm"><div class="avatar" aria-hidden="true"></div><b>ברוך משה גלון</b><span>אודסה</span><div class="more">לחצו לפרטים</div></div>
+        <div class="person" data-pid="ab"><div class="avatar" aria-hidden="true"></div><b>אנה ברנר</b><span>1849 – 1928</span><div class="more">לחצו לפרטים</div></div>
+        <div class="person" data-pid="lm"><div class="avatar" aria-hidden="true"></div><b>לאזר ולאוה מרקוס</b><span>קוטרוביץ</span><div class="more">לחצו לפרטים</div></div>
       </div>
       <div class="reveal reveal-d2 gen">
         <span class="gen-label">דור 2</span>
         <div class="couple">
-          <div class="person" data-pid="dg"><div class="avatar" style="background-image:url('img/b13.jpg')"></div><b>דוד גלון</b><span>1875 - 1948</span><div class="more">לחצו לפרטים</div></div>
-          <div class="person" data-pid="em"><div class="avatar" style="background-image:url('img/a10.jpg')"></div><b>ארנה מרקוס</b><span>1898 - 1976</span><div class="more">לחצו לפרטים</div></div>
+          <div class="person" data-pid="dg"><div class="avatar" aria-hidden="true" style="background-image:url('img/b13.jpg')"></div><b>דוד גלון</b><span>1875 – 1948</span><div class="more">לחצו לפרטים</div></div>
+          <div class="person" data-pid="em"><div class="avatar" aria-hidden="true" style="background-image:url('img/a10.jpg')"></div><b>ארנה מרקוס</b><span>1898 – 1976</span><div class="more">לחצו לפרטים</div></div>
         </div>
       </div>
       <div class="reveal reveal-d3 gen">
         <span class="gen-label">דור 3</span>
-        <div class="person" data-pid="ar"><div class="avatar">א.ג</div><b>אריה גלון</b><span>נ' 8.4.1924</span><div class="more">לחצו לפרטים</div></div>
+        <div class="person" data-pid="ar"><div class="avatar" aria-hidden="true"></div><b>אריה גלון</b><span>נ' 8.4.1924</span><div class="more">לחצו לפרטים</div></div>
         <div class="couple">
-          <div class="person featured" data-pid="ez"><div class="avatar">ע.ג</div><b>פרופ' עזרא גלון</b><span>7.4.1927 - 27.1.2014</span><div class="more">לחצו לפרטים</div></div>
-          <div class="person" data-pid="lt"><div class="avatar">ל.ג</div><b>פרופ' ליתי גלון (כץ)</b><span>נפ' 16.4.2012</span><div class="more">לחצו לפרטים</div></div>
+          <div class="person featured" data-pid="ez"><div class="avatar" aria-hidden="true"></div><b>פרופ' עזרא גלון</b><span>1927 – 2014</span><div class="more">לחצו לפרטים</div></div>
+          <div class="person" data-pid="lt"><div class="avatar" aria-hidden="true"></div><b>פרופ' ליתי גלון (כץ)</b><span>ביולוגיה, אונ' ת״א</span><div class="more">לחצו לפרטים</div></div>
         </div>
       </div>
       <div class="reveal gen">
         <span class="gen-label">דור 4</span>
-        <div class="person" data-pid="et"><div class="avatar">א.ג</div><b>פרופ' איתן גלון</b><span>נ' 1954 · האונ' העברית</span><div class="more">לחצו לפרטים</div></div>
-        <div class="person" data-pid="eh"><div class="avatar">א.ג</div><b>ד"ר אהוד גלון</b><span>נ' 1959 · אלביט מערכות</span><div class="more">לחצו לפרטים</div></div>
+        <div class="person" data-pid="et"><div class="avatar" aria-hidden="true"></div><b>פרופ' איתן גלון</b><span>נ' 1954 · האונ' העברית</span><div class="more">לחצו לפרטים</div></div>
+        <div class="person" data-pid="eh"><div class="avatar" aria-hidden="true"></div><b>ד"ר אהוד גלון</b><span>נ' 1959 · אלביט מערכות</span><div class="more">לחצו לפרטים</div></div>
       </div>
     </div>
 
@@ -1059,7 +1345,7 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
       <div class="reveal tl-item"><div class="y">1924</div><div class="t">אריה נולד בלייפציג</div></div>
       <div class="reveal tl-item"><div class="y">1927</div><div class="t">עזרא נולד בלייפציג</div></div>
       <div class="reveal tl-item"><div class="y">1933</div><div class="t">המשפחה עולה לתל אביב</div></div>
-      <div class="reveal tl-item"><div class="y">1942</div><div class="t">עזרא בבי"ס כדורי, הר תבור</div></div>
+      <div class="reveal tl-item"><div class="y">1942</div><div class="t">עזרא בבית ספר כדורי, הר תבור</div></div>
       <div class="reveal tl-item"><div class="y">1944</div><div class="t">עזרא מתגייס לפלמ"ח</div></div>
       <div class="reveal tl-item"><div class="y">1948</div><div class="t">דוד גלון נפטר · מלחמת השחרור</div></div>
       <div class="reveal tl-item"><div class="y">1953</div><div class="t">חתונה עם ליתי · מכון ויצמן</div></div>
@@ -1114,17 +1400,19 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
   </div>
 </section>
 
-<div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(10,7,5,.95);z-index:9999;align-items:center;justify-content:center;padding:2rem;overflow:hidden;">
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="תצוגת תמונה" style="display:none;position:fixed;inset:0;background:rgba(10,7,5,.95);z-index:9999;align-items:center;justify-content:center;padding:2rem;overflow:hidden;">
   <div id="lightbox-stage" style="width:100%;height:100%;display:flex;place-content:safe center;align-items:safe center;overflow:auto;">
-    <img id="lightbox-img" style="display:block;box-shadow:0 30px 80px rgba(0,0,0,.6);cursor:zoom-in;user-select:none;-webkit-user-drag:none;flex:none;"/>
+    <img id="lightbox-img" alt="" style="display:block;box-shadow:0 30px 80px rgba(0,0,0,.6);cursor:zoom-in;user-select:none;-webkit-user-drag:none;flex:none;"/>
   </div>
   <div id="lightbox-cap" style="position:absolute;bottom:0;left:0;right:0;padding:1rem 2rem;text-align:center;color:#f4ede0;font-family:'Heebo',sans-serif;font-size:.95rem;pointer-events:none;background:linear-gradient(to top,rgba(10,7,5,.85),transparent);z-index:10;"></div>
   <div style="position:absolute;top:1rem;right:1.2rem;display:flex;gap:.5rem;align-items:center;">
     <button id="lightbox-zoomout" style="background:rgba(255,255,255,.08);border:1px solid #a07a3a;color:#f4ede0;width:40px;height:40px;border-radius:50%;font-size:1.4rem;cursor:pointer;line-height:1;">−</button>
     <span id="lightbox-zoomlbl" style="color:#f4ede0;font-family:'Heebo',sans-serif;min-width:48px;text-align:center;">100%</span>
     <button id="lightbox-zoomin" style="background:rgba(255,255,255,.08);border:1px solid #a07a3a;color:#f4ede0;width:40px;height:40px;border-radius:50%;font-size:1.4rem;cursor:pointer;line-height:1;">+</button>
-    <button id="lightbox-close" style="background:transparent;border:none;color:#f4ede0;font-size:2.5rem;cursor:pointer;line-height:1;margin-right:.5rem;">×</button>
+    <button id="lightbox-close" aria-label="סגור" style="background:transparent;border:none;color:#f4ede0;font-size:2.5rem;cursor:pointer;line-height:1;margin-right:.5rem;">×</button>
   </div>
+  <button id="lightbox-prev" aria-label="הקודם" style="position:absolute;top:50%;right:1.2rem;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid #a07a3a;color:#f4ede0;width:48px;height:48px;border-radius:50%;font-size:1.6rem;cursor:pointer;line-height:1;z-index:11;">›</button>
+  <button id="lightbox-next" aria-label="הבא" style="position:absolute;top:50%;left:1.2rem;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid #a07a3a;color:#f4ede0;width:48px;height:48px;border-radius:50%;font-size:1.6rem;cursor:pointer;line-height:1;z-index:11;">‹</button>
 </div>
 
 <script>
@@ -1186,7 +1474,6 @@ const T = {
   "ליל הבדולח":"Kristallnacht",
   "הגעת האסירים הראשונים לאושוויץ":"First prisoners arrive at Auschwitz",
   "\"אנו כאן בארצנו\" · ארנה ובניה, תל אביב 1933":"\"We are here, in our land\" · Erna and her sons, Tel Aviv 1933",
-  "תמונה אחת אומרת הכל. אם, שני בנים, חולצות לבנות, מכנסיים קצרים. רקע של עצי דקל. ביטחון.":"One photograph says it all. A mother, two sons, white shirts, short trousers. Palm trees in the background. Safety.",
   // Chapter 5
   "ילד תל-אביבי":"A Tel Aviv Boy",
   "תל אביב · 1934-1941":"Tel Aviv · 1934-1941",
@@ -1194,9 +1481,9 @@ const T = {
   "חברי כיתה · משפחת גולדנברג ובני הילדים, תל אביב 1937":"Classmates · the Goldenberg family and the children, Tel Aviv 1937",
   "אגודת הבריאות, \"בית הפועל\" · יולי 1936":"The Health Society, \"Beit HaPo'el\" · July 1936",
   "עזרא בכרם המקצועי של בית הפועל · 1936":"Ezra at the vocational vineyard of Beit HaPo'el · 1936",
-  "בקיץ 1941, בן 14, סיים עזרא את כיתה ח'. הוא יצא לעבוד שנה בכפר גדעון, להתכונן ללימודי חקלאות בכדורי. גרמניה הייתה כבר עולם רחוק, ארץ ישראל - הבית.":"In the summer of 1941, age 14, Ezra finished eighth grade. He went off to work for a year at Kfar Gideon, preparing for agricultural studies at Kadoorie. Germany was already a distant world; the Land of Israel - home.",
+  "בקיץ 1941, בן 14, סיים עזרא את כיתה ח'. הוא יצא לעבוד שנה בכפר גדעון - שני משקים חקלאיים, ובמקביל שלוש שעות ביום של \"לימודי המשך\" אחר הצהריים, להתכונן לבחינות הכניסה ל\"כדורי\". גרמניה הייתה כבר עולם רחוק, ארץ ישראל - הבית.":"In the summer of 1941, age 14, Ezra finished eighth grade. He went off to work for a year at Kfar Gideon - two farms, with three hours a day of supplementary studies in the afternoons, preparing for the Kadoorie entrance exams. Germany was already a distant world; the Land of Israel - home.",
   // Chapter 6
-  "בית\"ס כדורי, פלמ\"ח, מלחמה":"Kadoorie School, Palmach, War",
+  "בית ספר כדורי, פלמ\"ח, מלחמה":"Kadoorie School, Palmach, War",
   "1942-1949":"1942-1949",
   "בסתיו 1942, בעוד מלחמת העולם השנייה בשיא, התקבל עזרא ל\"כדורי\" - בית הספר החקלאי האגדי על הר תבור. שנתיים לימודים, וב-1944, מיד עם סיום בית הספר - גיוס לפלמ\"ח. תחילה בפלוגה א', אחר כך קורס מפקדי כיתה, ולבסוף - הפלוגה הימית.":"In autumn 1942, while World War II raged, Ezra was admitted to \"Kadoorie\" - the legendary agricultural school on Mount Tabor. Two years of study, and in 1944, immediately upon graduation - enlistment in the Palmach. First in Company A, then a squad commanders' course, and finally - the Naval Company.",
   "בקיץ 1947 השתחרר, ניגש לבחינות בגרות חיצוניות, והתקבל לפקולטה לחקלאות באוניברסיטה העברית. אבל אחרי חמישה שבועות של לימודים בלבד, חזר לקרבות מלחמת השחרור - הפעם בגדוד השישי, מפקד פורמנים שאחראיים על השיירות לירושלים בזמן המצור על העיר.":"In summer 1947 he was discharged, sat external matriculation exams, and was admitted to the Faculty of Agriculture at the Hebrew University. But after just five weeks of study, he returned to the battles of the War of Independence - this time in the 6th Battalion, commander of the \"Formanim\" responsible for the convoys to Jerusalem during the siege.",
@@ -1217,13 +1504,23 @@ const T = {
   "פרופ' עזרא גלון · קריירה אקדמית":"Prof. Ezra Galun · Academic Career",
   "תואר ראשון - חקלאות, האונ' העברית":"B.Sc. - Agriculture, Hebrew University",
   "ב-1953 סיים עזרא את התואר השני בפקולטה לחקלאות, התקבל לעבודה במכון ויצמן למדע במעבדה לגנטיקה של צמחים, ובמאי אותה שנה התחתן עם <b>ליתי כץ</b> - אהבת חייו, שתהיה לפרופ' לביולוגיה באוניברסיטת תל אביב.":"In 1953 Ezra completed his master's degree at the Faculty of Agriculture, was hired at the Weizmann Institute of Science in the plant genetics laboratory, and in May of that year married <b>Liti Katz</b> - the love of his life, who would become a professor of biology at Tel Aviv University.",
-  "ב-1959 קיבל את הדוקטורט מטעם האוניברסיטה העברית. ב-1960, מלגת פולברייט והמשפחה הצעירה עברה לפסדינה - לפוסט-דוקטורט במכון הטכנולוגי של קליפורניה (Caltech). שני בנים: <b>איתן</b> (1954) ו<b>אהוד</b> (1959). שניהם יקבלו אחר כך דוקטורטים בעצמם.":"In 1959 he received his doctorate from the Hebrew University. In 1960, on a Fulbright fellowship, the young family moved to Pasadena - for a postdoctoral position at the California Institute of Technology (Caltech). Two sons: <b>Eitan</b> (1954) and <b>Ehud</b> (1959). Both would later earn doctorates of their own.",
+  "ב-1959, בעודו עובד במכון ויצמן, קיבל את הדוקטורט מטעם האוניברסיטה העברית. בסוף 1960, מלגת פולברייט והמשפחה הצעירה עברה לפסדינה - לפוסט-דוקטורט במכון הטכנולוגי של קליפורניה (Caltech). ב-1962 חזר למכון ויצמן וכבר אז שימש כממלא-מקום ראש המעבדה לגנטיקה של צמחים. שני בנים: <b>איתן</b> (1954) ו<b>אהוד</b> (1959).":"In 1959, while working at Weizmann, he received his doctorate from the Hebrew University. In late 1960, on a Fulbright fellowship, the young family moved to Pasadena - for a postdoctoral position at Caltech. He returned to Weizmann in 1962 and already served as acting head of the plant genetics laboratory. Two sons: <b>Eitan</b> (1954) and <b>Ehud</b> (1959).",
+  "איתן ואהוד":"Eitan and Ehud",
+  "ליתי":"Liti",
+  "שני הבנים, איתן (1954) ואהוד (1959), המשיכו את שתי המסורות המשפחתיות - האקדמית והצבאית. שניהם שירתו ביחידות קרביות והתמנו לקצינים בכירים. <b>איתן</b> קיבל את הדוקטורט מאוניברסיטת תל אביב ולימים פרופסורה מטעם האוניברסיטה העברית. <b>אהוד</b> קיבל את הדוקטורט שלו ממכון ויצמן והפך לחוקר בכיר בחברת אלביט מערכות, מושאל למשרד הביטחון.":"The two sons, Eitan (1954) and Ehud (1959), carried on both family traditions - academic and military. Both served in combat units and were promoted to senior officers. <b>Eitan</b> received his doctorate from Tel Aviv University and later a professorship from the Hebrew University. <b>Ehud</b> received his doctorate from the Weizmann Institute and became a senior researcher at Elbit Systems, seconded to the Ministry of Defense.",
+  "ליתי - אהבת חייו של עזרא, פרופסור לביולוגיה באוניברסיטת תל אביב - חלתה בשנותיה האחרונות בלימפומה ובשבץ מוחי. היא נפטרה ב-16 באפריל 2012, פחות משנתיים לפני עזרא. ארבעים ותשע שנים של חיים משותפים, שני בנים, מעבדה אחת והמון אהבה.":"Liti - the love of Ezra's life, professor of biology at Tel Aviv University - suffered in her later years from lymphoma and a stroke. She passed away on April 16, 2012, less than two years before Ezra. Forty-nine years of shared life, two sons, one laboratory, and so much love.",
   "תואר שני, מכון ויצמן":"M.Sc., Weizmann Institute",
   "תואר שני, האונ' העברית":"M.Sc., Hebrew University",
   "ייסד המחלקה לגנטיקה של צמחים, ויצמן":"Founded the Plant Genetics Dept., Weizmann",
   "דוקטורט (האונ' העברית, עבודת מחקר בויצמן)":"Ph.D. (Hebrew University, research at Weizmann)",
   "עמית מחקר, Caltech (פולברייט)":"Research Fellow, Caltech (Fulbright)",
   "עמית מחקר, מעבדות הביולוגיה בהארווארד":"Research Fellow, Harvard Biology Labs",
+  "מ\"מ ראש המעבדה לגנטיקה של צמחים":"Acting Head, Plant Genetics Laboratory",
+  "שבתון, מעבדות הביולוגיה בהארווארד":"Sabbatical, Harvard Biology Labs",
+  "שבתון, USDA":"Sabbatical, USDA",
+  "שבתון, Roche Institute, NJ":"Sabbatical, Roche Institute, NJ",
+  "דיקן מדרשת פיינברג ללימודים מתקדמים":"Dean, Feinberg Graduate School",
+  "יו\"ר המועצה הלאומית למחקר ופיתוח":"Chair, National R&D Council",
   "פרופסור חבר, ויצמן":"Associate Professor, Weizmann",
   "דיקן בית הספר על שם פיינברג ללימודים מתקדמים":"Dean, Feinberg Graduate School",
   "יו\"ר המועצה הארצית למחקר ופיתוח":"Chair, National R&D Council",
@@ -1239,7 +1536,8 @@ const T = {
   "דיקן הפקולטה לביולוגיה":"Dean, Faculty of Biology",
   "פרופסור אמריטוס":"Professor Emeritus",
   "200 מאמרים מדעיים. שבעה ספרים בהוצאות בינלאומיות (Springer, World Scientific, Imperial College Press). מייסד החברה הישראלית לגנטיקה - ובהמשך נשיא כבוד שלה.":"200 scientific papers. Seven books with international publishers (Springer, World Scientific, Imperial College Press). Founder of the Israeli Society for Genetics - and later its honorary president.",
-  "הילד שברח מלייפציג ב-1933, שהבית שלו דיבר גרמנית - בנה כאן, בארץ, מעבדה שהפכה לאחת המובילות בעולם בגנטיקה של צמחים. שבתונים בהארווארד, USDA, Roche Institute. הזמנות, הרצאות, אגודות מדעיות שהוא ייסד - בארץ ובחו\"ל.":"The child who fled Leipzig in 1933, whose home spoke German - built here, in Israel, a laboratory that became one of the world's leading labs in plant genetics. Sabbaticals at Harvard, USDA, the Roche Institute. Invitations, lectures, scientific societies he founded - at home and abroad.",
+  "הילד שברח מלייפציג ב-1933, שהבית שלו דיבר גרמנית - בנה כאן, בארץ, מעבדה שהפכה לאחת המובילות בעולם בגנטיקה של צמחים. שלושה שבתונים בארה\"ב: סוף 1967 בהארווארד, 1981 ב-USDA, ו-1985 ב-Roche Institute. הזמנות, הרצאות, ואגודות מדעיות שהוא ייסד - בארץ ובחו\"ל. את <b>החברה הישראלית לגנטיקה</b> ייסד יחד עם שני עמיתים, שימש כנשיאה ולקראת סוף חייו הוענקה לו \"חברות כבוד\" לכל החיים.":"The child who fled Leipzig in 1933, whose home spoke German - built here, in Israel, a laboratory that became one of the world's leading labs in plant genetics. Three sabbaticals in the US: late 1967 at Harvard, 1981 at the USDA, 1985 at the Roche Institute. Invitations, lectures, and scientific societies he founded - at home and abroad. The <b>Israeli Genetics Society</b> he founded together with two colleagues, served as its president, and toward the end of his life was granted lifetime honorary membership.",
+  "בין 1988 ל-1991 כיהן כדיקן הפקולטה לביולוגיה במכון ויצמן - פקולטה שמנתה אז כ-100 אנשי סגל מדעי. במקביל לראשות המחלקה לגנטיקה של צמחים (1970-1988) שירת גם כדיקן מדרשת פיינברג של מכון ויצמן, וכן כיו\"ר המועצה הלאומית למחקר ופיתוח (1982-1984).":"Between 1988 and 1991 he served as Dean of the Faculty of Biology at Weizmann - a faculty of about 100 scientific staff. Concurrently with heading the plant genetics department (1970-1988) he also served as Dean of the Feinberg Graduate School and as Chair of the National Council for Research and Development (1982-1984).",
   "חלוץ בחקר תרביות רקמה של צמחים. פיתח את זן המלפפון <b>\"שמשון\"</b> ואת זן המלון <b>\"מיכל\"</b> - גידולים שגדלים עד היום ברחבי העולם. מי שאוכל מלפפון ישראלי - אוכל מהמורשת שלו.":"A pioneer in plant tissue culture. He developed the <b>\"Shimshon\"</b> cucumber and the <b>\"Michal\"</b> melon varieties - crops grown around the world to this day. Anyone who eats an Israeli cucumber tastes his legacy.",
   "ב-2009, חמש שנים לפני מותו, יעץ לחברת Roche לרכוש את ג'ננטק. העסקה התבצעה ב-47 מיליארד דולר - אחת העסקאות הגדולות בהיסטוריה של הביוטכנולוגיה.":"In 2009, five years before his death, he advised Roche to acquire Genentech. The deal closed at $47 billion - one of the largest in the history of biotechnology.",
   "\"מדען צריך להיות מענטש.\"":"\"A scientist must be a mensch.\"",
@@ -1268,7 +1566,7 @@ const T = {
   "אריה נולד בלייפציג":"Aryeh born in Leipzig",
   "עזרא נולד בלייפציג":"Ezra born in Leipzig",
   "המשפחה עולה לתל אביב":"Family immigrates to Tel Aviv",
-  "עזרא בבי\"ס כדורי, הר תבור":"Ezra at Kadoorie School, Mt. Tabor",
+  "עזרא בבית ספר כדורי, הר תבור":"Ezra at Kadoorie School, Mt. Tabor",
   "עזרא מתגייס לפלמ\"ח":"Ezra enlists in the Palmach",
   "דוד גלון נפטר · מלחמת השחרור":"David Galun dies · War of Independence",
   "חתונה עם ליתי · מכון ויצמן":"Marriage to Liti · Weizmann Institute",
@@ -1364,8 +1662,144 @@ const io = new IntersectionObserver((entries)=>{
       io.unobserve(e.target);
     }
   });
-},{threshold:0.15});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+},{threshold:0.05, rootMargin:'0px 0px -10% 0px'});
+document.querySelectorAll('.reveal').forEach(el=>{
+  // Fallback: anything already in or above the viewport on load → reveal immediately
+  const r = el.getBoundingClientRect();
+  if(r.top < window.innerHeight){ el.classList.add('in'); }
+  else io.observe(el);
+});
+
+// Reduced motion preference helper
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+function smoothBehavior(){ return prefersReducedMotion.matches ? 'auto' : 'smooth'; }
+
+// Back to top - only visible after scrolling past the second chapter
+(function(){
+  const btn = document.getElementById('toTop');
+  if(!btn) return;
+  const trigger = ()=>{
+    const ch = document.querySelectorAll('section.chapter')[1];
+    return ch ? ch.getBoundingClientRect().bottom + window.scrollY : window.innerHeight * 1.5;
+  };
+  let threshold = trigger();
+  window.addEventListener('resize', ()=>{ threshold = trigger(); });
+  const update = ()=>{
+    btn.classList.toggle('visible', window.scrollY > threshold);
+  };
+  window.addEventListener('scroll', update, {passive:true});
+  btn.addEventListener('click', ()=>{
+    window.scrollTo({top:0, behavior:smoothBehavior()});
+  });
+  // Re-measure once layout settles (images/fonts)
+  setTimeout(()=>{ threshold = trigger(); update(); }, 600);
+  update();
+})();
+
+// Reveal nav when scrolling, hide when idle
+(function(){
+  let t;
+  window.addEventListener('scroll', ()=>{
+    document.body.classList.add('is-scrolling');
+    clearTimeout(t);
+    t = setTimeout(()=>document.body.classList.remove('is-scrolling'), 1500);
+  }, {passive:true});
+})();
+
+// Reading progress bar
+(function(){
+  const bar = document.getElementById('progress');
+  if(!bar) return;
+  const update = ()=>{
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    const pct = max > 0 ? Math.min(100, (h.scrollTop / max) * 100) : 0;
+    bar.style.width = pct + '%';
+  };
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+
+// TOC sidebar
+(function(){
+  const list = document.getElementById('tocList');
+  const toc = document.getElementById('toc');
+  const toggle = document.getElementById('tocToggle');
+  if(!list || !toc) return;
+
+  const sections = [];
+  document.querySelectorAll('section.chapter, section.map-section').forEach((sec,i)=>{
+    if(!sec.id) sec.id = 'sec-'+i;
+    const h2 = sec.querySelector('h2,h3');
+    if(!h2) return;
+    sections.push({el:sec, title:h2.textContent.trim(), id:sec.id});
+  });
+
+  const total = sections.length;
+  list.setAttribute('aria-label', document.documentElement.lang === 'en' ? `Chapters (${total})` : `פרקים (${total})`);
+  sections.forEach((s,i)=>{
+    const li = document.createElement('li');
+    li.dataset.id = s.id;
+    li.setAttribute('aria-posinset', i+1);
+    li.setAttribute('aria-setsize', total);
+    li.innerHTML = `<a href="#${s.id}" aria-label="${document.documentElement.lang==='en'?'Chapter':'פרק'} ${i+1} ${document.documentElement.lang==='en'?'of':'מתוך'} ${total}: ${s.title}"><span class="toc-label">${s.title}</span></a>`;
+    list.appendChild(li);
+  });
+
+  list.addEventListener('click', e=>{
+    const a = e.target.closest('a');
+    if(!a) return;
+    e.preventDefault();
+    const id = a.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if(target) target.scrollIntoView({behavior:smoothBehavior(), block:'start'});
+    toc.classList.remove('open');
+  });
+
+  toggle.addEventListener('click', ()=>{
+    const open = toc.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+
+  // Highlight current section based on viewport
+  const update = ()=>{
+    let currentId = sections[0]?.id;
+    const trigger = window.innerHeight * 0.35;
+    for(const s of sections){
+      const r = s.el.getBoundingClientRect();
+      if(r.top <= trigger) currentId = s.id;
+    }
+    list.querySelectorAll('li').forEach(li=>{
+      const isCurrent = li.dataset.id === currentId;
+      li.classList.toggle('current', isCurrent);
+      const a = li.querySelector('a');
+      if(a){
+        if(isCurrent) a.setAttribute('aria-current','location');
+        else a.removeAttribute('aria-current');
+      }
+    });
+  };
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+
+  // Update labels on language switch
+  document.getElementById('langToggle')?.addEventListener('click', ()=>{
+    setTimeout(()=>{
+      const en = document.documentElement.lang === 'en';
+      list.setAttribute('aria-label', en ? `Chapters (${total})` : `פרקים (${total})`);
+      sections.forEach((s,i)=>{
+        const h2 = s.el.querySelector('h2,h3');
+        const li = list.children[i];
+        const lbl = li?.querySelector('.toc-label');
+        const a = li?.querySelector('a');
+        if(h2 && lbl) lbl.textContent = h2.textContent.trim();
+        if(h2 && a) a.setAttribute('aria-label', `${en?'Chapter':'פרק'} ${i+1} ${en?'of':'מתוך'} ${total}: ${h2.textContent.trim()}`);
+      });
+    }, 150);
+  });
+})();
 
 // =========================================================
 // FAMILY TREE - person details modal
@@ -1385,11 +1819,11 @@ const PEOPLE = {
       en:{n:'Prof. Aryeh Galun',d:'b. 8 Apr 1924',bio:['The eldest. Born in Leipzig in 1924. At age nine he immigrated with the family to Israel. In 1948 he and Ezra suddenly became the heads of the family after their father\'s death.','An organic chemist. Founded "Zion" - a fine chemicals plant.']}},
   ez:{he:{n:'פרופ\' עזרא (עמיאל בן דוד הלוי) גלון',d:'7.4.1927 - 27.1.2014',bio:['הגיבור של הסיפור הזה. נולד בלייפציג, גדל בתל אביב, התחנך ב"כדורי".','שירת בגדוד השישי במלחמת השחרור - כמפקד בפורמנים שהיו אחראיים על השיירות לירושלים בזמן המצור. אחרי המלחמה היה מפקד פלוגה בצה"ל - שירת תחתיו המשורר יהודה עמיחי. השתחרר בדרגת רב-סרן אחרי ארבע מלחמות.','ייסד את המחלקה לגנטיקה של צמחים במכון ויצמן (1956), והיה ראשה עד 1988. דיקן הפקולטה לביולוגיה (1988-91).','חלוץ בחקר תרביות רקמה של צמחים. פיתח את זן המלפפון "שמשון" ואת זן המלון "מיכל" - גידולים שגדלים עד היום ברחבי העולם.','200+ מאמרים מדעיים, 7 ספרים בהוצאות בינלאומיות. שניים מתלמידיו הם פרופ\' תלמה קטן ופרופ\' אביחי פרל.','ב-2009 יעץ לחברת Roche לרכוש את ג\'ננטק - העסקה התבצעה ב-47 מיליארד דולר. אחת העסקאות הגדולות בהיסטוריה של הביוטכנולוגיה.','המוטו שלו: "מדען צריך להיות מענטש."']},
       en:{n:'Prof. Ezra (Amiel ben David HaLevi) Galun',d:'7 Apr 1927 - 27 Jan 2014',bio:['The hero of this story. Born in Leipzig, grew up in Tel Aviv, educated at "Kadoorie".','Served in the 6th Battalion in the War of Independence - commander of the "Formanim" responsible for the convoys to Jerusalem during the siege. After the war he was a company commander in the IDF - the poet Yehuda Amichai served under him. Discharged as Major after four wars.','Founded the Department of Plant Genetics at the Weizmann Institute (1956), and headed it until 1988. Dean of the Faculty of Biology (1988-91).','A pioneer in plant tissue culture. Developed the "Shimshon" cucumber and "Michal" melon varieties - crops grown around the world to this day.','200+ scientific papers, 7 books with international publishers. Two of his students are Prof. Talma Katan and Prof. Avichai Perl.','In 2009 he advised Roche to acquire Genentech - the deal closed at $47 billion. One of the largest in biotech history.','His motto: "A scientist must be a mensch."']}},
-  lt:{he:{n:'פרופ\' ליתי (מרגלית) גלון (כץ)',d:'נפ\' 16.4.2012',bio:['אהבת חייו של עזרא. התחתנו ב-1953 כשעזרא התחיל את עבודתו במכון ויצמן.','בוטנאית. התמחתה בביולוגיה של חזזיות, וכתבה את המגדיר הראשון לחזזיות ארץ-ישראל (יחד עם יעקב גרטי).','ב-1986 רשמה יחד עם עזרא פטנט להסרת מתכות כבדות משפכים תעשייתיים באמצעות פטריות.','אם איתן ואהוד. נפטרה באפריל 2012 - שותפה לחייו של עזרא במשך כמעט שישים שנה.']},
+  lt:{he:{n:'פרופ\' ליתי (מרגלית) גלון (כץ)',d:'נפ\' 16.4.2012',bio:['אהבת חייו של עזרא. התחתנו במאי 1953 כשעזרא התחיל את עבודתו במכון ויצמן.','פרופסור לביולוגיה באוניברסיטת תל אביב. בוטנאית, התמחתה בביולוגיה של חזזיות, וכתבה את המגדיר הראשון לחזזיות ארץ-ישראל (יחד עם יעקב גרטי).','ב-1986 רשמה יחד עם עזרא פטנט להסרת מתכות כבדות משפכים תעשייתיים באמצעות פטריות.','אם איתן ואהוד. בשנותיה האחרונות חלתה בלימפומה ובשבץ מוחי. נפטרה ב-16.4.2012, פחות משנתיים לפני עזרא - אחרי 49 שנות חיים משותפים.']},
       en:{n:'Prof. Liti (Margalit) Galun (Katz)',d:'d. 16 Apr 2012',bio:['Ezra\'s lifelong love. They married in 1953 when Ezra began his work at the Weizmann Institute.','A botanist. Specialized in lichen biology, and wrote the first identification guide for the lichens of the Land of Israel (with Yaakov Garti).','In 1986 she registered, together with Ezra, a patent for removing heavy metals from industrial wastewater using fungi.','Mother of Eitan and Ehud. Passed away in April 2012 - Ezra\'s partner for nearly sixty years.']}},
-  et:{he:{n:'פרופ\' איתן גלון',d:'נ\' 1954',bio:['הבן הבכור של עזרא וליתי. נולד בארץ ב-1954. פרופסור באוניברסיטה העברית בירושלים.']},
+  et:{he:{n:'פרופ\' איתן גלון',d:'נ\' 1954',bio:['הבן הבכור של עזרא וליתי. נולד בארץ ב-1954.','דוקטורט מאוניברסיטת תל אביב, ולימים פרופסורה מטעם האוניברסיטה העברית בירושלים.','שירת ביחידה קרבית והתמנה לקצין בכיר - ממשיך את המסורת המשפחתית של עזרא, אריה ודוד.']},
       en:{n:'Prof. Eitan Galun',d:'b. 1954',bio:['Ezra and Liti\'s elder son. Born in Israel in 1954. Professor at the Hebrew University of Jerusalem.']}},
-  eh:{he:{n:'ד"ר אהוד גלון',d:'נ\' 1959',bio:['הבן הצעיר. נולד ב-1959. דוקטור בעבודתו באלביט מערכות. דור רביעי - ילדים שכבר נולדו בארץ, להורים שעלו ב-1933.']},
+  eh:{he:{n:'ד"ר אהוד גלון',d:'נ\' 1959',bio:['הבן הצעיר של עזרא וליתי. נולד ב-1959.','דוקטורט ממכון ויצמן. חוקר בכיר בחברת אלביט מערכות, מושאל למשרד הביטחון.','שירת ביחידה קרבית והתמנה לקצין בכיר. דור רביעי - בנים שכבר נולדו בארץ, להורים שעלו ב-1933.']},
       en:{n:'Dr. Ehud Galun',d:'b. 1959',bio:['The younger son. Born in 1959. Doctorate; works at Elbit Systems. The fourth generation - children already born in Israel, to parents who immigrated in 1933.']}},
 };
 
@@ -1435,8 +1869,14 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape' && pm.classList.co
   const btnSpeed = document.getElementById('ttsSpeed');
   if(!audio) return;
 
-  const speeds = [1.25, 1.5, 0.85, 1];
+  const speeds = [1.25, 1.5, 1];
   let speedIdx = 0;
+  const iconPlay = document.getElementById('ttsIconPlay');
+  const iconPause = document.getElementById('ttsIconPause');
+  function setPlayIcon(playing){
+    iconPlay.style.display = playing ? 'none' : '';
+    iconPause.style.display = playing ? '' : 'none';
+  }
   let currentLang = 'he';
 
   function setSrcForLang(){
@@ -1460,27 +1900,31 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape' && pm.classList.co
 
   audio.addEventListener('timeupdate', ()=>{
     if(audio.duration){
-      seek.value = (audio.currentTime / audio.duration) * 100;
+      const p = (audio.currentTime / audio.duration) * 100;
+      seek.value = p;
+      seek.style.setProperty('--p', p+'%');
       lbl.textContent = fmt(audio.currentTime)+' / '+fmt(audio.duration);
     }
   });
+  audio.addEventListener('play', ()=>{ setPlayIcon(true); syncMainBtn(); });
+  audio.addEventListener('pause', ()=>{ setPlayIcon(false); syncMainBtn(); });
   audio.addEventListener('ended', ()=>{
     bar.classList.remove('visible');
-    const btn = document.getElementById('ttsPlayMain');
-    if(btn) btn.classList.remove('playing');
+    audio.currentTime = 0;
+    syncMainBtn();
   });
   seek.addEventListener('input', ()=>{
+    seek.style.setProperty('--p', seek.value+'%');
     if(audio.duration) audio.currentTime = (seek.value/100) * audio.duration;
   });
   btnPause.addEventListener('click', ()=>{
-    if(audio.paused){ audio.play(); btnPause.textContent = '⏸'; }
-    else { audio.pause(); btnPause.textContent = '▶'; }
+    if(audio.paused) audio.play();
+    else audio.pause();
   });
   btnStop.addEventListener('click', ()=>{
     audio.pause(); audio.currentTime = 0;
     bar.classList.remove('visible');
-    const btn = document.getElementById('ttsPlayMain');
-    if(btn) btn.classList.remove('playing');
+    syncMainBtn();
   });
   btnSpeed.addEventListener('click', ()=>{
     speedIdx = (speedIdx + 1) % speeds.length;
@@ -1489,7 +1933,22 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape' && pm.classList.co
   });
 
   function readableLabel(){
-    return document.documentElement.lang === 'en' ? 'Listen to the story' : 'האזן לסיפור';
+    const en = document.documentElement.lang === 'en';
+    if(audio.paused){
+      return audio.currentTime > 0
+        ? (en ? 'Resume' : 'המשך')
+        : (en ? 'Listen to the story' : 'האזן לסיפור');
+    }
+    return en ? 'Pause' : 'השהה';
+  }
+  function syncMainBtn(){
+    const btn = document.getElementById('ttsPlayMain');
+    if(!btn) return;
+    const playing = !audio.paused && audio.currentTime > 0;
+    btn.classList.toggle('playing', playing);
+    btn.classList.toggle('paused', audio.paused && audio.currentTime > 0);
+    const l = btn.querySelector('.lbl');
+    if(l) l.textContent = readableLabel();
   }
 
   // Insert single play button at top of first chapter
@@ -1500,31 +1959,28 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape' && pm.classList.co
       const btn = document.createElement('button');
       btn.className = 'tts-btn';
       btn.id = 'ttsPlayMain';
-      btn.innerHTML = `<span class="ico">🔊</span> <span class="lbl">${readableLabel()}</span>`;
+      btn.setAttribute('aria-pressed','false');
+      btn.innerHTML = `<svg class="tts-bars" viewBox="0 0 18 18" aria-hidden="true"><rect x="2" y="3" width="3" height="12" rx="1.2"/><rect x="7.5" y="3" width="3" height="12" rx="1.2"/><rect x="13" y="3" width="3" height="12" rx="1.2"/></svg><span class="lbl">${readableLabel()}</span>`;
       btn.addEventListener('click', e=>{
         e.preventDefault();
-        if(btn.classList.contains('playing')){
-          audio.pause(); audio.currentTime = 0;
-          btn.classList.remove('playing');
-          bar.classList.remove('visible');
+        if(!audio.paused){
+          audio.pause();
           return;
         }
         setSrcForLang();
-        btn.classList.add('playing');
         bar.classList.add('visible');
-        btnPause.textContent = '⏸';
         audio.playbackRate = speeds[speedIdx];
         audio.play().catch(err=>console.error('Audio play failed', err));
       });
       titleBlock.appendChild(btn);
+      syncMainBtn();
     }
   }
 
   // Update language - swap MP3 source
   document.getElementById('langToggle').addEventListener('click', ()=>{
     setTimeout(()=>{
-      const l = document.querySelector('#ttsPlayMain .lbl');
-      if(l) l.textContent = readableLabel();
+      syncMainBtn();
       setSrcForLang();
     }, 50);
   });
@@ -1539,6 +1995,9 @@ const lbLbl = document.getElementById('lightbox-zoomlbl');
 const ZOOMS = [1, 2, 3];
 let zIdx = 0;
 let baseW = 0, baseH = 0; // displayed size at zoom 1
+let lbList = []; // current navigable image list [{src, cap}]
+let lbIdx = 0;
+let lbPrevFocus = null;
 function computeBaseSize(){
   const nw = lbImg.naturalWidth, nh = lbImg.naturalHeight;
   if(!nw || !nh) return;
@@ -1562,15 +2021,29 @@ function applyZoom(){
     lbStage.scrollTop  = (lbStage.scrollHeight - lbStage.clientHeight)/2;
   });
 }
-function openLightbox(src, cap){
-  baseW = 0; baseH = 0;
+function loadCurrent(){
+  const cur = lbList[lbIdx];
+  if(!cur) return;
+  baseW = 0; baseH = 0; zIdx = 0;
   lbImg.onload = ()=>{ computeBaseSize(); applyZoom(); };
-  lbImg.src = src;
-  lbCap.textContent = cap || '';
-  zIdx = 0;
+  lbImg.src = cur.src;
+  lbImg.alt = cur.cap || '';
+  lbCap.textContent = cur.cap || '';
+  if(lbImg.complete && lbImg.naturalWidth){ computeBaseSize(); applyZoom(); }
+}
+function openLightbox(src, cap, list, idx){
+  lbList = list && list.length ? list : [{src, cap}];
+  lbIdx = idx >= 0 ? idx : 0;
+  lbPrevFocus = document.activeElement;
   lb.style.display = 'flex';
   document.body.style.overflow = 'hidden';
-  if(lbImg.complete && lbImg.naturalWidth){ computeBaseSize(); applyZoom(); }
+  loadCurrent();
+  document.getElementById('lightbox-close').focus();
+}
+function navLightbox(dir){
+  if(!lbList.length) return;
+  lbIdx = (lbIdx + dir + lbList.length) % lbList.length;
+  loadCurrent();
 }
 // Click-drag to pan when zoomed
 let dragging = false, didDrag = false, sx=0, sy=0, slx=0, sly=0;
@@ -1594,7 +2067,13 @@ window.addEventListener('mouseup', ()=>{
 });
 // Suppress click that follows a drag
 lbImg.addEventListener('click', e=>{ if(didDrag){ e.stopImmediatePropagation(); didDrag = false; } }, true);
-function closeLightbox(){ lb.style.display = 'none'; document.body.style.overflow = ''; }
+function closeLightbox(){
+  lb.style.display = 'none';
+  document.body.style.overflow = '';
+  if(lbPrevFocus && lbPrevFocus.focus) lbPrevFocus.focus();
+}
+document.getElementById('lightbox-prev').addEventListener('click', e=>{ e.stopPropagation(); navLightbox(-1); });
+document.getElementById('lightbox-next').addEventListener('click', e=>{ e.stopPropagation(); navLightbox(1); });
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
 document.getElementById('lightbox-zoomin').addEventListener('click', e=>{
   e.stopPropagation(); if(zIdx < ZOOMS.length-1){ zIdx++; applyZoom(); }
@@ -1614,21 +2093,40 @@ document.addEventListener('keydown', e=>{
   if(e.key==='Escape') closeLightbox();
   else if(e.key==='+' || e.key==='=') { if(zIdx < ZOOMS.length-1){ zIdx++; applyZoom(); } }
   else if(e.key==='-') { if(zIdx > 0){ zIdx--; applyZoom(); } }
+  // RTL: ArrowRight = previous, ArrowLeft = next
+  else if(e.key==='ArrowRight') navLightbox(-1);
+  else if(e.key==='ArrowLeft') navLightbox(1);
+  else if(e.key==='Tab'){
+    // focus-trap among lightbox controls
+    const f = lb.querySelectorAll('button');
+    const first = f[0], last = f[f.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
 });
 
-// Add zoom button + click-to-zoom to all photo images and fullbleed
+// Build full navigable list of all images (galleries + fullbleed) in document order
+const allImgs = [];
 document.querySelectorAll('.photo').forEach(p=>{
   const img = p.querySelector('img');
   if(!img) return;
   const cap = p.querySelector('.caption')?.textContent || img.alt || '';
-  const btn = document.createElement('button');
-  btn.className='zoom-btn'; btn.innerHTML='⊕'; btn.setAttribute('aria-label','הגדל');
-  btn.addEventListener('click', e=>{ e.stopPropagation(); openLightbox(img.src, cap); });
-  p.appendChild(btn);
-  img.addEventListener('click', ()=>openLightbox(img.src, cap));
+  allImgs.push({src:img.currentSrc||img.src, cap, el:img, host:p});
 });
 document.querySelectorAll('.fullbleed img').forEach(img=>{
-  img.addEventListener('click', ()=>openLightbox(img.src, img.alt||''));
+  allImgs.push({src:img.currentSrc||img.src, cap:img.alt||'', el:img, host:img});
+});
+allImgs.forEach((it, idx)=>{
+  const open = ()=>openLightbox(it.src, it.cap, allImgs, idx);
+  it.el.addEventListener('click', open);
+  if(it.host && it.host.classList && it.host.classList.contains('photo')){
+    const btn = document.createElement('button');
+    btn.className='zoom-btn';
+    btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
+    btn.setAttribute('aria-label','הגדל');
+    btn.addEventListener('click', e=>{ e.stopPropagation(); open(); });
+    it.host.appendChild(btn);
+  }
 });
 
 // Leaflet map - the Galun family geographic journey
@@ -1638,22 +2136,27 @@ document.querySelectorAll('.fullbleed img').forEach(img=>{
   const cities = [
     {he:{n:'אודסה',y:'1875',d:'בעיר הנמל על הים השחור נולד דוד גלון. אודסה של אז הייתה צומת תרבויות, סוחרים והוגי דעות - מבית גידולה של המשפחה.'},
      en:{n:'Odessa',y:'1875',d:'In the port city on the Black Sea, David Galun was born. The Odessa of those days was a crossroads of cultures, merchants, and thinkers - the family\'s starting point.'},
+     img:'img/a08.jpg', webp:'img/a08.webp',
      coord:[46.4825,30.7233], zoom:6},
     {he:{n:'קוטרוביץ',y:'1898',d:'במזרח שלזיה הגרמנית (היום קטוביץ\' שבפולין) נולדה ארנה מרקוס - ילדה לבורגנות יהודית-גרמנית מבוססת.'},
      en:{n:'Kotrowitz',y:'1898',d:'In eastern German Silesia (today Katowice, Poland), Erna Markus was born - a child of established German-Jewish bourgeoisie.'},
+     img:'img/a09.jpg', webp:'img/a09.webp',
      coord:[50.2649,19.0238], zoom:6},
     {he:{n:'לייפציג',y:'1922 - 1933',d:'דוד וארנה התחתנו וקבעו את ביתם בלייפציג. כאן נולדו אריה (1924) ועזרא (1927). עברית, גרמנית, באך ותנ"ך - חינוך כפול שעוד יציל את חייהם.'},
      en:{n:'Leipzig',y:'1922 - 1933',d:'David and Erna married and made their home in Leipzig. Aryeh (1924) and Ezra (1927) were born here. Hebrew, German, Bach and Bible - a double education that would save their lives.'},
+     img:'img/c11.jpg', webp:'img/c11.webp',
      coord:[51.3397,12.3731], zoom:6},
     {he:{n:'תל אביב',y:'אוקטובר 1933',d:'דוד ראה את הסימנים מוקדם. פחות משנה אחרי עליית היטלר עלה עם משפחתו לארץ. חולצות לבנות, מכנסיים קצרים, עצי דקל - ביטחון.'},
      en:{n:'Tel Aviv',y:'October 1933',d:'David saw the signs early. Less than a year after Hitler came to power he immigrated with his family. White shirts, short trousers, palm trees - safety.'},
+     img:'img/c15.jpg', webp:'img/c15.webp',
      coord:[32.0853,34.7818], zoom:7},
-    {he:{n:'רחובות · מכון ויצמן',y:'1953 - 1991',d:'הילד הפליט מלייפציג בנה כאן מעבדה שהפכה לאחת המובילות בעולם בגנטיקה של צמחים. 200 מאמרים, 7 ספרים, דיקן הפקולטה לביולוגיה.'},
-     en:{n:'Rehovot · Weizmann Institute',y:'1953 - 1991',d:'The refugee child from Leipzig built here a laboratory that became one of the world\'s leading labs in plant genetics. 200 papers, 7 books, Dean of the Faculty of Biology.'},
-     coord:[31.9070,34.8108], zoom:7},
     {he:{n:'פסדינה · Caltech',y:'1960 - 1962',d:'מלגת פולברייט. שבתון של פוסט-דוקטורט במכון הטכנולוגי של קליפורניה. המשפחה הצעירה - עזרא, ליתי, איתן ואהוד - חצתה את העולם.'},
      en:{n:'Pasadena · Caltech',y:'1960 - 1962',d:'A Fulbright fellowship. Postdoctoral sabbatical at the California Institute of Technology. The young family - Ezra, Liti, Eitan and Ehud - crossed the world.'},
      coord:[34.1478,-118.1445], zoom:7},
+    {he:{n:'רחובות · מכון ויצמן',y:'1953 - 1991',d:'הילד הפליט מלייפציג בנה כאן מעבדה שהפכה לאחת המובילות בעולם בגנטיקה של צמחים. 200 מאמרים, 7 ספרים, דיקן הפקולטה לביולוגיה.'},
+     en:{n:'Rehovot · Weizmann Institute',y:'1953 - 1991',d:'The refugee child from Leipzig built here a laboratory that became one of the world\'s leading labs in plant genetics. 200 papers, 7 books, Dean of the Faculty of Biology.'},
+     img:'img/c20.jpg', webp:'img/c20.webp',
+     coord:[31.9070,34.8108], zoom:7},
   ];
 
   const map = L.map(el, {scrollWheelZoom:false, zoomControl:true}).setView([45,15], 3);
@@ -1662,17 +2165,50 @@ document.querySelectorAll('.fullbleed img').forEach(img=>{
     attribution:'© OpenStreetMap, © CARTO', subdomains:'abcd', maxZoom:18
   }).addTo(map);
 
+  function popupHtml(c, lng, idx){
+    const t = c[lng] || c.he;
+    const img = c.img ? `<picture><source srcset="${c.webp}" type="image/webp"><img class="pop-img" src="${c.img}" alt="${t.n}" loading="lazy" decoding="async"></picture>` : '';
+    return `${img}<div class="pop-body"><b><span class="num">${idx+1}</span>${t.n}</b><span class="yr">${t.y}</span></div>`;
+  }
+
   const markers = [];
   cities.forEach((c,i)=>{
-    const icon = L.divIcon({className:'galon-marker',iconSize:[20,20],iconAnchor:[10,10]});
+    const icon = L.divIcon({className:'galon-marker',html:String(i+1),iconSize:[26,26],iconAnchor:[13,13]});
     const m = L.marker(c.coord,{icon}).addTo(map)
-      .bindPopup(`<b>${c.he.n}</b><span class="yr">${c.he.y}</span>`,{className:'galon-popup'});
+      .bindPopup(popupHtml(c,'he',i),{className:'galon-popup',maxWidth:260,minWidth:240});
     m.on('click', ()=>activate(i));
     markers.push({m,c});
   });
 
-  L.polyline(cities.map(c=>c.coord), {color:'#a07a3a', weight:2, dashArray:'6,6', opacity:.8}).addTo(map);
-  map.fitBounds(L.latLngBounds(cities.map(c=>c.coord)).pad(0.1));
+  // Animated path - segmented, fills as user scrolls through map section
+  const pathPoly = L.polyline(cities.map(c=>c.coord), {color:'#5fa395', weight:3, opacity:0.95, className:'galon-path'}).addTo(map);
+  map.fitBounds(L.latLngBounds(cities.map(c=>c.coord)).pad(0.15));
+
+  // Setup scroll-driven path drawing
+  function setupPathAnim(){
+    const pathEl = pathPoly._path;
+    if(!pathEl) return;
+    pathEl.classList.add('galon-path');
+    const len = pathEl.getTotalLength ? pathEl.getTotalLength() : 1500;
+    pathEl.style.setProperty('--len', len);
+    pathEl.style.strokeDasharray = len;
+    pathEl.style.strokeDashoffset = len;
+    const section = document.querySelector('.map-section');
+    function update(){
+      if(!section) return;
+      const r = section.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // Progress 0 when section top hits viewport bottom; 1 when section bottom hits viewport top
+      const total = r.height + vh;
+      const p = Math.min(1, Math.max(0, (vh - r.top) / total));
+      pathEl.style.strokeDashoffset = len * (1 - p);
+    }
+    window.addEventListener('scroll', update, {passive:true});
+    window.addEventListener('resize', update);
+    update();
+  }
+  // Wait a tick for SVG to be created
+  map.whenReady(()=>setTimeout(setupPathAnim, 100));
 
   // Build city nav buttons
   const nav = document.getElementById('cityNav');
@@ -1694,12 +2230,13 @@ document.querySelectorAll('.fullbleed img').forEach(img=>{
     // Update markers
     markers.forEach(({m},j)=>{
       const cls = 'galon-marker' + (j===i?' current':'');
-      m.setIcon(L.divIcon({className:cls,iconSize:[20,20],iconAnchor:[10,10]}));
+      m.setIcon(L.divIcon({className:cls,html:String(j+1),iconSize:[26,26],iconAnchor:[13,13]}));
     });
     // Update buttons
     nav.querySelectorAll('button').forEach((b,j)=>b.classList.toggle('active', j===i));
     // Fly to
-    map.flyTo(c.coord, c.zoom, {duration:1.4});
+    if(prefersReducedMotion.matches) map.setView(c.coord, c.zoom, {animate:false});
+    else map.flyTo(c.coord, c.zoom, {duration:1.4});
     // Update story
     story.style.opacity = '0';
     setTimeout(()=>{
@@ -1725,9 +2262,8 @@ document.querySelectorAll('.fullbleed img').forEach(img=>{
 
   window._galonRefreshMap = function(lng){
     currentLang = lng;
-    markers.forEach(({m,c})=>{
-      const t = c[lng] || c.he;
-      m.setPopupContent(`<b>${t.n}</b><span class="yr">${t.y}</span>`);
+    markers.forEach(({m,c},j)=>{
+      m.setPopupContent(popupHtml(c, lng, j));
     });
     // Re-render nav button labels
     nav.querySelectorAll('button').forEach((b,j)=>{
