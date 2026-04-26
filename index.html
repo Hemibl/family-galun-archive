@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מסע משפחת גלון · מאודסה אל תל אביב</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{
+  --cream:#f4ede0;
+  --paper:#ebe1cd;
+  --ink:#1d1611;
+  --sepia:#6b4a2b;
+  --gold:#a07a3a;
+  --rust:#8a3a1f;
+  --shadow:rgba(29,22,17,0.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Frank Ruhl Libre','Heebo',serif;
+  background:var(--cream);
+  color:var(--ink);
+  line-height:1.7;
+  overflow-x:hidden;
+}
+img{max-width:100%;height:auto;display:block}
+
+/* ---------- HERO ---------- */
+.hero{
+  min-height:100vh;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:radial-gradient(ellipse at center, #2a1f15 0%, #0e0907 100%);
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background:url('img/a08.jpg') center/contain no-repeat;
+  opacity:.18;
+  filter:sepia(.6) contrast(1.1);
+}
+.hero-content{
+  position:relative;
+  text-align:center;
+  color:var(--cream);
+  padding:2rem;
+  max-width:900px;
+}
+.hero h1{
+  font-weight:900;
+  font-size:clamp(2rem,5vw,4.5rem);
+  letter-spacing:-0.02em;
+  line-height:1.1;
+  margin-bottom:1.5rem;
+  text-shadow:0 4px 30px rgba(0,0,0,.6);
+  word-break:keep-all;
+}
+.hero h1 span{
+  display:block;
+  font-size:0.5em;
+  font-weight:400;
+  color:var(--gold);
+  letter-spacing:0.08em;
+  margin-bottom:1rem;
+}
+.hero p{
+  font-size:clamp(1rem,1.6vw,1.25rem);
+  font-weight:300;
+  color:#d8c8a8;
+  max-width:600px;
+  margin:0 auto 3rem;
+}
+.scroll-hint{
+  position:absolute;
+  bottom:3rem;
+  left:50%;
+  transform:translateX(-50%);
+  color:var(--gold);
+  font-size:0.85rem;
+  letter-spacing:0.3em;
+  animation:bounce 2.5s infinite;
+}
+.scroll-hint::after{
+  content:'';
+  display:block;
+  width:1px;height:40px;
+  background:var(--gold);
+  margin:1rem auto 0;
+}
+@keyframes bounce{
+  0%,100%{transform:translateX(-50%) translateY(0);opacity:.7}
+  50%{transform:translateX(-50%) translateY(10px);opacity:1}
+}
+
+/* ---------- CHAPTERS ---------- */
+.chapter{
+  padding:9rem 2rem;
+  position:relative;
+}
+.chapter:nth-of-type(even){background:var(--paper)}
+
+.chapter-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.chapter-num{
+  font-size:0.85rem;
+  font-weight:500;
+  letter-spacing:0.5em;
+  color:var(--gold);
+  margin-bottom:1rem;
+  text-transform:uppercase;
+}
+.chapter h2{
+  font-weight:900;
+  font-size:clamp(2rem,4.5vw,3.5rem);
+  margin-bottom:1rem;
+  line-height:1.1;
+}
+.chapter .year{
+  font-family:'Heebo',sans-serif;
+  font-weight:300;
+  font-size:1.5rem;
+  color:var(--sepia);
+  margin-bottom:2.5rem;
+  letter-spacing:0.05em;
+}
+.chapter p{
+  font-size:1.15rem;
+  margin-bottom:1.5rem;
+  max-width:680px;
+}
+.chapter p.lead{
+  font-size:1.4rem;
+  font-weight:400;
+  color:var(--sepia);
+  font-style:italic;
+  border-right:3px solid var(--gold);
+  padding-right:1.25rem;
+  margin:2rem 0;
+}
+
+/* ---------- LAYOUT BLOCKS ---------- */
+.split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3rem;
+  align-items:center;
+  margin-top:3rem;
+}
+@media(max-width:768px){.split{grid-template-columns:1fr}}
+
+.photo{
+  background:#fff;
+  padding:1rem 1rem 2.5rem;
+  box-shadow:0 20px 50px var(--shadow), 0 4px 10px rgba(0,0,0,.1);
+  transform:rotate(-1.2deg);
+  transition:transform .4s ease;
+  position:relative;
+}
+.photo:hover{transform:rotate(0) scale(1.02);z-index:5}
+.photo.r{transform:rotate(1.5deg)}
+.photo img{filter:sepia(.15) contrast(1.05);width:100%;height:auto;display:block;cursor:zoom-in}
+.photo .zoom-btn{
+  position:absolute;top:1.2rem;left:1.2rem;
+  background:rgba(29,22,17,.75);color:var(--cream);
+  border:none;width:34px;height:34px;border-radius:50%;
+  cursor:pointer;font-size:18px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .25s;z-index:3;
+}
+.photo:hover .zoom-btn{opacity:1}
+.photo .caption{
+  font-family:'Heebo',sans-serif;
+  font-size:0.85rem;
+  text-align:center;
+  margin-top:0.75rem;
+  color:#666;
+  font-weight:300;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+  gap:2rem;
+  margin-top:3rem;
+}
+.gallery .photo{transform:rotate(0)}
+.gallery .photo:nth-child(odd){transform:rotate(-1deg)}
+.gallery .photo:nth-child(3n){transform:rotate(1.5deg)}
+.gallery .photo:nth-child(5n){transform:rotate(-0.5deg)}
+
+.fullbleed{
+  margin:4rem 0;
+  position:relative;
+  background:var(--ink);
+  overflow:hidden;
+  width:100%;
+}
+.fullbleed img{
+  width:100%;
+  max-height:85vh;
+  height:auto;
+  object-fit:contain;
+  display:block;
+  filter:sepia(.3) contrast(1.05);
+  cursor:zoom-in;
+}
+.fullbleed-text{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:3rem 2rem;
+  background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
+  color:var(--cream);
+  font-size:1.5rem;
+  font-weight:300;
+  text-align:center;
+  font-style:italic;
+}
+
+.factbox{
+  background:var(--ink);
+  color:var(--cream);
+  padding:2.5rem;
+  margin:3rem 0;
+  border-right:6px solid var(--gold);
+}
+.factbox h4{
+  color:var(--gold);
+  font-weight:500;
+  font-size:0.85rem;
+  letter-spacing:0.3em;
+  margin-bottom:1rem;
+  text-transform:uppercase;
+}
+.factbox ul{list-style:none}
+.factbox li{
+  padding:0.5rem 0;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  display:flex;
+  justify-content:space-between;
+  font-family:'Heebo',sans-serif;
+  font-weight:300;
+}
+.factbox li:last-child{border:none}
+.factbox li b{font-weight:500;color:var(--gold);font-family:'Heebo',sans-serif}
+
+/* MAP */
+.map-section{
+  background:var(--ink);
+  color:var(--cream);
+  padding:6rem 2rem;
+  text-align:center;
+}
+.map-section h3{
+  font-size:2.5rem;
+  font-weight:900;
+  margin-bottom:1rem;
+}
+.map-section p{color:#bba47a;max-width:600px;margin:0 auto 3rem}
+.map{
+  max-width:1100px;
+  height:600px;
+  margin:0 auto;
+  position:relative;
+  background:#0e0907;
+  border:1px solid rgba(160,122,58,.3);
+  filter:saturate(.7) sepia(.15);
+}
+.map .leaflet-container{background:#1a1209;font-family:'Heebo',sans-serif}
+.galon-popup .leaflet-popup-content-wrapper{
+  background:var(--ink);color:var(--cream);
+  border:1px solid var(--gold);border-radius:2px;
+  font-family:'Heebo',sans-serif;
+}
+.galon-popup .leaflet-popup-tip{background:var(--ink);border:1px solid var(--gold)}
+.galon-popup b{color:var(--gold);font-size:1.1rem;display:block;margin-bottom:.25rem}
+.galon-popup .yr{color:var(--gold);font-weight:300;font-size:.85rem}
+.galon-marker{
+  background:var(--gold);width:14px;height:14px;border-radius:50%;
+  border:3px solid var(--cream);box-shadow:0 0 0 2px var(--rust);
+}
+.galon-marker.active{background:var(--rust);width:18px;height:18px}
+.galon-marker.current{background:var(--rust);box-shadow:0 0 0 2px var(--cream),0 0 0 6px var(--rust);transform:scale(1.3)}
+.city-nav{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;
+  max-width:1100px;margin:0 auto 1.5rem;
+}
+.city-nav button{
+  background:transparent;border:1px solid rgba(160,122,58,.4);
+  color:var(--cream);font-family:'Heebo',sans-serif;font-size:.95rem;
+  padding:.55rem 1.1rem;border-radius:30px;cursor:pointer;
+  transition:all .25s;letter-spacing:.02em;
+}
+.city-nav button:hover{border-color:var(--gold);color:var(--gold)}
+.city-nav button.active{
+  background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:500;
+}
+.city-story{
+  max-width:1100px;margin:1.5rem auto 0;text-align:center;
+  min-height:90px;padding:1.5rem;
+  background:rgba(160,122,58,.07);
+  border-top:1px solid rgba(160,122,58,.3);
+  border-bottom:1px solid rgba(160,122,58,.3);
+  transition:opacity .3s;
+}
+.city-story .cs-yr{
+  color:var(--gold);font-family:'Heebo',sans-serif;font-size:.85rem;
+  letter-spacing:.3em;margin-bottom:.3rem;
+}
+.city-story .cs-name{
+  font-size:1.6rem;font-weight:700;color:var(--cream);margin-bottom:.5rem;
+}
+.city-story .cs-desc{color:#bba47a;font-family:'Heebo',sans-serif;font-weight:300;line-height:1.7}
+
+/* TIMELINE */
+.timeline{
+  position:relative;
+  padding:2rem 0;
+  margin:3rem 0;
+}
+.timeline::before{
+  content:'';
+  position:absolute;
+  right:50%;
+  top:0;bottom:0;
+  width:2px;
+  background:var(--gold);
+}
+.tl-item{
+  position:relative;
+  padding:1.5rem 0;
+  width:50%;
+  padding-left:3rem;
+}
+.tl-item:nth-child(even){
+  margin-right:50%;
+  padding-right:3rem;
+  padding-left:0;
+  text-align:right;
+}
+.tl-item:nth-child(odd){
+  text-align:left;
+}
+.tl-item::before{
+  content:'';
+  position:absolute;
+  width:14px;height:14px;
+  border-radius:50%;
+  background:var(--rust);
+  border:3px solid var(--cream);
+  top:1.7rem;
+}
+.tl-item:nth-child(odd)::before{left:-7px}
+.tl-item:nth-child(even)::before{right:-7px}
+.tl-item .y{
+  font-family:'Heebo',sans-serif;
+  font-size:1.5rem;
+  font-weight:700;
+  color:var(--rust);
+}
+.tl-item .t{
+  font-size:1rem;
+  margin-top:0.25rem;
+  font-family:'Heebo',sans-serif;
+  font-weight:300;
+}
+@media(max-width:768px){
+  .timeline::before{right:20px}
+  .tl-item, .tl-item:nth-child(even){
+    width:100%;margin:0;
+    padding-right:3rem;padding-left:0;
+    text-align:right;
+  }
+  .tl-item::before, .tl-item:nth-child(even)::before{right:13px;left:auto}
+}
+
+/* FAMILY TREE */
+.tree{
+  display:flex;flex-direction:column;align-items:center;
+  gap:2.5rem;margin:3rem 0;position:relative;
+}
+.tree .gen{
+  display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;
+  position:relative;width:100%;
+}
+.tree .gen-label{
+  position:absolute;top:50%;transform:translateY(-50%);
+  left:1rem;font-family:'Heebo',sans-serif;font-size:.7rem;
+  letter-spacing:.3em;color:var(--gold);font-weight:500;
+  writing-mode:vertical-rl;
+}
+.tree .gen::before{
+  content:'';position:absolute;top:-2rem;left:50%;
+  width:1px;height:2rem;background:var(--sepia);opacity:.5;
+}
+.tree .gen:first-child::before{display:none}
+.tree .person{
+  background:var(--cream);border:1px solid rgba(107,74,43,.3);
+  padding:1rem 1.2rem .9rem;text-align:center;
+  font-family:'Heebo',sans-serif;font-size:.95rem;
+  min-width:160px;cursor:pointer;
+  transition:all .25s;border-radius:6px;
+  box-shadow:0 2px 8px rgba(107,74,43,.06);
+  position:relative;
+}
+.tree .person:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(107,74,43,.18);
+  border-color:var(--gold);
+}
+.tree .person .avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--sepia);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:1.2rem;
+  color:var(--sepia);margin:0 auto .6rem;
+  background-size:cover;background-position:center;
+}
+.tree .person.featured{
+  background:var(--gold);color:var(--cream);
+  border-color:var(--rust);
+}
+.tree .person.featured .avatar{
+  background-color:var(--rust);color:var(--cream);border-color:var(--cream);
+}
+.tree .person.featured span{color:#f3e3c4 !important}
+.tree .person b{display:block;font-weight:600;font-size:1rem;margin-bottom:.25rem;line-height:1.3}
+.tree .person span{font-size:.78rem;color:var(--sepia);font-weight:300;display:block}
+.tree .person .more{
+  font-size:.7rem;color:var(--gold);margin-top:.5rem;
+  letter-spacing:.1em;opacity:0;transition:opacity .25s;
+}
+.tree .person:hover .more{opacity:1}
+.tree .couple{
+  display:flex;gap:1.5rem;align-items:center;position:relative;
+}
+.tree .couple::after{
+  content:'∞';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:1rem;color:var(--gold);opacity:.5;
+}
+
+/* Person modal */
+.person-modal{
+  position:fixed;inset:0;background:rgba(10,7,5,.85);
+  z-index:9000;display:none;align-items:center;justify-content:center;
+  padding:2rem;cursor:pointer;
+}
+.person-modal.open{display:flex}
+.person-modal-card{
+  background:var(--cream);max-width:560px;width:100%;
+  padding:2.5rem;border-radius:8px;cursor:default;
+  position:relative;max-height:90vh;overflow-y:auto;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+.person-modal-card .pm-close{
+  position:absolute;top:1rem;left:1rem;
+  background:transparent;border:none;font-size:1.8rem;
+  color:var(--sepia);cursor:pointer;line-height:1;
+}
+.person-modal-card .pm-avatar{
+  width:90px;height:90px;border-radius:50%;
+  background:var(--paper);border:3px solid var(--gold);
+  margin:0 auto 1.2rem;display:flex;align-items:center;
+  justify-content:center;font-family:'Frank Ruhl Libre',serif;
+  font-weight:700;font-size:2rem;color:var(--sepia);
+  background-size:cover;background-position:center;
+}
+.person-modal-card .pm-name{
+  font-family:'Frank Ruhl Libre',serif;font-size:1.8rem;
+  font-weight:700;text-align:center;color:var(--ink);margin-bottom:.4rem;
+}
+.person-modal-card .pm-dates{
+  text-align:center;color:var(--gold);font-family:'Heebo',sans-serif;
+  font-size:.95rem;letter-spacing:.05em;margin-bottom:1.5rem;
+}
+.person-modal-card .pm-bio{
+  font-family:'Frank Ruhl Libre',serif;font-size:1.05rem;
+  line-height:1.7;color:var(--ink);
+}
+.person-modal-card .pm-bio p{margin-bottom:.8rem}
+
+/* OUTRO */
+.outro{
+  background:linear-gradient(180deg, var(--ink) 0%, #0a0604 100%);
+  color:var(--cream);
+  padding:8rem 2rem;
+  text-align:center;
+}
+.outro h2{
+  font-weight:300;
+  font-size:clamp(1.8rem,3.5vw,3rem);
+  max-width:800px;
+  margin:0 auto 2rem;
+  line-height:1.4;
+}
+.outro h2 b{color:var(--gold);font-weight:700}
+.outro .sig{
+  margin-top:4rem;
+  font-family:'Heebo',sans-serif;
+  font-size:0.85rem;
+  letter-spacing:0.3em;
+  color:#7a6648;
+}
+
+.resources{
+  margin:5rem auto 2rem;max-width:900px;
+  padding-top:3rem;border-top:1px solid rgba(160,122,58,.25);
+}
+.res-title{
+  font-family:'Heebo',sans-serif;font-size:.85rem;
+  letter-spacing:.3em;color:var(--gold);font-weight:500;
+  margin-bottom:1.8rem;text-align:center;
+}
+.res-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:.9rem;
+}
+.res-btn{
+  display:flex;align-items:center;gap:.9rem;
+  padding:1rem 1.2rem;
+  background:rgba(160,122,58,.08);
+  border:1px solid rgba(160,122,58,.3);
+  border-radius:6px;text-decoration:none;color:var(--cream);
+  transition:all .25s;text-align:right;
+}
+.res-btn:hover{
+  background:rgba(160,122,58,.18);
+  border-color:var(--gold);transform:translateY(-2px);
+}
+.res-btn.primary{
+  background:rgba(160,122,58,.18);border-color:var(--gold);
+}
+.res-btn.primary:hover{background:var(--gold);color:var(--ink)}
+.res-btn.primary:hover .res-ico{background:var(--ink);color:var(--gold)}
+.res-btn.primary:hover .res-text span{color:var(--ink)}
+.res-ico{
+  flex:none;width:36px;height:36px;border-radius:50%;
+  background:var(--gold);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Heebo',sans-serif;font-weight:700;font-size:1.05rem;
+}
+.res-text{display:flex;flex-direction:column;line-height:1.3;font-family:'Heebo',sans-serif}
+.res-text b{font-size:.95rem;font-weight:500;color:var(--cream)}
+.res-text span{font-size:.75rem;font-weight:300;color:#bba47a;margin-top:.15rem}
+html[lang="en"] .res-btn{text-align:left}
+
+/* REVEAL ANIMATIONS */
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity 1s ease, transform 1s ease;
+}
+.reveal.in{opacity:1;transform:none}
+.reveal-d2{transition-delay:.15s}
+.reveal-d3{transition-delay:.3s}
+
+/* DROP CAP */
+.dropcap::first-letter{
+  font-size:4.5rem;
+  font-weight:900;
+  float:right;
+  line-height:0.9;
+  margin:0.3rem 0 0 0.4rem;
+  color:var(--rust);
+}
+html[lang="en"] .dropcap::first-letter{
+  float:left;
+  margin:0.3rem 0.4rem 0 0;
+}
+
+/* AUDIO NARRATION */
+.tts-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:transparent;border:1px solid var(--gold);
+  color:var(--gold);padding:.45rem 1rem;border-radius:30px;
+  font-family:'Heebo',sans-serif;font-size:.85rem;cursor:pointer;
+  margin-top:1.5rem;margin-bottom:0;transition:all .2s;letter-spacing:.02em;
+}
+.tts-btn:hover{background:var(--gold);color:var(--cream)}
+.tts-btn.playing{background:var(--rust);border-color:var(--rust);color:var(--cream)}
+.tts-btn .ico{width:14px;height:14px;display:inline-block}
+.chapter[style*="ink"] .tts-btn{color:var(--gold);border-color:var(--gold)}
+.tts-bar{
+  position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);
+  background:rgba(29,22,17,.95);color:var(--cream);
+  border:1px solid var(--gold);border-radius:40px;
+  padding:.6rem 1rem;display:none;align-items:center;gap:.7rem;
+  z-index:9500;backdrop-filter:blur(10px);
+  font-family:'Heebo',sans-serif;font-size:.9rem;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+.tts-bar.visible{display:flex}
+.tts-bar button{
+  background:transparent;border:none;color:var(--cream);
+  cursor:pointer;font-size:1.2rem;padding:.2rem .5rem;line-height:1;
+}
+.tts-bar button:hover{color:var(--gold)}
+.tts-bar .label{padding:0 .5rem;color:#bba47a;font-size:.8rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tts-bar .speed{
+  background:transparent;border:1px solid rgba(255,255,255,.2);
+  color:var(--cream);border-radius:20px;padding:.15rem .6rem;
+  font-size:.75rem;font-family:'Heebo',sans-serif;cursor:pointer;
+}
+.tts-reading{background:rgba(160,122,58,.15);transition:background .3s;border-radius:4px}
+
+.lang-toggle{
+  position:fixed;top:1.2rem;right:1.2rem;z-index:1000;
+  background:rgba(29,22,17,.85);color:var(--cream);
+  border:1px solid var(--gold);border-radius:30px;
+  padding:.5rem 1.1rem;font-family:'Heebo',sans-serif;font-size:.85rem;
+  cursor:pointer;letter-spacing:.05em;font-weight:500;
+  backdrop-filter:blur(8px);transition:all .2s;
+}
+.lang-toggle:hover{background:var(--gold);color:var(--ink)}
+html[lang="en"] .lang-toggle{right:auto;left:1.2rem}
+html[lang="en"]{direction:ltr}
+html[lang="en"] body{font-family:'Frank Ruhl Libre','Georgia',serif}
+html[lang="en"] .timeline::before{right:auto;left:50%;transform:translateX(-50%)}
+html[lang="en"] .tl-item{padding-left:3rem;padding-right:0;text-align:left;margin-left:50%;margin-right:0}
+html[lang="en"] .tl-item:nth-child(even){margin-left:0;margin-right:0;padding-left:0;padding-right:3rem;text-align:right;width:50%}
+html[lang="en"] .tl-item::before{left:-7px;right:auto}
+html[lang="en"] .tl-item:nth-child(even)::before{right:-7px;left:auto}
+html[lang="en"] .factbox li{justify-content:space-between;gap:1.2rem;text-align:left}
+html[lang="en"] .factbox li b{order:1;min-width:auto;text-align:right}
+html[lang="en"] .factbox li span{order:0;flex:1;text-align:left}
+html[lang="en"] .chapter p.lead{
+  border-right:none;border-left:3px solid var(--gold);
+  padding-right:0;padding-left:1.25rem;
+}
+html[lang="en"] .factbox{border-right:none;border-left:6px solid var(--gold)}
+html[lang="en"] .person-modal-card .pm-close{left:auto;right:1rem}
+html[lang="en"] .scroll-hint{letter-spacing:0.4em}
+html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
+</style>
+</head>
+<body>
+<button class="lang-toggle" id="langToggle" aria-label="Switch language">English</button>
+
+<div class="tts-bar" id="ttsBar">
+  <button id="ttsPause" title="השהה/המשך">⏸</button>
+  <button id="ttsStop" title="עצור">⏹</button>
+  <span class="label" id="ttsLabel">0:00 / 0:00</span>
+  <input type="range" id="ttsSeek" min="0" max="100" value="0" style="width:140px;accent-color:#a07a3a;">
+  <button class="speed" id="ttsSpeed">1.25x</button>
+</div>
+<audio id="ttsAudio" preload="none">
+  <source id="ttsSrc" src="audio/story-he.mp3" type="audio/mpeg">
+</audio>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>
+      <span>מסע משפחת גלון</span>
+      מאודסה אל תל אביב
+    </h1>
+    <p>סיפור של חמישה דורות, ארבע שפות, שלוש מולדות - ובית אחד שנבנה מחדש בכל פעם</p>
+  </div>
+  <div class="scroll-hint">גלול מטה</div>
+</section>
+
+<!-- CHAPTER 1 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="reveal">
+      <div class="chapter-num">פרק ראשון</div>
+      <h2>השורשים</h2>
+      <div class="year">אודסה · 1875-1902</div>
+      <p class="dropcap">בעיר נמל על שפת הים השחור, באודסה של האימפריה הרוסית, נולד דוד גלון ב-15 בדצמבר 1875. הוא היה בנם של ברוך משה גלון ולאה לבית גרינשפן, באחת מקהילות היהודים הוותיקות והתוססות במזרח אירופה.</p>
+      <p>אודסה של אותם הימים הייתה צומת של תרבויות, סוחרים, סופרים והוגי דעות. ברוך משה - הסבא של עזרא לעתיד - היה אדם שמכבד מסורת אך גם מסתכל קדימה. בתמונה היחידה ששרדה ממנו, הוא עומד בנוקשות לצד בנו דוד, שלבוש כמו מלח קטן.</p>
+    </div>
+
+    <div class="split">
+      <div class="reveal photo">
+        <img src="img/a08.jpg" alt="ברוך משה גלון עם בנו דוד">
+        <div class="caption">ברוך משה גלון עם בנו דוד · אודסה, 1902</div>
+      </div>
+      <div class="reveal reveal-d2">
+        <p class="lead">"דוד גלון, יליד אודסה - היה הראשון במשפחה שעזב את העיר. הוא יצא מערבה, אל גרמניה, אל מה שנראה אז כעולם הגדול והמודרני."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 2 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="reveal">
+      <div class="chapter-num">פרק שני</div>
+      <h2>הצד של ארנה</h2>
+      <div class="year">קוטרוביץ · 1849-1922</div>
+      <p>במקביל, בעיר קוטרוביץ (היום קטוביץ' שבפולין, אז שלזיה הגרמנית), חיה משפחה אחרת - משפחת מרקוס. סבתא אנה ביינר לבית ברנר (1849-1928) הביאה לעולם דורות שלמים. בתמונות הראשונות שלהם נראים גינות מטופחות, חליפות צמר משובצות, ואותו מבט שקט של בורגנות יהודית-גרמנית במלוא תפארתה.</p>
+    </div>
+
+    <div class="gallery">
+      <div class="reveal photo">
+        <img src="img/a09.jpg" alt="ברטה גרידן ולאזר מרקוס · קוטרוביץ 1895">
+        <div class="caption">ברטה ולאזר מרקוס · 1895</div>
+      </div>
+      <div class="reveal reveal-d2 photo">
+        <img src="img/a10.jpg" alt="ארנה מרקוס · 1899">
+        <div class="caption">ארנה מרקוס בת שנה · 1899</div>
+      </div>
+      <div class="reveal reveal-d3 photo">
+        <img src="img/b03.jpg" alt="ברטה מרקוס עם ילדיה · 1903">
+        <div class="caption">ברטה מרקוס עם בנותיה · 1903</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:3rem">
+      <p><b>ארנה מרקוס</b>, שתהיה אם המשפחה הבאה, נולדה ב-1898. היא גדלה בקוטרוביץ, התחנכה בבתי ספר גרמניים, ולמדה לקרוא ולכתוב בגרמנית גבוהה. בתמונות מילדותה היא נראית עם אחיותיה - בשמלות מלמלה, עם שיער מסודר וצמות.</p>
+    </div>
+
+    <div class="split">
+      <div class="reveal photo r">
+        <img src="img/b07.jpg" alt="ליבא גלון - לייפציג 1913">
+        <div class="caption">משפחת גלון בלייפציג, 1913</div>
+      </div>
+      <div class="reveal reveal-d2">
+        <p class="lead">"ב-1922, אחרי מלחמת העולם הראשונה, התחתנו דוד גלון - יליד אודסה - וארנה מרקוס - ילידת קוטרוביץ. שני אנשים משני קצוות אירופה היהודית, שמצאו את עצמם יחד בלב גרמניה."</p>
+      </div>
+    </div>
+
+    <div class="gallery">
+      <div class="reveal photo">
+        <img src="img/b13.jpg" alt="דוד גלון 1922">
+        <div class="caption">דוד גלון, 1922</div>
+      </div>
+      <div class="reveal reveal-d2 photo">
+        <img src="img/b12.jpg" alt="ארנה ודוד גלון 1920-21">
+        <div class="caption">ארנה ודוד · 1920-1921</div>
+      </div>
+      <div class="reveal reveal-d3 photo r">
+        <img src="img/b14.jpg" alt="ארנה מרקוס 1923">
+        <div class="caption">ארנה מרקוס · פורטרט, 1923</div>
+      </div>
+      <div class="reveal reveal-d3 photo">
+        <img src="img/b16.jpg" alt="אנה ברנר 1928">
+        <div class="caption">אנה נוימן לבית ברנר · 1928</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 3 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="reveal">
+      <div class="chapter-num">פרק שלישי</div>
+      <h2>בני הבית בלייפציג</h2>
+      <div class="year">לייפציג · 1924-1932</div>
+      <p>הזוג הצעיר השתקע בלייפציג ובכפר באלסדורף הסמוך. דוד עבד ופרנס, ארנה ניהלה את הבית. ב-8 באפריל 1924 נולד הבכור - <b>אריה</b>. שלוש שנים אחר כך, באפריל 1927, נולד הצעיר - <b>עזרא</b>.</p>
+      <p>הילדות שלהם הייתה גרמנית במובן הכי עמוק של המילה. גן ילדים גרמני, בית ספר עברי בלייפציג, חברים יהודים וגוים, טיולים בפארקים, חופשות על הים, מפגשי משפחה גדולים וצילומים מאצל הצלם של השכונה.</p>
+    </div>
+
+    <div class="gallery">
+      <div class="reveal photo">
+        <img src="img/b15.jpg" alt="ארנה עם אריה התינוק 1924">
+        <div class="caption">ארנה עם אריה התינוק · 1924</div>
+      </div>
+      <div class="reveal reveal-d2 photo">
+        <img src="img/c01.jpg" alt="אריה בעגלת תינוק קטוביץ 1924">
+        <div class="caption">אריה ברוך בן דוד · קטוביץ, 1924</div>
+      </div>
+      <div class="reveal reveal-d3 photo">
+        <img src="img/c02.jpg" alt="עזרא ואריה תינוקות">
+        <div class="caption">עזרא ואריה · 1925</div>
+      </div>
+      <div class="reveal photo r">
+        <img src="img/c03.jpg" alt="בית גלון בבאלסדורף">
+        <div class="caption">בית משפחת גלון בבאלסדורף · 1926</div>
+      </div>
+      <div class="reveal reveal-d2 photo">
+        <img src="img/c05.jpg" alt="אריה ועזרא בילדותם">
+        <div class="caption">שני האחים, באלסדורף · 1927</div>
+      </div>
+    </div>
+
+    <div class="split" style="margin-top:4rem">
+      <div class="reveal photo">
+        <img src="img/c08.jpg" alt="כיתה בבית הספר העברי בלייפציג">
+        <div class="caption">כיתה בבית הספר העברי בלייפציג · 1930</div>
+      </div>
+      <div class="reveal reveal-d2">
+        <p>בבית הספר העברי בלייפציג, אריה ועזרא קיבלו חינוך כפול: מצד אחד גרמניה, באך ושילר; מצד שני - עברית, תנ"ך וציונות. הוריהם, כמו רוב יהודי גרמניה באותם הימים, לא ידעו עדיין שיום אחד החינוך הזה יציל את חייהם.</p>
+        <p class="lead">"כל זה היה בלייפציג, ב-1930. שלוש שנים לפני ש'הוא' עלה לשלטון."</p>
+      </div>
+    </div>
+
+    <div class="gallery">
+      <div class="reveal photo">
+        <img src="img/c09.jpg" alt="אריה על הסוס 1929">
+        <div class="caption">אריה על הסוס · 1929</div>
+      </div>
+      <div class="reveal reveal-d2 photo r">
+        <img src="img/c10.jpg" alt="אריה ועזרא בלייפציג 1931">
+        <div class="caption">אריה ועזרא · גן העיר לייפציג, 1931</div>
+      </div>
+      <div class="reveal reveal-d3 photo">
+        <img src="img/c11.jpg" alt="לייפציג 1930-1931">
+        <div class="caption">לייפציג · רחבת המלך אוגוסטוס, 1931</div>
+      </div>
+      <div class="reveal photo">
+        <img src="img/c12.jpg" alt="ארנה וילדים על הסלד">
+        <div class="caption">חופשה משפחתית · 1932</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FULL BLEED MOMENT -->
+<div class="fullbleed">
+  <img src="img/c13.jpg" alt="נופש משפחתי אחרון בגרמניה 1932">
+  <div class="fullbleed-text">"נופש משפחתי אחרון בגרמניה · החוף הבלטי · אוגוסט 1932"</div>
+</div>
+
+<div class="fullbleed">
+  <img src="img/c14.jpg" alt="פסח אחרון בלייפציג 1933">
+  <div class="fullbleed-text">"אפריל 1933 - העולם הישן מתחיל להתפרק. ינואר היה החודש שבו עלה היטלר. עכשיו צריך להחליט."</div>
+</div>
+
+<!-- CHAPTER 4 - The Escape -->
+<section class="chapter" style="background:var(--ink);color:var(--cream)">
+  <div class="chapter-inner">
+    <div class="reveal">
+      <div class="chapter-num" style="color:var(--rust)">פרק רביעי</div>
+      <h2 style="color:var(--cream)">"אנו כאן בארצנו"</h2>
+      <div class="year" style="color:var(--gold)">תל אביב · אוקטובר 1933</div>
+      <p class="dropcap" style="color:var(--cream)">דוד גלון ראה את הסימנים מוקדם. הוא לא חיכה לקריסטל-נאכט, לא חיכה לחוקי נירנברג. באוקטובר 1933, פחות משנה אחרי שהיטלר עלה לשלטון, הוא עלה עם משפחתו לארץ ישראל - אשתו ארנה, הבכור אריה (9), והצעיר עזרא (6 וחצי).</p>
+      <p>הם הגיעו לתל אביב הקטנה - עיר חולית, עירוני, צעירה, עברית. דוד שכר לעצמו "סנט רוסיג'נסון" - חברה לעבודות בנייה. המשפחה התיישבה, הילדים התחילו בית ספר, ארנה למדה עברית. השפה החדשה לא הייתה קלה, אבל היא הייתה ביתית.</p>
+    </div>
+
+    <div class="factbox">
+      <h4>הצלה ברגע האחרון</h4>
+      <ul>
+        <li><span>עליית היטלר לשלטון</span><b>30.1.1933</b></li>
+        <li><span>בית הספר העברי בלייפציג נסגר</span><b>אביב 1933</b></li>
+        <li><span>משפחת גלון מגיעה לתל אביב</span><b>אוקטובר 1933</b></li>
+        <li><span>ליל הבדולח</span><b>9.11.1938</b></li>
+        <li><span>הגעת האסירים הראשונים לאושוויץ</span><b>14.6.1940</b></li>
+      </ul>
+    </div>
+
+    <div class="split">
+      <div class="reveal photo">
+        <img src="img/c15.jpg" alt="ארנה ובניה - הגעה לתל אביב 1933">
+        <div class="caption">"אנו כאן בארצנו" · ארנה ובניה, תל אביב 1933</div>
+      </div>
+      <div class="reveal reveal-d2">
+        <p class="lead" style="color:var(--gold);border-color:var(--rust)">תמונה אחת אומרת הכל. אם, שני בנים, חולצות לבנות, מכנסיים קצרים. רקע של עצי דקל. ביטחון.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 5 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="reveal">
+      <div class="chapter-num">פרק חמישי</div>
+      <h2>ילד תל-אביבי</h2>
+      <div class="year">תל אביב · 1934-1941</div>
+      <p>עזרא נכנס לבית הספר היסודי "אחד העם" לבנים בתל אביב. שמונה שנים, עברית, חברים עולים מאירופה, חיים פשוטים. במקביל הצטרף ל"אגודת הבריאות" של בית הפועל - תנועת נוער שדגלה בספורט, חיים בריאים והכשרה לעבודה חקלאית.</p>
+    </div>
+
+    <div class="gallery">
+      <div class="reveal photo">
+        <img src="img/c16.jpg" alt="דוד גלון תל אביב 1934">
+        <div class="caption">דוד גלון · תל אביב, 2.7.1934</div>
+      </div>
+      <div class="reveal reveal-d2 photo">
+        <img src="img/c17.jpg" alt="חברי כיתה ת״א">
+        <div class="caption">חברי כיתה · משפחת גולדנברג ובני הילדים, תל אביב 1937</div>
+      </div>
+      <div class="reveal reveal-d3 photo r">
+        <img src="img/c18.jpg" alt="אגודת הבריאות בית הפועל 1936">
+        <div class="caption">אגודת הבריאות, "בית הפועל" · יולי 1936</div>
+      </div>
+      <div class="reveal photo">
+        <img src="img/c19.jpg" alt="דוד גלון על אנייה לארה״ב 1936">
+        <div class="caption">דוד גלון על סיפון האנייה בדרך לארה"ב · 1936</div>
+      </div>
+      <div class="reveal reveal-d3 photo">
+        <img src="img/c20.jpg" alt="עזרא בכרם הפועל">
+        <div class="caption">עזרא בכרם המקצועי של בית הפועל · 1936</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:3rem">
+      <p class="lead">בקיץ 1941, בן 14, סיים עזרא את כיתה ח'. הוא יצא לעבוד שנה בכפר גדעון, להתכונן ללימודי חקלאות בכדורי. גרמניה הייתה כבר עולם רחוק, ארץ ישראל - הבית.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 6 - PALMACH -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="reveal">
+      <div class="chapter-num">פרק שישי</div>
+      <h2>בית"ס כדורי, פלמ"ח, מלחמה</h2>
+      <div class="year">1942-1949</div>
+      <p>בסתיו 1942, בעוד מלחמת העולם השנייה בשיא, התקבל עזרא ל"כדורי" - בית הספר החקלאי האגדי על הר תבור. שנתיים לימודים, וב-1944, מיד עם סיום בית הספר - גיוס לפלמ"ח. תחילה בפלוגה א', אחר כך קורס מפקדי כיתה, ולבסוף - הפלוגה הימית.</p>
+      <p>בקיץ 1947 השתחרר, ניגש לבחינות בגרות חיצוניות, והתקבל לפקולטה לחקלאות באוניברסיטה העברית. אבל אחרי חמישה שבועות של לימודים בלבד, חזר לקרבות מלחמת השחרור - הפעם בגדוד השישי, מפקד פורמנים שאחראיים על השיירות לירושלים בזמן המצור על העיר.</p>
+      <p>אחרי המלחמה שימש כמפקד פלוגה בצה"ל. תחתיו שירת אז המשורר <b>יהודה עמיחי</b>. המשיך במילואים במבצע קדש, ששת הימים ויום כיפור. תפקידו האחרון - מפקד הג"א של חבל רחובות. השתחרר בדרגת רב-סרן.</p>
+    </div>
+
+    <div class="factbox">
+      <h4>שירות צבאי</h4>
+      <ul>
+        <li><span>גיוס לפלמ"ח</span><b>1944</b></li>
+        <li><span>פלוגה ימית, מפקד כיתה</span><b>1945-47</b></li>
+        <li><span>מלחמת השחרור</span><b>1948-49</b></li>
+        <li><span>אבא דוד נפטר</span><b>19.4.1948</b></li>
+        <li><span>מלחמת סיני (מ"פ)</span><b>1956</b></li>
+        <li><span>מלחמת ששת הימים</span><b>1967</b></li>
+        <li><span>מלחמת יום כיפור</span><b>1973</b></li>
+        <li><span>דרגת רב-סרן (במילואים)</span><b>-</b></li>
+      </ul>
+    </div>
+
+    <p class="lead reveal">"באותה שנה - 1948 - אבא דוד נפטר. עזרא ואריה הפכו לפתע לראשי המשפחה. אחת המלחמות הייתה בחוץ, אחרת הייתה בבית."</p>
+  </div>
+</section>
+
+<!-- CHAPTER 7 - SCIENCE -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="reveal">
+      <div class="chapter-num">פרק שביעי</div>
+      <h2>המדע, המעבדה, ליתי</h2>
+      <div class="year">רחובות · 1953-1991</div>
+      <p>ב-1953 סיים עזרא את התואר השני בפקולטה לחקלאות, התקבל לעבודה במכון ויצמן למדע במעבדה לגנטיקה של צמחים, ובמאי אותה שנה התחתן עם <b>ליתי כץ</b> - אהבת חייו, שתהיה לפרופ' לביולוגיה באוניברסיטת תל אביב.</p>
+      <p>ב-1959 קיבל את הדוקטורט מטעם האוניברסיטה העברית. ב-1960, מלגת פולברייט והמשפחה הצעירה עברה לפסדינה - לפוסט-דוקטורט במכון הטכנולוגי של קליפורניה (Caltech). שני בנים: <b>איתן</b> (1954) ו<b>אהוד</b> (1959). שניהם יקבלו אחר כך דוקטורטים בעצמם.</p>
+    </div>
+
+    <div class="factbox">
+      <h4>פרופ' עזרא גלון · קריירה אקדמית</h4>
+      <ul>
+        <li><span>תואר ראשון - חקלאות, האונ' העברית</span><b>1947</b></li>
+        <li><span>תואר שני, האונ' העברית</span><b>1954</b></li>
+        <li><span>ייסד המחלקה לגנטיקה של צמחים, ויצמן</span><b>1956</b></li>
+        <li><span>דוקטורט (האונ' העברית, עבודת מחקר בויצמן)</span><b>1959</b></li>
+        <li><span>עמית מחקר, Caltech (פולברייט)</span><b>1960-63</b></li>
+        <li><span>עמית מחקר, מעבדות הביולוגיה בהארווארד</span><b>1967-68</b></li>
+        <li><span>פרופסור חבר, ויצמן</span><b>1968</b></li>
+        <li><span>פרופסור מן המניין</span><b>1972</b></li>
+        <li><span>דיקן בית הספר על שם פיינברג ללימודים מתקדמים</span><b>1974</b></li>
+        <li><span>יו"ר המועצה הארצית למחקר ופיתוח</span><b>1982</b></li>
+        <li><span>מדען אורח, Hoffmann-La Roche, NJ</span><b>1985</b></li>
+        <li><span>פטנטים: הסרת מתכות + זרעי קישוא</span><b>1986</b></li>
+        <li><span>דיקן הפקולטה לביולוגיה</span><b>1988-91</b></li>
+        <li><span>פרופסור אמריטוס</span><b>1991-</b></li>
+        <li><span>יעץ ל-Roche לרכישת ג'ננטק (47 מיליארד $)</span><b>2009</b></li>
+      </ul>
+    </div>
+
+    <p class="lead reveal">200 מאמרים מדעיים. שבעה ספרים בהוצאות בינלאומיות (Springer, World Scientific, Imperial College Press). מייסד החברה הישראלית לגנטיקה - ובהמשך נשיא כבוד שלה.</p>
+
+    <div class="reveal" style="margin-top:2rem">
+      <p>הילד שברח מלייפציג ב-1933, שהבית שלו דיבר גרמנית - בנה כאן, בארץ, מעבדה שהפכה לאחת המובילות בעולם בגנטיקה של צמחים. שבתונים בהארווארד, USDA, Roche Institute. הזמנות, הרצאות, אגודות מדעיות שהוא ייסד - בארץ ובחו"ל.</p>
+      <p>חלוץ בחקר תרביות רקמה של צמחים. פיתח את זן המלפפון <b>"שמשון"</b> ואת זן המלון <b>"מיכל"</b> - גידולים שגדלים עד היום ברחבי העולם. מי שאוכל מלפפון ישראלי - אוכל מהמורשת שלו.</p>
+      <p>ב-2009, חמש שנים לפני מותו, יעץ לחברת Roche לרכוש את ג'ננטק. העסקה התבצעה ב-47 מיליארד דולר - אחת העסקאות הגדולות בהיסטוריה של הביוטכנולוגיה.</p>
+    </div>
+
+    <p class="lead reveal">"מדען צריך להיות מענטש."</p>
+    <p class="reveal" style="text-align:center;color:var(--sepia);margin-top:-1rem">- המוטו של עזרא גלון</p>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section">
+  <div class="reveal">
+    <h3>המסע הגיאוגרפי</h3>
+    <p>לחצו על שם של עיר כדי לטוס אליה ולקרוא את הסיפור</p>
+  </div>
+  <div class="city-nav reveal" id="cityNav"></div>
+  <div class="map reveal" id="galonMap"></div>
+  <div class="city-story reveal" id="cityStory">
+    <div class="cs-yr"></div>
+    <div class="cs-name"></div>
+    <div class="cs-desc"></div>
+  </div>
+</section>
+
+<!-- CHAPTER 8 - The next generation -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="reveal">
+      <div class="chapter-num">פרק שמיני</div>
+      <h2>חמשת הדורות</h2>
+      <div class="year">עץ המשפחה</div>
+    </div>
+
+    <div class="tree" id="familyTree">
+      <div class="reveal gen">
+        <span class="gen-label">דור 1</span>
+        <div class="person" data-pid="bm"><div class="avatar">ב.מ</div><b>ברוך משה גלון</b><span>אודסה</span><div class="more">לחצו לפרטים</div></div>
+        <div class="person" data-pid="ab"><div class="avatar">א.ב</div><b>אנה ברנר</b><span>1849-1928</span><div class="more">לחצו לפרטים</div></div>
+        <div class="person" data-pid="lm"><div class="avatar">ל.מ</div><b>לאזר ולאוה מרקוס</b><span>קוטרוביץ</span><div class="more">לחצו לפרטים</div></div>
+      </div>
+      <div class="reveal reveal-d2 gen">
+        <span class="gen-label">דור 2</span>
+        <div class="couple">
+          <div class="person" data-pid="dg"><div class="avatar" style="background-image:url('img/b13.jpg')"></div><b>דוד גלון</b><span>1875 - 1948</span><div class="more">לחצו לפרטים</div></div>
+          <div class="person" data-pid="em"><div class="avatar" style="background-image:url('img/a10.jpg')"></div><b>ארנה מרקוס</b><span>1898 - 1976</span><div class="more">לחצו לפרטים</div></div>
+        </div>
+      </div>
+      <div class="reveal reveal-d3 gen">
+        <span class="gen-label">דור 3</span>
+        <div class="person" data-pid="ar"><div class="avatar">א.ג</div><b>אריה גלון</b><span>נ' 8.4.1924</span><div class="more">לחצו לפרטים</div></div>
+        <div class="couple">
+          <div class="person featured" data-pid="ez"><div class="avatar">ע.ג</div><b>פרופ' עזרא גלון</b><span>7.4.1927 - 27.1.2014</span><div class="more">לחצו לפרטים</div></div>
+          <div class="person" data-pid="lt"><div class="avatar">ל.ג</div><b>פרופ' ליתי גלון (כץ)</b><span>נפ' 16.4.2012</span><div class="more">לחצו לפרטים</div></div>
+        </div>
+      </div>
+      <div class="reveal gen">
+        <span class="gen-label">דור 4</span>
+        <div class="person" data-pid="et"><div class="avatar">א.ג</div><b>פרופ' איתן גלון</b><span>נ' 1954 · האונ' העברית</span><div class="more">לחצו לפרטים</div></div>
+        <div class="person" data-pid="eh"><div class="avatar">א.ג</div><b>ד"ר אהוד גלון</b><span>נ' 1959 · אלביט מערכות</span><div class="more">לחצו לפרטים</div></div>
+      </div>
+    </div>
+
+    <!-- Person detail modal -->
+    <div class="person-modal" id="personModal">
+      <div class="person-modal-card" onclick="event.stopPropagation()">
+        <button class="pm-close" id="pmClose">×</button>
+        <div class="pm-avatar" id="pmAvatar"></div>
+        <div class="pm-name" id="pmName"></div>
+        <div class="pm-dates" id="pmDates"></div>
+        <div class="pm-bio" id="pmBio"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 9 - timeline -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="reveal">
+      <div class="chapter-num">פרק תשיעי</div>
+      <h2>ציר הזמן</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="reveal tl-item"><div class="y">1875</div><div class="t">דוד גלון נולד באודסה</div></div>
+      <div class="reveal tl-item"><div class="y">1898</div><div class="t">ארנה מרקוס נולדה בקוטרוביץ</div></div>
+      <div class="reveal tl-item"><div class="y">1922</div><div class="t">חתונת דוד וארנה, גרמניה</div></div>
+      <div class="reveal tl-item"><div class="y">1924</div><div class="t">אריה נולד בלייפציג</div></div>
+      <div class="reveal tl-item"><div class="y">1927</div><div class="t">עזרא נולד בלייפציג</div></div>
+      <div class="reveal tl-item"><div class="y">1933</div><div class="t">המשפחה עולה לתל אביב</div></div>
+      <div class="reveal tl-item"><div class="y">1942</div><div class="t">עזרא בבי"ס כדורי, הר תבור</div></div>
+      <div class="reveal tl-item"><div class="y">1944</div><div class="t">עזרא מתגייס לפלמ"ח</div></div>
+      <div class="reveal tl-item"><div class="y">1948</div><div class="t">דוד גלון נפטר · מלחמת השחרור</div></div>
+      <div class="reveal tl-item"><div class="y">1953</div><div class="t">חתונה עם ליתי · מכון ויצמן</div></div>
+      <div class="reveal tl-item"><div class="y">1959</div><div class="t">דוקטורט · אהוד נולד</div></div>
+      <div class="reveal tl-item"><div class="y">1960</div><div class="t">פוסט-דוק ב-Caltech</div></div>
+      <div class="reveal tl-item"><div class="y">1970</div><div class="t">ראש המחלקה לגנטיקה של צמחים</div></div>
+      <div class="reveal tl-item"><div class="y">1972</div><div class="t">פרופסור מן המניין</div></div>
+      <div class="reveal tl-item"><div class="y">1976</div><div class="t">ארנה גלון נפטרה</div></div>
+      <div class="reveal tl-item"><div class="y">1988</div><div class="t">דיקן הפקולטה לביולוגיה</div></div>
+      <div class="reveal tl-item"><div class="y">1991</div><div class="t">פרופסור אמריטוס · 200 מאמרים, 7 ספרים</div></div>
+      <div class="reveal tl-item"><div class="y">2009</div><div class="t">יעץ ל-Roche לרכוש את ג'ננטק · 47 מיליארד דולר</div></div>
+      <div class="reveal tl-item"><div class="y">2012</div><div class="t">ליתי נפטרה · עזרא בן 85</div></div>
+      <div class="reveal tl-item"><div class="y">27.1.2014</div><div class="t">פרופ' עזרא גלון נפטר בגיל 86</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTRO -->
+<section class="outro">
+  <div class="reveal">
+    <h2>חמישה דורות. <b>ארבע שפות</b>. שלוש מולדות.<br>שני בנים שכל אחד מהם מקים משפחה משלו. <b>בית אחד שבכל פעם נבנה מחדש.</b></h2>
+    <p style="max-width:700px;margin:2rem auto;color:#bba47a;font-size:1.1rem;line-height:1.8">
+      מאודסה של ברוך משה ב-1875, דרך לייפציג של ארנה ודוד, דרך תל אביב של ילד פליט בן שש, דרך מעבדה במכון ויצמן שהפכה לאחת המובילות בעולם - הסיפור הזה אינו רק סיפור משפחתי. זה סיפור של מאה עשרים, של היהדות, של המדינה הזו.
+    </p>
+    <div class="resources reveal">
+      <h4 class="res-title">מקורות וקריאה נוספת</h4>
+      <div class="res-grid">
+        <a class="res-btn primary" href="https://he.wikipedia.org/wiki/%D7%A2%D7%96%D7%A8%D7%90_%D7%92%D7%9C%D7%95%D7%9F" target="_blank" rel="noopener">
+          <span class="res-ico">W</span>
+          <span class="res-text"><b>הערך בוויקיפדיה</b><span>פרופ' עזרא גלון</span></span>
+        </a>
+        <a class="res-btn" href="pdf/תולדות חייו של פרופ' עזרא גלון.pdf" download>
+          <span class="res-ico">↓</span>
+          <span class="res-text"><b>תולדות חייו</b><span>מסמך ביוגרפי · PDF</span></span>
+        </a>
+        <a class="res-btn" href="pdf/דוד וארנה גלון 1.pdf" download>
+          <span class="res-ico">↓</span>
+          <span class="res-text"><b>דוד וארנה גלון</b><span>תיעוד וצילומים מוקדמים · PDF</span></span>
+        </a>
+        <a class="res-btn" href="pdf/המשך אלבום 1.pdf" download>
+          <span class="res-ico">↓</span>
+          <span class="res-text"><b>אלבום משפחתי 1</b><span>1900-1924 · PDF</span></span>
+        </a>
+        <a class="res-btn" href="pdf/אלבום משפחת גלון 2.pdf" download>
+          <span class="res-ico">↓</span>
+          <span class="res-text"><b>אלבום משפחתי 2</b><span>1924-1937 · PDF</span></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sig">משפחת גלון · ארכיון משפחתי</div>
+  </div>
+</section>
+
+<div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(10,7,5,.95);z-index:9999;align-items:center;justify-content:center;padding:2rem;overflow:hidden;">
+  <div id="lightbox-stage" style="width:100%;height:100%;display:flex;place-content:safe center;align-items:safe center;overflow:auto;">
+    <img id="lightbox-img" style="display:block;box-shadow:0 30px 80px rgba(0,0,0,.6);cursor:zoom-in;user-select:none;-webkit-user-drag:none;flex:none;"/>
+  </div>
+  <div id="lightbox-cap" style="position:absolute;bottom:0;left:0;right:0;padding:1rem 2rem;text-align:center;color:#f4ede0;font-family:'Heebo',sans-serif;font-size:.95rem;pointer-events:none;background:linear-gradient(to top,rgba(10,7,5,.85),transparent);z-index:10;"></div>
+  <div style="position:absolute;top:1rem;right:1.2rem;display:flex;gap:.5rem;align-items:center;">
+    <button id="lightbox-zoomout" style="background:rgba(255,255,255,.08);border:1px solid #a07a3a;color:#f4ede0;width:40px;height:40px;border-radius:50%;font-size:1.4rem;cursor:pointer;line-height:1;">−</button>
+    <span id="lightbox-zoomlbl" style="color:#f4ede0;font-family:'Heebo',sans-serif;min-width:48px;text-align:center;">100%</span>
+    <button id="lightbox-zoomin" style="background:rgba(255,255,255,.08);border:1px solid #a07a3a;color:#f4ede0;width:40px;height:40px;border-radius:50%;font-size:1.4rem;cursor:pointer;line-height:1;">+</button>
+    <button id="lightbox-close" style="background:transparent;border:none;color:#f4ede0;font-size:2.5rem;cursor:pointer;line-height:1;margin-right:.5rem;">×</button>
+  </div>
+</div>
+
+<script>
+// =========================================================
+// LANGUAGE TOGGLE (HE / EN)
+// =========================================================
+const T = {
+  // Hero
+  "מסע משפחת גלון":"The Galun Family",
+  "מאודסה אל תל אביב":"From Odessa to Tel Aviv",
+  "סיפור של חמישה דורות, ארבע שפות, שלוש מולדות - ובית אחד שנבנה מחדש בכל פעם":"A story of five generations, four languages, three homelands - and one home rebuilt time and again",
+  "גלול מטה":"Scroll down",
+  // Chapter labels
+  "פרק ראשון":"Chapter One","פרק שני":"Chapter Two","פרק שלישי":"Chapter Three","פרק רביעי":"Chapter Four","פרק חמישי":"Chapter Five","פרק שישי":"Chapter Six","פרק שביעי":"Chapter Seven","פרק שמיני":"Chapter Eight","פרק תשיעי":"Chapter Nine",
+  // Chapter 1
+  "השורשים":"The Roots",
+  "אודסה · 1875-1902":"Odessa · 1875-1902",
+  "בעיר נמל על שפת הים השחור, באודסה של האימפריה הרוסית, נולד דוד גלון ב-15 בדצמבר 1875. הוא היה בנם של ברוך משה גלון ולאה לבית גרינשפן, באחת מקהילות היהודים הוותיקות והתוססות במזרח אירופה.":"In a port city on the Black Sea coast, in the Odessa of the Russian Empire, David Galun was born on December 15, 1875. He was the son of Baruch Moshe Galun and Leah née Greenspan, in one of the oldest and most vibrant Jewish communities in Eastern Europe.",
+  "אודסה של אותם הימים הייתה צומת של תרבויות, סוחרים, סופרים והוגי דעות. ברוך משה - הסבא של עזרא לעתיד - היה אדם שמכבד מסורת אך גם מסתכל קדימה. בתמונה היחידה ששרדה ממנו, הוא עומד בנוקשות לצד בנו דוד, שלבוש כמו מלח קטן.":"The Odessa of those days was a crossroads of cultures, merchants, writers, and thinkers. Baruch Moshe - the future grandfather of Ezra - was a man who honored tradition while looking forward. In the only surviving photograph of him, he stands stiffly beside his son David, dressed like a little sailor.",
+  "ברוך משה גלון עם בנו דוד · אודסה, 1902":"Baruch Moshe Galun with his son David · Odessa, 1902",
+  "\"דוד גלון, יליד אודסה - היה הראשון במשפחה שעזב את העיר. הוא יצא מערבה, אל גרמניה, אל מה שנראה אז כעולם הגדול והמודרני.\"":"\"David Galun, born in Odessa, was the first in the family to leave the city. He went west, to Germany, to what then seemed the great modern world.\"",
+  // Chapter 2
+  "הצד של ארנה":"Erna's Side",
+  "קוטרוביץ · 1849-1922":"Kotrowitz · 1849-1922",
+  "במקביל, בעיר קוטרוביץ (היום קטוביץ' שבפולין, אז שלזיה הגרמנית), חיה משפחה אחרת - משפחת מרקוס. סבתא אנה ביינר לבית ברנר (1849-1928) הביאה לעולם דורות שלמים. בתמונות הראשונות שלהם נראים גינות מטופחות, חליפות צמר משובצות, ואותו מבט שקט של בורגנות יהודית-גרמנית במלוא תפארתה.":"Meanwhile, in the city of Kotrowitz (today Katowice in Poland, then German Silesia), another family lived - the Markus family. Grandmother Anna Beiner née Brenner (1849-1928) brought entire generations into the world. In their earliest photos one sees manicured gardens, checked wool suits, and the quiet gaze of German-Jewish bourgeoisie in full bloom.",
+  "ברטה ולאזר מרקוס · 1895":"Berta and Lazar Markus · 1895",
+  "ארנה מרקוס בת שנה · 1899":"Erna Markus, age one · 1899",
+  "ברטה מרקוס עם בנותיה · 1903":"Berta Markus with her daughters · 1903",
+  "<b>ארנה מרקוס</b>, שתהיה אם המשפחה הבאה, נולדה ב-1898. היא גדלה בקוטרוביץ, התחנכה בבתי ספר גרמניים, ולמדה לקרוא ולכתוב בגרמנית גבוהה. בתמונות מילדותה היא נראית עם אחיותיה - בשמלות מלמלה, עם שיער מסודר וצמות.":"<b>Erna Markus</b>, who would become the matriarch of the next generation, was born in 1898. She grew up in Kotrowitz, was educated in German schools, and learned to read and write in High German. In photographs from her childhood she appears with her sisters - in lace dresses, hair tidy and in braids.",
+  "משפחת גלון בלייפציג, 1913":"The Galun family in Leipzig, 1913",
+  "\"ב-1922, אחרי מלחמת העולם הראשונה, התחתנו דוד גלון - יליד אודסה - וארנה מרקוס - ילידת קוטרוביץ. שני אנשים משני קצוות אירופה היהודית, שמצאו את עצמם יחד בלב גרמניה.\"":"\"In 1922, after the First World War, David Galun - born in Odessa - and Erna Markus - born in Kotrowitz - were married. Two people from opposite ends of Jewish Europe, who found themselves together in the heart of Germany.\"",
+  "דוד גלון, 1922":"David Galun, 1922",
+  "ארנה ודוד · 1920-1921":"Erna and David · 1920-1921",
+  // Chapter 3
+  "בני הבית בלייפציג":"At Home in Leipzig",
+  "לייפציג · 1924-1932":"Leipzig · 1924-1932",
+  "הזוג הצעיר השתקע בלייפציג ובכפר באלסדורף הסמוך. דוד עבד ופרנס, ארנה ניהלה את הבית. ב-8 באפריל 1924 נולד הבכור - <b>אריה</b>. שלוש שנים אחר כך, באפריל 1927, נולד הצעיר - <b>עזרא</b>.":"The young couple settled in Leipzig and the nearby village of Baalsdorf. David worked and provided; Erna ran the home. On April 8, 1924, the elder son - <b>Aryeh</b> - was born. Three years later, in April 1927, the younger - <b>Ezra</b> - was born.",
+  "הילדות שלהם הייתה גרמנית במובן הכי עמוק של המילה. גן ילדים גרמני, בית ספר עברי בלייפציג, חברים יהודים וגוים, טיולים בפארקים, חופשות על הים, מפגשי משפחה גדולים וצילומים מאצל הצלם של השכונה.":"Their childhood was German in the deepest sense. A German kindergarten, the Hebrew school in Leipzig, Jewish and gentile friends, walks in the parks, seaside vacations, big family gatherings, and photographs at the neighborhood photographer.",
+  "ארנה עם אריה התינוק · 1924":"Erna with baby Aryeh · 1924",
+  "עזרא ואריה · 1925":"Ezra and Aryeh · 1925",
+  "שני האחים, באלסדורף · 1927":"The two brothers, Baalsdorf · 1927",
+  "כיתה בבית הספר העברי בלייפציג · 1930":"Class at the Hebrew school in Leipzig · 1930",
+  "בבית הספר העברי בלייפציג, אריה ועזרא קיבלו חינוך כפול: מצד אחד גרמניה, באך ושילר; מצד שני - עברית, תנ\"ך וציונות. הוריהם, כמו רוב יהודי גרמניה באותם הימים, לא ידעו עדיין שיום אחד החינוך הזה יציל את חייהם.":"At the Hebrew school in Leipzig, Aryeh and Ezra received a double education: on one side Germany, Bach and Schiller; on the other - Hebrew, Bible, and Zionism. Their parents, like most German Jews in those days, did not yet know that one day this education would save their lives.",
+  "\"כל זה היה בלייפציג, ב-1930. שלוש שנים לפני ש'הוא' עלה לשלטון.\"":"\"All of this was in Leipzig, in 1930. Three years before 'he' came to power.\"",
+  "אריה על הסוס · 1929":"Aryeh on horseback · 1929",
+  "אריה ועזרא · גן העיר לייפציג, 1931":"Aryeh and Ezra · Leipzig City Park, 1931",
+  "חופשה משפחתית · 1932":"A family vacation · 1932",
+  // Fullbleed
+  "\"אפריל 1933 - העולם הישן מתחיל להתפרק. ינואר היה החודש שבו עלה היטלר. עכשיו צריך להחליט.\"":"\"April 1933 - the old world begins to fall apart. January was the month Hitler came to power. Now a decision must be made.\"",
+  // Chapter 4
+  "\"אנו כאן בארצנו\"":"\"We Are Here, in Our Land\"",
+  "תל אביב · אוקטובר 1933":"Tel Aviv · October 1933",
+  "דוד גלון ראה את הסימנים מוקדם. הוא לא חיכה לקריסטל-נאכט, לא חיכה לחוקי נירנברג. באוקטובר 1933, פחות משנה אחרי שהיטלר עלה לשלטון, הוא עלה עם משפחתו לארץ ישראל - אשתו ארנה, הבכור אריה (9), והצעיר עזרא (6 וחצי).":"David Galun saw the signs early. He did not wait for Kristallnacht, did not wait for the Nuremberg Laws. In October 1933, less than a year after Hitler came to power, he immigrated with his family to the Land of Israel - his wife Erna, the elder Aryeh (9), and the younger Ezra (6 and a half).",
+  "הם הגיעו לתל אביב הקטנה - עיר חולית, עירוני, צעירה, עברית. דוד שכר לעצמו \"סנט רוסיג'נסון\" - חברה לעבודות בנייה. המשפחה התיישבה, הילדים התחילו בית ספר, ארנה למדה עברית. השפה החדשה לא הייתה קלה, אבל היא הייתה ביתית.":"They arrived in the small Tel Aviv - a city of sand, urban, young, Hebrew. David rented \"Sankt Rusignenson,\" a construction company. The family settled in, the children started school, Erna learned Hebrew. The new language was not easy - but it was home.",
+  "הצלה ברגע האחרון":"Rescue at the Last Moment",
+  "עליית היטלר לשלטון":"Hitler comes to power",
+  "בית הספר העברי בלייפציג נסגר":"Hebrew school in Leipzig closes",
+  "משפחת גלון מגיעה לתל אביב":"The Galun family arrives in Tel Aviv",
+  "ליל הבדולח":"Kristallnacht",
+  "הגעת האסירים הראשונים לאושוויץ":"First prisoners arrive at Auschwitz",
+  "\"אנו כאן בארצנו\" · ארנה ובניה, תל אביב 1933":"\"We are here, in our land\" · Erna and her sons, Tel Aviv 1933",
+  "תמונה אחת אומרת הכל. אם, שני בנים, חולצות לבנות, מכנסיים קצרים. רקע של עצי דקל. ביטחון.":"One photograph says it all. A mother, two sons, white shirts, short trousers. Palm trees in the background. Safety.",
+  // Chapter 5
+  "ילד תל-אביבי":"A Tel Aviv Boy",
+  "תל אביב · 1934-1941":"Tel Aviv · 1934-1941",
+  "עזרא נכנס לבית הספר היסודי \"אחד העם\" לבנים בתל אביב. שמונה שנים, עברית, חברים עולים מאירופה, חיים פשוטים. במקביל הצטרף ל\"אגודת הבריאות\" של בית הפועל - תנועת נוער שדגלה בספורט, חיים בריאים והכשרה לעבודה חקלאית.":"Ezra entered the \"Ahad Ha'am\" boys' elementary school in Tel Aviv. Eight years, Hebrew, friends who were also immigrants from Europe, a simple life. He also joined the \"Health Society\" of Beit HaPo'el - a youth movement promoting sports, healthy living, and training for agricultural work.",
+  "חברי כיתה · משפחת גולדנברג ובני הילדים, תל אביב 1937":"Classmates · the Goldenberg family and the children, Tel Aviv 1937",
+  "אגודת הבריאות, \"בית הפועל\" · יולי 1936":"The Health Society, \"Beit HaPo'el\" · July 1936",
+  "עזרא בכרם המקצועי של בית הפועל · 1936":"Ezra at the vocational vineyard of Beit HaPo'el · 1936",
+  "בקיץ 1941, בן 14, סיים עזרא את כיתה ח'. הוא יצא לעבוד שנה בכפר גדעון, להתכונן ללימודי חקלאות בכדורי. גרמניה הייתה כבר עולם רחוק, ארץ ישראל - הבית.":"In the summer of 1941, age 14, Ezra finished eighth grade. He went off to work for a year at Kfar Gideon, preparing for agricultural studies at Kadoorie. Germany was already a distant world; the Land of Israel - home.",
+  // Chapter 6
+  "בית\"ס כדורי, פלמ\"ח, מלחמה":"Kadoorie School, Palmach, War",
+  "1942-1949":"1942-1949",
+  "בסתיו 1942, בעוד מלחמת העולם השנייה בשיא, התקבל עזרא ל\"כדורי\" - בית הספר החקלאי האגדי על הר תבור. שנתיים לימודים, וב-1944, מיד עם סיום בית הספר - גיוס לפלמ\"ח. תחילה בפלוגה א', אחר כך קורס מפקדי כיתה, ולבסוף - הפלוגה הימית.":"In autumn 1942, while World War II raged, Ezra was admitted to \"Kadoorie\" - the legendary agricultural school on Mount Tabor. Two years of study, and in 1944, immediately upon graduation - enlistment in the Palmach. First in Company A, then a squad commanders' course, and finally - the Naval Company.",
+  "בקיץ 1947 השתחרר, ניגש לבחינות בגרות חיצוניות, והתקבל לפקולטה לחקלאות באוניברסיטה העברית. אבל אחרי חמישה שבועות של לימודים בלבד, חזר לקרבות מלחמת השחרור - הפעם בגדוד השישי, מפקד פורמנים שאחראיים על השיירות לירושלים בזמן המצור על העיר.":"In summer 1947 he was discharged, sat external matriculation exams, and was admitted to the Faculty of Agriculture at the Hebrew University. But after just five weeks of study, he returned to the battles of the War of Independence - this time in the 6th Battalion, commander of the \"Formanim\" responsible for the convoys to Jerusalem during the siege.",
+  "אחרי המלחמה שימש כמפקד פלוגה בצה\"ל. תחתיו שירת אז המשורר <b>יהודה עמיחי</b>. המשיך במילואים במבצע קדש, ששת הימים ויום כיפור. תפקידו האחרון - מפקד הג\"א של חבל רחובות. השתחרר בדרגת רב-סרן.":"After the war he served as a company commander in the IDF. The poet <b>Yehuda Amichai</b> served under him. He continued in reserves through the Sinai War, the Six-Day War, and Yom Kippur. His final role - commander of Civil Defense for the Rehovot region. Discharged as Major.",
+  "שירות צבאי":"Military Service",
+  "גיוס לפלמ\"ח":"Enlistment in the Palmach",
+  "פלוגה ימית, מפקד כיתה":"Naval Company, squad commander",
+  "מלחמת השחרור":"War of Independence",
+  "אבא דוד נפטר":"Father David passes away",
+  "מלחמת סיני (מ\"פ)":"Sinai War (company commander)",
+  "מלחמת ששת הימים":"Six-Day War",
+  "מלחמת יום כיפור":"Yom Kippur War",
+  "דרגת רב-סרן (במילואים)":"Rank of Major (reserves)",
+  "\"באותה שנה - 1948 - אבא דוד נפטר. עזרא ואריה הפכו לפתע לראשי המשפחה. אחת המלחמות הייתה בחוץ, אחרת הייתה בבית.\"":"\"That same year - 1948 - father David passed away. Ezra and Aryeh suddenly became the heads of the family. One war was outside; another was at home.\"",
+  // Chapter 7
+  "המדע, המעבדה, ליתי":"The Science, the Lab, Liti",
+  "רחובות · 1953-1991":"Rehovot · 1953-1991",
+  "פרופ' עזרא גלון · קריירה אקדמית":"Prof. Ezra Galun · Academic Career",
+  "תואר ראשון - חקלאות, האונ' העברית":"B.Sc. - Agriculture, Hebrew University",
+  "ב-1953 סיים עזרא את התואר השני בפקולטה לחקלאות, התקבל לעבודה במכון ויצמן למדע במעבדה לגנטיקה של צמחים, ובמאי אותה שנה התחתן עם <b>ליתי כץ</b> - אהבת חייו, שתהיה לפרופ' לביולוגיה באוניברסיטת תל אביב.":"In 1953 Ezra completed his master's degree at the Faculty of Agriculture, was hired at the Weizmann Institute of Science in the plant genetics laboratory, and in May of that year married <b>Liti Katz</b> - the love of his life, who would become a professor of biology at Tel Aviv University.",
+  "ב-1959 קיבל את הדוקטורט מטעם האוניברסיטה העברית. ב-1960, מלגת פולברייט והמשפחה הצעירה עברה לפסדינה - לפוסט-דוקטורט במכון הטכנולוגי של קליפורניה (Caltech). שני בנים: <b>איתן</b> (1954) ו<b>אהוד</b> (1959). שניהם יקבלו אחר כך דוקטורטים בעצמם.":"In 1959 he received his doctorate from the Hebrew University. In 1960, on a Fulbright fellowship, the young family moved to Pasadena - for a postdoctoral position at the California Institute of Technology (Caltech). Two sons: <b>Eitan</b> (1954) and <b>Ehud</b> (1959). Both would later earn doctorates of their own.",
+  "תואר שני, מכון ויצמן":"M.Sc., Weizmann Institute",
+  "תואר שני, האונ' העברית":"M.Sc., Hebrew University",
+  "ייסד המחלקה לגנטיקה של צמחים, ויצמן":"Founded the Plant Genetics Dept., Weizmann",
+  "דוקטורט (האונ' העברית, עבודת מחקר בויצמן)":"Ph.D. (Hebrew University, research at Weizmann)",
+  "עמית מחקר, Caltech (פולברייט)":"Research Fellow, Caltech (Fulbright)",
+  "עמית מחקר, מעבדות הביולוגיה בהארווארד":"Research Fellow, Harvard Biology Labs",
+  "פרופסור חבר, ויצמן":"Associate Professor, Weizmann",
+  "דיקן בית הספר על שם פיינברג ללימודים מתקדמים":"Dean, Feinberg Graduate School",
+  "יו\"ר המועצה הארצית למחקר ופיתוח":"Chair, National R&D Council",
+  "מדען אורח, Hoffmann-La Roche, NJ":"Visiting Scientist, Hoffmann-La Roche, NJ",
+  "פטנטים: הסרת מתכות + זרעי קישוא":"Patents: heavy metal removal + zucchini seeds",
+  "יעץ ל-Roche לרכישת ג'ננטק (47 מיליארד $)":"Advised Roche to acquire Genentech ($47 billion)",
+  "דוקטורט":"Ph.D.",
+  "פוסט-דוק, Caltech":"Postdoc, Caltech",
+  "פרופסור חבר":"Associate Professor",
+  "פרופסור מן המניין":"Full Professor",
+  "ראש המחלקה לגנטיקה של צמחים":"Head, Dept. of Plant Genetics",
+  "יו\"ר המועצה הלאומית למו\"פ":"Chair, National R&D Council",
+  "דיקן הפקולטה לביולוגיה":"Dean, Faculty of Biology",
+  "פרופסור אמריטוס":"Professor Emeritus",
+  "200 מאמרים מדעיים. שבעה ספרים בהוצאות בינלאומיות (Springer, World Scientific, Imperial College Press). מייסד החברה הישראלית לגנטיקה - ובהמשך נשיא כבוד שלה.":"200 scientific papers. Seven books with international publishers (Springer, World Scientific, Imperial College Press). Founder of the Israeli Society for Genetics - and later its honorary president.",
+  "הילד שברח מלייפציג ב-1933, שהבית שלו דיבר גרמנית - בנה כאן, בארץ, מעבדה שהפכה לאחת המובילות בעולם בגנטיקה של צמחים. שבתונים בהארווארד, USDA, Roche Institute. הזמנות, הרצאות, אגודות מדעיות שהוא ייסד - בארץ ובחו\"ל.":"The child who fled Leipzig in 1933, whose home spoke German - built here, in Israel, a laboratory that became one of the world's leading labs in plant genetics. Sabbaticals at Harvard, USDA, the Roche Institute. Invitations, lectures, scientific societies he founded - at home and abroad.",
+  "חלוץ בחקר תרביות רקמה של צמחים. פיתח את זן המלפפון <b>\"שמשון\"</b> ואת זן המלון <b>\"מיכל\"</b> - גידולים שגדלים עד היום ברחבי העולם. מי שאוכל מלפפון ישראלי - אוכל מהמורשת שלו.":"A pioneer in plant tissue culture. He developed the <b>\"Shimshon\"</b> cucumber and the <b>\"Michal\"</b> melon varieties - crops grown around the world to this day. Anyone who eats an Israeli cucumber tastes his legacy.",
+  "ב-2009, חמש שנים לפני מותו, יעץ לחברת Roche לרכוש את ג'ננטק. העסקה התבצעה ב-47 מיליארד דולר - אחת העסקאות הגדולות בהיסטוריה של הביוטכנולוגיה.":"In 2009, five years before his death, he advised Roche to acquire Genentech. The deal closed at $47 billion - one of the largest in the history of biotechnology.",
+  "\"מדען צריך להיות מענטש.\"":"\"A scientist must be a mensch.\"",
+  "- המוטו של עזרא גלון":"- Ezra Galun's motto",
+  // Map
+  "המסע הגיאוגרפי":"The Geographic Journey",
+  "לחצו על שם של עיר כדי לטוס אליה ולקרוא את הסיפור":"Click a city name to fly there and read the story",
+  // Chapter 8 - tree
+  "חמשת הדורות":"Five Generations",
+  "עץ המשפחה":"The Family Tree",
+  "ברוך משה גלון":"Baruch Moshe Galun","אודסה":"Odessa",
+  "אנה ברנר":"Anna Brenner",
+  "לאזר ולאוה מרקוס":"Lazar and Lava Markus","קוטרוביץ":"Kotrowitz",
+  "דוד גלון":"David Galun","15.12.1875 - 19.4.1948":"15 Dec 1875 - 19 Apr 1948",
+  "ארנה מרקוס":"Erna Markus","1898 - 28.4.1976":"1898 - 28 Apr 1976",
+  "אריה גלון":"Aryeh Galun","נ' 8.4.1924":"b. 8 Apr 1924",
+  "פרופ' עזרא גלון":"Prof. Ezra Galun","נ' אפריל 1927":"b. April 1927",
+  "פרופ' ליתי גלון (כץ)":"Prof. Liti Galun (Katz)","נפ' 16.4.2012":"d. 16 Apr 2012",
+  "פרופ' איתן גלון":"Prof. Eitan Galun","נ' 1954 · האונ' העברית":"b. 1954 · Hebrew University",
+  "ד\"ר אהוד גלון":"Dr. Ehud Galun","נ' 1959 · אלביט מערכות":"b. 1959 · Elbit Systems",
+  // Timeline
+  "ציר הזמן":"Timeline",
+  "דוד גלון נולד באודסה":"David Galun born in Odessa",
+  "ארנה מרקוס נולדה בקוטרוביץ":"Erna Markus born in Kotrowitz",
+  "חתונת דוד וארנה, גרמניה":"David and Erna marry, Germany",
+  "אריה נולד בלייפציג":"Aryeh born in Leipzig",
+  "עזרא נולד בלייפציג":"Ezra born in Leipzig",
+  "המשפחה עולה לתל אביב":"Family immigrates to Tel Aviv",
+  "עזרא בבי\"ס כדורי, הר תבור":"Ezra at Kadoorie School, Mt. Tabor",
+  "עזרא מתגייס לפלמ\"ח":"Ezra enlists in the Palmach",
+  "דוד גלון נפטר · מלחמת השחרור":"David Galun dies · War of Independence",
+  "חתונה עם ליתי · מכון ויצמן":"Marriage to Liti · Weizmann Institute",
+  "דוקטורט · אהוד נולד":"Ph.D. · Ehud born",
+  "פוסט-דוק ב-Caltech":"Postdoc at Caltech",
+  "ארנה גלון נפטרה":"Erna Galun passes away",
+  "פרופסור אמריטוס · 200 מאמרים, 7 ספרים":"Professor Emeritus · 200 papers, 7 books",
+  "ליתי נפטרה · עזרא בן 85":"Liti passes away · Ezra is 85",
+  "יעץ ל-Roche לרכוש את ג'ננטק · 47 מיליארד דולר":"Advised Roche to acquire Genentech · $47 billion",
+  "פרופ' עזרא גלון נפטר בגיל 86":"Prof. Ezra Galun passes away at 86",
+  "27.1.2014":"27 Jan 2014",
+  // Outro
+  "חמישה דורות.":"Five generations.",
+  "ארבע שפות":"four languages",
+  ". שלוש מולדות.":". Three homelands.",
+  "שני בנים שכל אחד מהם מקים משפחה משלו.":"Two sons, each building a family of his own.",
+  "בית אחד שבכל פעם נבנה מחדש.":"One home, rebuilt each time.",
+  "מאודסה של ברוך משה ב-1875, דרך לייפציג של ארנה ודוד, דרך תל אביב של ילד פליט בן שש, דרך מעבדה במכון ויצמן שהפכה לאחת המובילות בעולם - הסיפור הזה אינו רק סיפור משפחתי. זה סיפור של מאה עשרים, של היהדות, של המדינה הזו.":"From Baruch Moshe's Odessa in 1875, through Erna and David's Leipzig, through the Tel Aviv of a six-year-old refugee, through a laboratory at the Weizmann Institute that became one of the world's leading - this is not only a family story. It is the story of the twentieth century, of the Jewish people, of this country.",
+  "משפחת גלון · ארכיון משפחתי":"The Galun Family · Family Archive",
+  "מקורות וקריאה נוספת":"Sources & Further Reading",
+  "הערך בוויקיפדיה":"Wikipedia Entry",
+  "פרופ' עזרא גלון":"Prof. Ezra Galun",
+  "תולדות חייו":"Biographical Memoir",
+  "מסמך ביוגרפי · PDF":"Biographical document · PDF",
+  "דוד וארנה גלון":"David & Erna Galun",
+  "תיעוד וצילומים מוקדמים · PDF":"Early documentation & photos · PDF",
+  "אלבום משפחתי 1":"Family Album 1",
+  "1900-1924 · PDF":"1900-1924 · PDF",
+  "אלבום משפחתי 2":"Family Album 2",
+  "1924-1937 · PDF":"1924-1937 · PDF",
+  // Map popups (rendered later by JS - we still translate strings)
+  "הולדת דוד גלון":"Birth of David Galun",
+  "הולדת ארנה מרקוס":"Birth of Erna Markus",
+  "חיי המשפחה, הולדת אריה (1924) ועזרא (1927)":"Family life; birth of Aryeh (1924) and Ezra (1927)",
+  "עליית המשפחה לארץ ישראל":"Family's immigration to Eretz Israel",
+  "מקום עבודתו ומחקריו של פרופ׳ עזרא גלון":"Workplace and research of Prof. Ezra Galun",
+  "שבתון בקליפורניה":"Sabbatical in California",
+  "תל אביב":"Tel Aviv",
+  "לייפציג":"Leipzig",
+  "רחובות / מכון ויצמן":"Rehovot / Weizmann Institute",
+  "פסדינה (Caltech)":"Pasadena (Caltech)",
+};
+
+// Snapshot original Hebrew innerHTML of every translatable element on first load.
+let lang = 'he';
+const originals = new WeakMap();
+function snapshotIfNeeded(el){ if(!originals.has(el)) originals.set(el, el.innerHTML); }
+
+function translateBody(toEn){
+  // Walk all leaf elements with text content
+  const candidates = document.querySelectorAll(
+    '.hero h1 span, .hero h1, .hero p, .scroll-hint, ' +
+    '.chapter-num, .chapter h2, .chapter .year, .chapter p, .chapter p.lead, .chapter p.dropcap, ' +
+    '.caption, .factbox h4, .factbox li span, .fullbleed-text, ' +
+    '.map-section h3, .map-section p, ' +
+    '.tree .person b, .tree .person span, ' +
+    '.timeline .y, .timeline .t, ' +
+    '.outro h2, .outro p, .outro .sig, .outro h2 b, ' +
+    '.res-title, .res-text b, .res-text span'
+  );
+  candidates.forEach(el=>{
+    snapshotIfNeeded(el);
+    if(toEn){
+      let html = originals.get(el);
+      // Replace each Hebrew key with its English translation
+      // Sort by length descending so longer phrases match before shorter substrings
+      Object.keys(T).sort((a,b)=>b.length-a.length).forEach(he=>{
+        if(html.indexOf(he) !== -1){
+          html = html.split(he).join(T[he]);
+        }
+      });
+      el.innerHTML = html;
+    } else {
+      el.innerHTML = originals.get(el);
+    }
+  });
+}
+
+document.getElementById('langToggle').addEventListener('click', ()=>{
+  lang = lang === 'he' ? 'en' : 'he';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+  document.getElementById('langToggle').textContent = lang === 'he' ? 'English' : 'עברית';
+  translateBody(lang === 'en');
+  // Refresh map popups in selected language
+  if(window._galonRefreshMap) window._galonRefreshMap(lang);
+});
+
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// =========================================================
+// FAMILY TREE - person details modal
+// =========================================================
+const PEOPLE = {
+  bm:{he:{n:'ברוך משה גלון',d:'אודסה · המאה ה-19',bio:['סבו של עזרא, אבי דוד גלון. חי באודסה - העיר הגדולה והקוסמופוליטית על שפת הים השחור באימפריה הרוסית.','בתמונה היחידה ששרדה ממנו, הוא עומד בנוקשות לצד בנו דוד הצעיר, שלבוש כמו מלח קטן. אדם המכבד מסורת אך מסתכל קדימה.']},
+      en:{n:'Baruch Moshe Galun',d:'Odessa · 19th century',bio:['Ezra\'s grandfather, father of David Galun. Lived in Odessa - the great cosmopolitan city on the Black Sea coast of the Russian Empire.','In the only surviving photograph of him, he stands stiffly beside his young son David, dressed like a little sailor. A man who honored tradition while looking forward.']}},
+  ab:{he:{n:'אנה ברנר',d:'1849 - 1928',bio:['סבתא רבא של עזרא מצד ארנה, אם משפחת מרקוס בקוטרוביץ. הביאה לעולם דורות שלמים של בורגנות יהודית-גרמנית.']},
+      en:{n:'Anna Brenner',d:'1849 - 1928',bio:['Ezra\'s great-grandmother on Erna\'s side, matriarch of the Markus family in Kotrowitz. Brought into the world entire generations of German-Jewish bourgeoisie.']}},
+  lm:{he:{n:'לאזר ולאוה מרקוס',d:'קוטרוביץ',bio:['הוריה של ארנה. חיו בקוטרוביץ (היום קטוביץ\' שבפולין, אז שלזיה הגרמנית). בתמונה משנת 1895 הם נראים בגאון בורגני - חליפות, גינות מטופחות, חיי משפחה גרמנית-יהודית מבוססת.']},
+      en:{n:'Lazar and Lava Markus',d:'Kotrowitz',bio:['Erna\'s parents. Lived in Kotrowitz (today Katowice in Poland, then German Silesia). In a 1895 photograph they appear in bourgeois pride - suits, manicured gardens, the established life of a German-Jewish family.']}},
+  dg:{he:{n:'דוד גלון',d:'15.12.1875 - 19.4.1948',bio:['יליד אודסה. הראשון במשפחה שעזב את העיר, יצא מערבה לגרמניה.','בגרמניה היה מהנדס חשמל. ב-1922 התחתן עם ארנה מרקוס בלייפציג. ראה את הסימנים מוקדם - פחות משנה אחרי שהיטלר עלה לשלטון, באוקטובר 1933, עלה עם משפחתו לארץ ישראל.','בתל אביב פתח חברה לעבודות בנייה. נפטר באפריל 1948 - ערב הקמת המדינה.']},
+      en:{n:'David Galun',d:'15 Dec 1875 - 19 Apr 1948',bio:['Born in Odessa. The first in the family to leave the city, going west to Germany.','In Germany he worked as an electrical engineer. In 1922 he married Erna Markus in Leipzig. He saw the signs early - less than a year after Hitler came to power, in October 1933, he immigrated with his family to the Land of Israel.','In Tel Aviv he opened a construction company. He died in April 1948 - on the eve of Israel\'s independence.']}},
+  em:{he:{n:'ארנה (אסתר) מרקוס',d:'1898 - 28.4.1976',bio:['ילידת קוטרוביץ. גדלה בבית בורגני, התחנכה בבתי ספר גרמניים, ולמדה לקרוא ולכתוב בגרמנית גבוהה. עסקה במסחר.','התחתנה עם דוד גלון ב-1922. ניהלה את הבית בלייפציג, וגידלה את אריה ועזרא. היא זו שלחצה לעלות לארץ - מחששה לעליית המפלגה הנאצית.','ב-1933 עזבה את העולם הגרמני לטובת תל אביב הקטנה והעברית. שרדה את בעלה כמעט שלושים שנה. הייתה אם השושלת.']},
+      en:{n:'Erna (Esther) Markus',d:'1898 - 28 Apr 1976',bio:['Born in Kotrowitz. Raised in a bourgeois home, educated in German schools, learned to read and write in High German. Worked in trade.','Married David Galun in 1922. Ran the home in Leipzig, raised Aryeh and Ezra. It was her insistence - fearing the rise of the Nazi party - that drove the family to immigrate.','In 1933 she left the German world for the small Hebrew Tel Aviv. Survived her husband by almost thirty years. The matriarch of the dynasty.']}},
+  ar:{he:{n:'פרופ\' אריה גלון',d:'נ\' 8.4.1924',bio:['הבכור. נולד בלייפציג ב-1924. בגיל תשע עלה עם המשפחה לארץ. ב-1948 הוא ועזרא הפכו לפתע לראשי המשפחה לאחר מות אביהם.','כימאי אורגני. ייסד את "ציון" - מפעל לכימיקלים עדינים.']},
+      en:{n:'Prof. Aryeh Galun',d:'b. 8 Apr 1924',bio:['The eldest. Born in Leipzig in 1924. At age nine he immigrated with the family to Israel. In 1948 he and Ezra suddenly became the heads of the family after their father\'s death.','An organic chemist. Founded "Zion" - a fine chemicals plant.']}},
+  ez:{he:{n:'פרופ\' עזרא (עמיאל בן דוד הלוי) גלון',d:'7.4.1927 - 27.1.2014',bio:['הגיבור של הסיפור הזה. נולד בלייפציג, גדל בתל אביב, התחנך ב"כדורי".','שירת בגדוד השישי במלחמת השחרור - כמפקד בפורמנים שהיו אחראיים על השיירות לירושלים בזמן המצור. אחרי המלחמה היה מפקד פלוגה בצה"ל - שירת תחתיו המשורר יהודה עמיחי. השתחרר בדרגת רב-סרן אחרי ארבע מלחמות.','ייסד את המחלקה לגנטיקה של צמחים במכון ויצמן (1956), והיה ראשה עד 1988. דיקן הפקולטה לביולוגיה (1988-91).','חלוץ בחקר תרביות רקמה של צמחים. פיתח את זן המלפפון "שמשון" ואת זן המלון "מיכל" - גידולים שגדלים עד היום ברחבי העולם.','200+ מאמרים מדעיים, 7 ספרים בהוצאות בינלאומיות. שניים מתלמידיו הם פרופ\' תלמה קטן ופרופ\' אביחי פרל.','ב-2009 יעץ לחברת Roche לרכוש את ג\'ננטק - העסקה התבצעה ב-47 מיליארד דולר. אחת העסקאות הגדולות בהיסטוריה של הביוטכנולוגיה.','המוטו שלו: "מדען צריך להיות מענטש."']},
+      en:{n:'Prof. Ezra (Amiel ben David HaLevi) Galun',d:'7 Apr 1927 - 27 Jan 2014',bio:['The hero of this story. Born in Leipzig, grew up in Tel Aviv, educated at "Kadoorie".','Served in the 6th Battalion in the War of Independence - commander of the "Formanim" responsible for the convoys to Jerusalem during the siege. After the war he was a company commander in the IDF - the poet Yehuda Amichai served under him. Discharged as Major after four wars.','Founded the Department of Plant Genetics at the Weizmann Institute (1956), and headed it until 1988. Dean of the Faculty of Biology (1988-91).','A pioneer in plant tissue culture. Developed the "Shimshon" cucumber and "Michal" melon varieties - crops grown around the world to this day.','200+ scientific papers, 7 books with international publishers. Two of his students are Prof. Talma Katan and Prof. Avichai Perl.','In 2009 he advised Roche to acquire Genentech - the deal closed at $47 billion. One of the largest in biotech history.','His motto: "A scientist must be a mensch."']}},
+  lt:{he:{n:'פרופ\' ליתי (מרגלית) גלון (כץ)',d:'נפ\' 16.4.2012',bio:['אהבת חייו של עזרא. התחתנו ב-1953 כשעזרא התחיל את עבודתו במכון ויצמן.','בוטנאית. התמחתה בביולוגיה של חזזיות, וכתבה את המגדיר הראשון לחזזיות ארץ-ישראל (יחד עם יעקב גרטי).','ב-1986 רשמה יחד עם עזרא פטנט להסרת מתכות כבדות משפכים תעשייתיים באמצעות פטריות.','אם איתן ואהוד. נפטרה באפריל 2012 - שותפה לחייו של עזרא במשך כמעט שישים שנה.']},
+      en:{n:'Prof. Liti (Margalit) Galun (Katz)',d:'d. 16 Apr 2012',bio:['Ezra\'s lifelong love. They married in 1953 when Ezra began his work at the Weizmann Institute.','A botanist. Specialized in lichen biology, and wrote the first identification guide for the lichens of the Land of Israel (with Yaakov Garti).','In 1986 she registered, together with Ezra, a patent for removing heavy metals from industrial wastewater using fungi.','Mother of Eitan and Ehud. Passed away in April 2012 - Ezra\'s partner for nearly sixty years.']}},
+  et:{he:{n:'פרופ\' איתן גלון',d:'נ\' 1954',bio:['הבן הבכור של עזרא וליתי. נולד בארץ ב-1954. פרופסור באוניברסיטה העברית בירושלים.']},
+      en:{n:'Prof. Eitan Galun',d:'b. 1954',bio:['Ezra and Liti\'s elder son. Born in Israel in 1954. Professor at the Hebrew University of Jerusalem.']}},
+  eh:{he:{n:'ד"ר אהוד גלון',d:'נ\' 1959',bio:['הבן הצעיר. נולד ב-1959. דוקטור בעבודתו באלביט מערכות. דור רביעי - ילדים שכבר נולדו בארץ, להורים שעלו ב-1933.']},
+      en:{n:'Dr. Ehud Galun',d:'b. 1959',bio:['The younger son. Born in 1959. Doctorate; works at Elbit Systems. The fourth generation - children already born in Israel, to parents who immigrated in 1933.']}},
+};
+
+const pm = document.getElementById('personModal');
+const pmAvatar = document.getElementById('pmAvatar');
+const pmName = document.getElementById('pmName');
+const pmDates = document.getElementById('pmDates');
+const pmBio = document.getElementById('pmBio');
+
+document.querySelectorAll('.tree .person').forEach(p=>{
+  p.addEventListener('click', ()=>{
+    const id = p.dataset.pid;
+    const data = PEOPLE[id];
+    if(!data) return;
+    const t = data[lang] || data.he;
+    // Reuse the avatar style from card
+    const av = p.querySelector('.avatar');
+    pmAvatar.style.cssText = av.style.cssText;
+    pmAvatar.textContent = av.style.backgroundImage ? '' : av.textContent;
+    pmName.textContent = t.n;
+    pmDates.textContent = t.d;
+    pmBio.innerHTML = t.bio.map(p=>`<p>${p}</p>`).join('');
+    pm.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+});
+function closePm(){ pm.classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('pmClose').addEventListener('click', closePm);
+pm.addEventListener('click', closePm);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && pm.classList.contains('open')) closePm(); });
+
+// =========================================================
+// AUDIO NARRATION (ElevenLabs MP3)
+// =========================================================
+(function(){
+  const audio = document.getElementById('ttsAudio');
+  const src = document.getElementById('ttsSrc');
+  const bar = document.getElementById('ttsBar');
+  const lbl = document.getElementById('ttsLabel');
+  const seek = document.getElementById('ttsSeek');
+  const btnPause = document.getElementById('ttsPause');
+  const btnStop = document.getElementById('ttsStop');
+  const btnSpeed = document.getElementById('ttsSpeed');
+  if(!audio) return;
+
+  const speeds = [1.25, 1.5, 0.85, 1];
+  let speedIdx = 0;
+  let currentLang = 'he';
+
+  function setSrcForLang(){
+    const newLang = document.documentElement.lang === 'en' ? 'en' : 'he';
+    if(newLang !== currentLang){
+      currentLang = newLang;
+      const t = audio.currentTime;
+      const wasPlaying = !audio.paused;
+      src.src = `audio/story-${newLang}.mp3`;
+      audio.load();
+      audio.currentTime = t;
+      if(wasPlaying) audio.play();
+    }
+  }
+
+  function fmt(s){
+    if(!isFinite(s)) return '0:00';
+    const m = Math.floor(s/60), sec = Math.floor(s%60);
+    return m+':'+(sec<10?'0':'')+sec;
+  }
+
+  audio.addEventListener('timeupdate', ()=>{
+    if(audio.duration){
+      seek.value = (audio.currentTime / audio.duration) * 100;
+      lbl.textContent = fmt(audio.currentTime)+' / '+fmt(audio.duration);
+    }
+  });
+  audio.addEventListener('ended', ()=>{
+    bar.classList.remove('visible');
+    const btn = document.getElementById('ttsPlayMain');
+    if(btn) btn.classList.remove('playing');
+  });
+  seek.addEventListener('input', ()=>{
+    if(audio.duration) audio.currentTime = (seek.value/100) * audio.duration;
+  });
+  btnPause.addEventListener('click', ()=>{
+    if(audio.paused){ audio.play(); btnPause.textContent = '⏸'; }
+    else { audio.pause(); btnPause.textContent = '▶'; }
+  });
+  btnStop.addEventListener('click', ()=>{
+    audio.pause(); audio.currentTime = 0;
+    bar.classList.remove('visible');
+    const btn = document.getElementById('ttsPlayMain');
+    if(btn) btn.classList.remove('playing');
+  });
+  btnSpeed.addEventListener('click', ()=>{
+    speedIdx = (speedIdx + 1) % speeds.length;
+    audio.playbackRate = speeds[speedIdx];
+    btnSpeed.textContent = speeds[speedIdx]+'x';
+  });
+
+  function readableLabel(){
+    return document.documentElement.lang === 'en' ? 'Listen to the story' : 'האזן לסיפור';
+  }
+
+  // Insert single play button at top of first chapter
+  const firstChapter = document.querySelector('section.chapter');
+  if(firstChapter){
+    const titleBlock = firstChapter.querySelector('.chapter-inner > .reveal');
+    if(titleBlock){
+      const btn = document.createElement('button');
+      btn.className = 'tts-btn';
+      btn.id = 'ttsPlayMain';
+      btn.innerHTML = `<span class="ico">🔊</span> <span class="lbl">${readableLabel()}</span>`;
+      btn.addEventListener('click', e=>{
+        e.preventDefault();
+        if(btn.classList.contains('playing')){
+          audio.pause(); audio.currentTime = 0;
+          btn.classList.remove('playing');
+          bar.classList.remove('visible');
+          return;
+        }
+        setSrcForLang();
+        btn.classList.add('playing');
+        bar.classList.add('visible');
+        btnPause.textContent = '⏸';
+        audio.playbackRate = speeds[speedIdx];
+        audio.play().catch(err=>console.error('Audio play failed', err));
+      });
+      titleBlock.appendChild(btn);
+    }
+  }
+
+  // Update language - swap MP3 source
+  document.getElementById('langToggle').addEventListener('click', ()=>{
+    setTimeout(()=>{
+      const l = document.querySelector('#ttsPlayMain .lbl');
+      if(l) l.textContent = readableLabel();
+      setSrcForLang();
+    }, 50);
+  });
+})();
+
+// Lightbox with zoom
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightbox-img');
+const lbCap = document.getElementById('lightbox-cap');
+const lbStage = document.getElementById('lightbox-stage');
+const lbLbl = document.getElementById('lightbox-zoomlbl');
+const ZOOMS = [1, 2, 3];
+let zIdx = 0;
+let baseW = 0, baseH = 0; // displayed size at zoom 1
+function computeBaseSize(){
+  const nw = lbImg.naturalWidth, nh = lbImg.naturalHeight;
+  if(!nw || !nh) return;
+  const maxW = window.innerWidth * 0.95;
+  const maxH = window.innerHeight * 0.92;
+  const r = Math.min(maxW/nw, maxH/nh, 1);
+  baseW = nw * r; baseH = nh * r;
+}
+function applyZoom(){
+  if(!baseW) computeBaseSize();
+  const z = ZOOMS[zIdx];
+  lbImg.style.width = (baseW * z)+'px';
+  lbImg.style.height = (baseH * z)+'px';
+  lbImg.style.maxWidth = 'none';
+  lbImg.style.maxHeight = 'none';
+  lbLbl.textContent = (z*100)+'%';
+  lbImg.style.cursor = z>1 ? 'grab' : (zIdx < ZOOMS.length-1 ? 'zoom-in' : 'zoom-out');
+  // Center scroll on the stage when zooming
+  requestAnimationFrame(()=>{
+    lbStage.scrollLeft = (lbStage.scrollWidth - lbStage.clientWidth)/2;
+    lbStage.scrollTop  = (lbStage.scrollHeight - lbStage.clientHeight)/2;
+  });
+}
+function openLightbox(src, cap){
+  baseW = 0; baseH = 0;
+  lbImg.onload = ()=>{ computeBaseSize(); applyZoom(); };
+  lbImg.src = src;
+  lbCap.textContent = cap || '';
+  zIdx = 0;
+  lb.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  if(lbImg.complete && lbImg.naturalWidth){ computeBaseSize(); applyZoom(); }
+}
+// Click-drag to pan when zoomed
+let dragging = false, didDrag = false, sx=0, sy=0, slx=0, sly=0;
+lbImg.addEventListener('mousedown', e=>{
+  if(ZOOMS[zIdx] === 1) return;
+  dragging = true; didDrag = false;
+  sx = e.clientX; sy = e.clientY;
+  slx = lbStage.scrollLeft; sly = lbStage.scrollTop;
+  lbImg.style.cursor = 'grabbing';
+  e.preventDefault();
+});
+window.addEventListener('mousemove', e=>{
+  if(!dragging) return;
+  const dx = e.clientX - sx, dy = e.clientY - sy;
+  if(Math.abs(dx) > 3 || Math.abs(dy) > 3) didDrag = true;
+  lbStage.scrollLeft = slx - dx;
+  lbStage.scrollTop  = sly - dy;
+});
+window.addEventListener('mouseup', ()=>{
+  if(dragging){ dragging = false; lbImg.style.cursor = ZOOMS[zIdx]>1 ? 'grab' : 'zoom-in'; }
+});
+// Suppress click that follows a drag
+lbImg.addEventListener('click', e=>{ if(didDrag){ e.stopImmediatePropagation(); didDrag = false; } }, true);
+function closeLightbox(){ lb.style.display = 'none'; document.body.style.overflow = ''; }
+document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+document.getElementById('lightbox-zoomin').addEventListener('click', e=>{
+  e.stopPropagation(); if(zIdx < ZOOMS.length-1){ zIdx++; applyZoom(); }
+});
+document.getElementById('lightbox-zoomout').addEventListener('click', e=>{
+  e.stopPropagation(); if(zIdx > 0){ zIdx--; applyZoom(); }
+});
+lbImg.addEventListener('click', e=>{
+  e.stopPropagation();
+  zIdx = (zIdx + 1) % ZOOMS.length;
+  applyZoom();
+});
+// Click on dark backdrop closes
+lb.addEventListener('click', e=>{ if(e.target === lb || e.target === lbStage) closeLightbox(); });
+document.addEventListener('keydown', e=>{
+  if(lb.style.display !== 'flex') return;
+  if(e.key==='Escape') closeLightbox();
+  else if(e.key==='+' || e.key==='=') { if(zIdx < ZOOMS.length-1){ zIdx++; applyZoom(); } }
+  else if(e.key==='-') { if(zIdx > 0){ zIdx--; applyZoom(); } }
+});
+
+// Add zoom button + click-to-zoom to all photo images and fullbleed
+document.querySelectorAll('.photo').forEach(p=>{
+  const img = p.querySelector('img');
+  if(!img) return;
+  const cap = p.querySelector('.caption')?.textContent || img.alt || '';
+  const btn = document.createElement('button');
+  btn.className='zoom-btn'; btn.innerHTML='⊕'; btn.setAttribute('aria-label','הגדל');
+  btn.addEventListener('click', e=>{ e.stopPropagation(); openLightbox(img.src, cap); });
+  p.appendChild(btn);
+  img.addEventListener('click', ()=>openLightbox(img.src, cap));
+});
+document.querySelectorAll('.fullbleed img').forEach(img=>{
+  img.addEventListener('click', ()=>openLightbox(img.src, img.alt||''));
+});
+
+// Leaflet map - the Galun family geographic journey
+(function(){
+  const el = document.getElementById('galonMap');
+  if(!el || typeof L === 'undefined') return;
+  const cities = [
+    {he:{n:'אודסה',y:'1875',d:'בעיר הנמל על הים השחור נולד דוד גלון. אודסה של אז הייתה צומת תרבויות, סוחרים והוגי דעות - מבית גידולה של המשפחה.'},
+     en:{n:'Odessa',y:'1875',d:'In the port city on the Black Sea, David Galun was born. The Odessa of those days was a crossroads of cultures, merchants, and thinkers - the family\'s starting point.'},
+     coord:[46.4825,30.7233], zoom:6},
+    {he:{n:'קוטרוביץ',y:'1898',d:'במזרח שלזיה הגרמנית (היום קטוביץ\' שבפולין) נולדה ארנה מרקוס - ילדה לבורגנות יהודית-גרמנית מבוססת.'},
+     en:{n:'Kotrowitz',y:'1898',d:'In eastern German Silesia (today Katowice, Poland), Erna Markus was born - a child of established German-Jewish bourgeoisie.'},
+     coord:[50.2649,19.0238], zoom:6},
+    {he:{n:'לייפציג',y:'1922 - 1933',d:'דוד וארנה התחתנו וקבעו את ביתם בלייפציג. כאן נולדו אריה (1924) ועזרא (1927). עברית, גרמנית, באך ותנ"ך - חינוך כפול שעוד יציל את חייהם.'},
+     en:{n:'Leipzig',y:'1922 - 1933',d:'David and Erna married and made their home in Leipzig. Aryeh (1924) and Ezra (1927) were born here. Hebrew, German, Bach and Bible - a double education that would save their lives.'},
+     coord:[51.3397,12.3731], zoom:6},
+    {he:{n:'תל אביב',y:'אוקטובר 1933',d:'דוד ראה את הסימנים מוקדם. פחות משנה אחרי עליית היטלר עלה עם משפחתו לארץ. חולצות לבנות, מכנסיים קצרים, עצי דקל - ביטחון.'},
+     en:{n:'Tel Aviv',y:'October 1933',d:'David saw the signs early. Less than a year after Hitler came to power he immigrated with his family. White shirts, short trousers, palm trees - safety.'},
+     coord:[32.0853,34.7818], zoom:7},
+    {he:{n:'רחובות · מכון ויצמן',y:'1953 - 1991',d:'הילד הפליט מלייפציג בנה כאן מעבדה שהפכה לאחת המובילות בעולם בגנטיקה של צמחים. 200 מאמרים, 7 ספרים, דיקן הפקולטה לביולוגיה.'},
+     en:{n:'Rehovot · Weizmann Institute',y:'1953 - 1991',d:'The refugee child from Leipzig built here a laboratory that became one of the world\'s leading labs in plant genetics. 200 papers, 7 books, Dean of the Faculty of Biology.'},
+     coord:[31.9070,34.8108], zoom:7},
+    {he:{n:'פסדינה · Caltech',y:'1960 - 1962',d:'מלגת פולברייט. שבתון של פוסט-דוקטורט במכון הטכנולוגי של קליפורניה. המשפחה הצעירה - עזרא, ליתי, איתן ואהוד - חצתה את העולם.'},
+     en:{n:'Pasadena · Caltech',y:'1960 - 1962',d:'A Fulbright fellowship. Postdoctoral sabbatical at the California Institute of Technology. The young family - Ezra, Liti, Eitan and Ehud - crossed the world.'},
+     coord:[34.1478,-118.1445], zoom:7},
+  ];
+
+  const map = L.map(el, {scrollWheelZoom:false, zoomControl:true}).setView([45,15], 3);
+  // Atmospheric muted tiles (CartoDB Voyager - works well with sepia filter)
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    attribution:'© OpenStreetMap, © CARTO', subdomains:'abcd', maxZoom:18
+  }).addTo(map);
+
+  const markers = [];
+  cities.forEach((c,i)=>{
+    const icon = L.divIcon({className:'galon-marker',iconSize:[20,20],iconAnchor:[10,10]});
+    const m = L.marker(c.coord,{icon}).addTo(map)
+      .bindPopup(`<b>${c.he.n}</b><span class="yr">${c.he.y}</span>`,{className:'galon-popup'});
+    m.on('click', ()=>activate(i));
+    markers.push({m,c});
+  });
+
+  L.polyline(cities.map(c=>c.coord), {color:'#a07a3a', weight:2, dashArray:'6,6', opacity:.8}).addTo(map);
+  map.fitBounds(L.latLngBounds(cities.map(c=>c.coord)).pad(0.1));
+
+  // Build city nav buttons
+  const nav = document.getElementById('cityNav');
+  cities.forEach((c,i)=>{
+    const b = document.createElement('button');
+    b.dataset.i = i;
+    b.textContent = c.he.n;
+    b.addEventListener('click', ()=>activate(i));
+    nav.appendChild(b);
+  });
+
+  const story = document.getElementById('cityStory');
+  let currentLang = 'he';
+  let currentIdx = -1;
+
+  function activate(i){
+    currentIdx = i;
+    const c = cities[i], t = c[currentLang] || c.he;
+    // Update markers
+    markers.forEach(({m},j)=>{
+      const cls = 'galon-marker' + (j===i?' current':'');
+      m.setIcon(L.divIcon({className:cls,iconSize:[20,20],iconAnchor:[10,10]}));
+    });
+    // Update buttons
+    nav.querySelectorAll('button').forEach((b,j)=>b.classList.toggle('active', j===i));
+    // Fly to
+    map.flyTo(c.coord, c.zoom, {duration:1.4});
+    // Update story
+    story.style.opacity = '0';
+    setTimeout(()=>{
+      story.querySelector('.cs-yr').textContent = t.y;
+      story.querySelector('.cs-name').textContent = t.n;
+      story.querySelector('.cs-desc').textContent = t.d;
+      story.style.opacity = '1';
+    }, 250);
+    // Open popup
+    setTimeout(()=>markers[i].m.openPopup(), 1500);
+  }
+
+  // Initialize: select Tel Aviv (the pivotal location) once visible
+  const initObs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && currentIdx === -1){
+        activate(0);
+        initObs.disconnect();
+      }
+    });
+  },{threshold:0.4});
+  initObs.observe(el);
+
+  window._galonRefreshMap = function(lng){
+    currentLang = lng;
+    markers.forEach(({m,c})=>{
+      const t = c[lng] || c.he;
+      m.setPopupContent(`<b>${t.n}</b><span class="yr">${t.y}</span>`);
+    });
+    // Re-render nav button labels
+    nav.querySelectorAll('button').forEach((b,j)=>{
+      b.textContent = (cities[j][lng]||cities[j].he).n;
+    });
+    if(currentIdx>=0){
+      const t = cities[currentIdx][lng] || cities[currentIdx].he;
+      story.querySelector('.cs-yr').textContent = t.y;
+      story.querySelector('.cs-name').textContent = t.n;
+      story.querySelector('.cs-desc').textContent = t.d;
+    }
+  };
+})();
+</script>
+
+</body>
+</html>
