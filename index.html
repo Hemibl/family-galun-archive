@@ -678,6 +678,14 @@ html[lang="en"] .factbox{border-right:none;border-left:6px solid var(--gold)}
 html[lang="en"] .person-modal-card .pm-close{left:auto;right:1rem}
 html[lang="en"] .scroll-hint{letter-spacing:0.4em}
 html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
+
+#lightbox-img{touch-action:none}
+@media (max-width:600px){
+  #lightbox{padding:0!important}
+  #lightbox-close{font-size:2.8rem!important;width:48px!important;height:48px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;margin-right:0!important}
+  #lightbox-zoomin, #lightbox-zoomout{width:48px!important;height:48px!important;font-size:1.6rem!important}
+  #lightbox-cap{font-size:.85rem!important;padding:.7rem 1rem!important}
+}
 </style>
 </head>
 <body>
@@ -723,7 +731,7 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="split">
       <div class="reveal photo">
-        <img src="img/a08.jpg" alt="ברוך משה גלון עם בנו דוד">
+        <img loading="lazy" decoding="async" src="img/a08.jpg" alt="ברוך משה גלון עם בנו דוד">
         <div class="caption">ברוך משה גלון עם בנו דוד · אודסה, 1902</div>
       </div>
       <div class="reveal reveal-d2">
@@ -745,15 +753,15 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/a09.jpg" alt="ברטה גרידן ולאזר מרקוס · קוטרוביץ 1895">
+        <img loading="lazy" decoding="async" src="img/a09.jpg" alt="ברטה גרידן ולאזר מרקוס · קוטרוביץ 1895">
         <div class="caption">ברטה ולאזר מרקוס · 1895</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/a10.jpg" alt="ארנה מרקוס · 1899">
+        <img loading="lazy" decoding="async" src="img/a10.jpg" alt="ארנה מרקוס · 1899">
         <div class="caption">ארנה מרקוס בת שנה · 1899</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/b03.jpg" alt="ברטה מרקוס עם ילדיה · 1903">
+        <img loading="lazy" decoding="async" src="img/b03.jpg" alt="ברטה מרקוס עם ילדיה · 1903">
         <div class="caption">ברטה מרקוס עם בנותיה · 1903</div>
       </div>
     </div>
@@ -764,7 +772,7 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="split">
       <div class="reveal photo r">
-        <img src="img/b07.jpg" alt="ליבא גלון - לייפציג 1913">
+        <img loading="lazy" decoding="async" src="img/b07.jpg" alt="ליבא גלון - לייפציג 1913">
         <div class="caption">משפחת גלון בלייפציג, 1913</div>
       </div>
       <div class="reveal reveal-d2">
@@ -774,19 +782,19 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/b13.jpg" alt="דוד גלון 1922">
+        <img loading="lazy" decoding="async" src="img/b13.jpg" alt="דוד גלון 1922">
         <div class="caption">דוד גלון, 1922</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/b12.jpg" alt="ארנה ודוד גלון 1920-21">
+        <img loading="lazy" decoding="async" src="img/b12.jpg" alt="ארנה ודוד גלון 1920-21">
         <div class="caption">ארנה ודוד · 1920-1921</div>
       </div>
       <div class="reveal reveal-d3 photo r">
-        <img src="img/b14.jpg" alt="ארנה מרקוס 1923">
+        <img loading="lazy" decoding="async" src="img/b14.jpg" alt="ארנה מרקוס 1923">
         <div class="caption">ארנה מרקוס · פורטרט, 1923</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/b16.jpg" alt="אנה ברנר 1928">
+        <img loading="lazy" decoding="async" src="img/b16.jpg" alt="אנה ברנר 1928">
         <div class="caption">אנה נוימן לבית ברנר · 1928</div>
       </div>
     </div>
@@ -806,30 +814,30 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/b15.jpg" alt="ארנה עם אריה התינוק 1924">
+        <img loading="lazy" decoding="async" src="img/b15.jpg" alt="ארנה עם אריה התינוק 1924">
         <div class="caption">ארנה עם אריה התינוק · 1924</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/c01.jpg" alt="אריה בעגלת תינוק קטוביץ 1924">
+        <img loading="lazy" decoding="async" src="img/c01.jpg" alt="אריה בעגלת תינוק קטוביץ 1924">
         <div class="caption">אריה ברוך בן דוד · קטוביץ, 1924</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/c02.jpg" alt="עזרא ואריה תינוקות">
+        <img loading="lazy" decoding="async" src="img/c02.jpg" alt="עזרא ואריה תינוקות">
         <div class="caption">עזרא ואריה · 1925</div>
       </div>
       <div class="reveal photo r">
-        <img src="img/c03.jpg" alt="בית גלון בבאלסדורף">
+        <img loading="lazy" decoding="async" src="img/c03.jpg" alt="בית גלון בבאלסדורף">
         <div class="caption">בית משפחת גלון בבאלסדורף · 1926</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/c05.jpg" alt="אריה ועזרא בילדותם">
+        <img loading="lazy" decoding="async" src="img/c05.jpg" alt="אריה ועזרא בילדותם">
         <div class="caption">שני האחים, באלסדורף · 1927</div>
       </div>
     </div>
 
     <div class="split" style="margin-top:4rem">
       <div class="reveal photo">
-        <img src="img/c08.jpg" alt="כיתה בבית הספר העברי בלייפציג">
+        <img loading="lazy" decoding="async" src="img/c08.jpg" alt="כיתה בבית הספר העברי בלייפציג">
         <div class="caption">כיתה בבית הספר העברי בלייפציג · 1930</div>
       </div>
       <div class="reveal reveal-d2">
@@ -840,19 +848,19 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/c09.jpg" alt="אריה על הסוס 1929">
+        <img loading="lazy" decoding="async" src="img/c09.jpg" alt="אריה על הסוס 1929">
         <div class="caption">אריה על הסוס · 1929</div>
       </div>
       <div class="reveal reveal-d2 photo r">
-        <img src="img/c10.jpg" alt="אריה ועזרא בלייפציג 1931">
+        <img loading="lazy" decoding="async" src="img/c10.jpg" alt="אריה ועזרא בלייפציג 1931">
         <div class="caption">אריה ועזרא · גן העיר לייפציג, 1931</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/c11.jpg" alt="לייפציג 1930-1931">
+        <img loading="lazy" decoding="async" src="img/c11.jpg" alt="לייפציג 1930-1931">
         <div class="caption">לייפציג · רחבת המלך אוגוסטוס, 1931</div>
       </div>
       <div class="reveal photo">
-        <img src="img/c12.jpg" alt="ארנה וילדים על הסלד">
+        <img loading="lazy" decoding="async" src="img/c12.jpg" alt="ארנה וילדים על הסלד">
         <div class="caption">חופשה משפחתית · 1932</div>
       </div>
     </div>
@@ -861,12 +869,12 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
 <!-- FULL BLEED MOMENT -->
 <div class="fullbleed">
-  <img src="img/c13.jpg" alt="נופש משפחתי אחרון בגרמניה 1932">
+  <img loading="lazy" decoding="async" src="img/c13.jpg" alt="נופש משפחתי אחרון בגרמניה 1932">
   <div class="fullbleed-text">"נופש משפחתי אחרון בגרמניה · החוף הבלטי · אוגוסט 1932"</div>
 </div>
 
 <div class="fullbleed">
-  <img src="img/c14.jpg" alt="פסח אחרון בלייפציג 1933">
+  <img loading="lazy" decoding="async" src="img/c14.jpg" alt="פסח אחרון בלייפציג 1933">
   <div class="fullbleed-text">"אפריל 1933 - העולם הישן מתחיל להתפרק. ינואר היה החודש שבו עלה היטלר. עכשיו צריך להחליט."</div>
 </div>
 
@@ -894,7 +902,7 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="split">
       <div class="reveal photo">
-        <img src="img/c15.jpg" alt="ארנה ובניה - הגעה לתל אביב 1933">
+        <img loading="lazy" decoding="async" src="img/c15.jpg" alt="ארנה ובניה - הגעה לתל אביב 1933">
         <div class="caption">"אנו כאן בארצנו" · ארנה ובניה, תל אביב 1933</div>
       </div>
       <div class="reveal reveal-d2">
@@ -916,23 +924,23 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 
     <div class="gallery">
       <div class="reveal photo">
-        <img src="img/c16.jpg" alt="דוד גלון תל אביב 1934">
+        <img loading="lazy" decoding="async" src="img/c16.jpg" alt="דוד גלון תל אביב 1934">
         <div class="caption">דוד גלון · תל אביב, 2.7.1934</div>
       </div>
       <div class="reveal reveal-d2 photo">
-        <img src="img/c17.jpg" alt="חברי כיתה ת״א">
+        <img loading="lazy" decoding="async" src="img/c17.jpg" alt="חברי כיתה ת״א">
         <div class="caption">חברי כיתה · משפחת גולדנברג ובני הילדים, תל אביב 1937</div>
       </div>
       <div class="reveal reveal-d3 photo r">
-        <img src="img/c18.jpg" alt="אגודת הבריאות בית הפועל 1936">
+        <img loading="lazy" decoding="async" src="img/c18.jpg" alt="אגודת הבריאות בית הפועל 1936">
         <div class="caption">אגודת הבריאות, "בית הפועל" · יולי 1936</div>
       </div>
       <div class="reveal photo">
-        <img src="img/c19.jpg" alt="דוד גלון על אנייה לארה״ב 1936">
+        <img loading="lazy" decoding="async" src="img/c19.jpg" alt="דוד גלון על אנייה לארה״ב 1936">
         <div class="caption">דוד גלון על סיפון האנייה בדרך לארה"ב · 1936</div>
       </div>
       <div class="reveal reveal-d3 photo">
-        <img src="img/c20.jpg" alt="עזרא בכרם הפועל">
+        <img loading="lazy" decoding="async" src="img/c20.jpg" alt="עזרא בכרם הפועל">
         <div class="caption">עזרא בכרם המקצועי של בית הפועל · 1936</div>
       </div>
     </div>
@@ -1595,9 +1603,13 @@ const lbImg = document.getElementById('lightbox-img');
 const lbCap = document.getElementById('lightbox-cap');
 const lbStage = document.getElementById('lightbox-stage');
 const lbLbl = document.getElementById('lightbox-zoomlbl');
-const ZOOMS = [1, 2, 3];
+const ZOOM_STEPS = [1, 2, 3];
+const MIN_ZOOM = 1, MAX_ZOOM = 4;
+let curZoom = 1;
 let zIdx = 0;
 let baseW = 0, baseH = 0; // displayed size at zoom 1
+let didDrag = false;
+
 function computeBaseSize(){
   const nw = lbImg.naturalWidth, nh = lbImg.naturalHeight;
   if(!nw || !nh) return;
@@ -1606,73 +1618,114 @@ function computeBaseSize(){
   const r = Math.min(maxW/nw, maxH/nh, 1);
   baseW = nw * r; baseH = nh * r;
 }
-function applyZoom(){
+function applyZoom(z, recenter){
+  curZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, z));
   if(!baseW) computeBaseSize();
-  const z = ZOOMS[zIdx];
-  lbImg.style.width = (baseW * z)+'px';
-  lbImg.style.height = (baseH * z)+'px';
+  lbImg.style.width = (baseW * curZoom)+'px';
+  lbImg.style.height = (baseH * curZoom)+'px';
   lbImg.style.maxWidth = 'none';
   lbImg.style.maxHeight = 'none';
-  lbLbl.textContent = (z*100)+'%';
-  lbImg.style.cursor = z>1 ? 'grab' : (zIdx < ZOOMS.length-1 ? 'zoom-in' : 'zoom-out');
-  // Center scroll on the stage when zooming
-  requestAnimationFrame(()=>{
-    lbStage.scrollLeft = (lbStage.scrollWidth - lbStage.clientWidth)/2;
-    lbStage.scrollTop  = (lbStage.scrollHeight - lbStage.clientHeight)/2;
-  });
+  lbLbl.textContent = Math.round(curZoom*100)+'%';
+  lbImg.style.cursor = curZoom>1 ? 'grab' : 'zoom-in';
+  // Snap zIdx to nearest step so click-cycling stays predictable after pinch
+  zIdx = ZOOM_STEPS.reduce((best, val, i) =>
+    Math.abs(val - curZoom) < Math.abs(ZOOM_STEPS[best] - curZoom) ? i : best, 0);
+  if(recenter){
+    requestAnimationFrame(()=>{
+      lbStage.scrollLeft = (lbStage.scrollWidth - lbStage.clientWidth)/2;
+      lbStage.scrollTop  = (lbStage.scrollHeight - lbStage.clientHeight)/2;
+    });
+  }
 }
 function openLightbox(src, cap){
   baseW = 0; baseH = 0;
-  lbImg.onload = ()=>{ computeBaseSize(); applyZoom(); };
+  lbImg.onload = ()=>{ computeBaseSize(); applyZoom(1, true); };
   lbImg.src = src;
   lbCap.textContent = cap || '';
-  zIdx = 0;
+  zIdx = 0; curZoom = 1;
   lb.style.display = 'flex';
   document.body.style.overflow = 'hidden';
-  if(lbImg.complete && lbImg.naturalWidth){ computeBaseSize(); applyZoom(); }
+  if(lbImg.complete && lbImg.naturalWidth){ computeBaseSize(); applyZoom(1, true); }
 }
-// Click-drag to pan when zoomed
-let dragging = false, didDrag = false, sx=0, sy=0, slx=0, sly=0;
-lbImg.addEventListener('mousedown', e=>{
-  if(ZOOMS[zIdx] === 1) return;
-  dragging = true; didDrag = false;
-  sx = e.clientX; sy = e.clientY;
-  slx = lbStage.scrollLeft; sly = lbStage.scrollTop;
-  lbImg.style.cursor = 'grabbing';
+
+// Pointer Events: one unified handler for mouse, touch, and pen.
+// 1 active pointer + zoomed in  → pan
+// 2 active pointers             → pinch to zoom
+const pointers = new Map();
+let pinchStartDist = 0;
+let pinchStartZoom = 1;
+let pan = null;
+
+function midDist(){
+  const pts = [...pointers.values()];
+  return Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+}
+
+lbImg.addEventListener('pointerdown', e=>{
+  lbImg.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if(pointers.size === 2){
+    pinchStartDist = midDist();
+    pinchStartZoom = curZoom;
+    pan = null;
+  } else if(pointers.size === 1 && curZoom > 1){
+    pan = {x:e.clientX, y:e.clientY, slx:lbStage.scrollLeft, sly:lbStage.scrollTop};
+    lbImg.style.cursor = 'grabbing';
+  }
   e.preventDefault();
 });
-window.addEventListener('mousemove', e=>{
-  if(!dragging) return;
-  const dx = e.clientX - sx, dy = e.clientY - sy;
-  if(Math.abs(dx) > 3 || Math.abs(dy) > 3) didDrag = true;
-  lbStage.scrollLeft = slx - dx;
-  lbStage.scrollTop  = sly - dy;
+lbImg.addEventListener('pointermove', e=>{
+  if(!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if(pointers.size === 2 && pinchStartDist > 0){
+    const newZoom = pinchStartZoom * (midDist() / pinchStartDist);
+    applyZoom(newZoom, false);
+    didDrag = true;
+  } else if(pointers.size === 1 && pan){
+    const dx = e.clientX - pan.x, dy = e.clientY - pan.y;
+    if(Math.abs(dx) > 3 || Math.abs(dy) > 3) didDrag = true;
+    lbStage.scrollLeft = pan.slx - dx;
+    lbStage.scrollTop  = pan.sly - dy;
+  }
 });
-window.addEventListener('mouseup', ()=>{
-  if(dragging){ dragging = false; lbImg.style.cursor = ZOOMS[zIdx]>1 ? 'grab' : 'zoom-in'; }
-});
-// Suppress click that follows a drag
+function endPointer(e){
+  pointers.delete(e.pointerId);
+  if(pointers.size < 2) pinchStartDist = 0;
+  // If a finger lifted but one remains and we're zoomed in, transition into pan mode
+  if(pointers.size === 1 && curZoom > 1){
+    const remaining = [...pointers.values()][0];
+    pan = {x:remaining.x, y:remaining.y, slx:lbStage.scrollLeft, sly:lbStage.scrollTop};
+  }
+  if(pointers.size === 0){
+    pan = null;
+    lbImg.style.cursor = curZoom > 1 ? 'grab' : 'zoom-in';
+  }
+}
+lbImg.addEventListener('pointerup', endPointer);
+lbImg.addEventListener('pointercancel', endPointer);
+
+// Suppress click that follows a drag or pinch
 lbImg.addEventListener('click', e=>{ if(didDrag){ e.stopImmediatePropagation(); didDrag = false; } }, true);
-function closeLightbox(){ lb.style.display = 'none'; document.body.style.overflow = ''; }
+function closeLightbox(){ lb.style.display = 'none'; document.body.style.overflow = ''; pointers.clear(); pan = null; }
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
 document.getElementById('lightbox-zoomin').addEventListener('click', e=>{
-  e.stopPropagation(); if(zIdx < ZOOMS.length-1){ zIdx++; applyZoom(); }
+  e.stopPropagation(); if(zIdx < ZOOM_STEPS.length-1){ zIdx++; applyZoom(ZOOM_STEPS[zIdx], true); }
 });
 document.getElementById('lightbox-zoomout').addEventListener('click', e=>{
-  e.stopPropagation(); if(zIdx > 0){ zIdx--; applyZoom(); }
+  e.stopPropagation(); if(zIdx > 0){ zIdx--; applyZoom(ZOOM_STEPS[zIdx], true); }
 });
 lbImg.addEventListener('click', e=>{
   e.stopPropagation();
-  zIdx = (zIdx + 1) % ZOOMS.length;
-  applyZoom();
+  zIdx = (zIdx + 1) % ZOOM_STEPS.length;
+  applyZoom(ZOOM_STEPS[zIdx], true);
 });
 // Click on dark backdrop closes
 lb.addEventListener('click', e=>{ if(e.target === lb || e.target === lbStage) closeLightbox(); });
 document.addEventListener('keydown', e=>{
   if(lb.style.display !== 'flex') return;
   if(e.key==='Escape') closeLightbox();
-  else if(e.key==='+' || e.key==='=') { if(zIdx < ZOOMS.length-1){ zIdx++; applyZoom(); } }
-  else if(e.key==='-') { if(zIdx > 0){ zIdx--; applyZoom(); } }
+  else if(e.key==='+' || e.key==='=') { if(zIdx < ZOOM_STEPS.length-1){ zIdx++; applyZoom(ZOOM_STEPS[zIdx], true); } }
+  else if(e.key==='-') { if(zIdx > 0){ zIdx--; applyZoom(ZOOM_STEPS[zIdx], true); } }
 });
 
 // Add zoom button + click-to-zoom to all photo images and fullbleed
