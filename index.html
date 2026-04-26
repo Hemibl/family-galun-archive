@@ -4,6 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>מסע משפחת גלון · מאודסה אל תל אביב</title>
+<meta name="description" content="סיפור משפחת גלון - חמישה דורות, ארבע שפות, שלוש מולדות. מסע מאודסה (1875), דרך לייפציג ותל אביב, ועד מורשתו המדעית של פרופ' עזרא גלון.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hemibl.github.io/family-galun-archive/">
+<meta property="og:site_name" content="מסע משפחת גלון">
+<meta property="og:title" content="מסע משפחת גלון · מאודסה אל תל אביב">
+<meta property="og:description" content="סיפור של חמישה דורות, ארבע שפות, שלוש מולדות - ובית אחד שנבנה מחדש בכל פעם">
+<meta property="og:image" content="https://hemibl.github.io/family-galun-archive/img/a08.jpg">
+<meta property="og:image:alt" content="ברוך משה גלון עם בנו דוד · אודסה, 1902">
+<meta property="og:locale" content="he_IL">
+<meta property="og:locale:alternate" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="מסע משפחת גלון · מאודסה אל תל אביב">
+<meta name="twitter:description" content="סיפור של חמישה דורות, ארבע שפות, שלוש מולדות - ובית אחד שנבנה מחדש בכל פעם">
+<meta name="twitter:image" content="https://hemibl.github.io/family-galun-archive/img/a08.jpg">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231d1611'/%3E%3Ctext x='32' y='46' font-family='serif' font-size='42' font-weight='700' text-anchor='middle' fill='%23a07a3a'%3E%D7%92%3C/text%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -624,6 +643,23 @@ html[lang="en"] .dropcap::first-letter{
 }
 .lang-toggle:hover{background:var(--gold);color:var(--ink)}
 html[lang="en"] .lang-toggle{right:auto;left:1.2rem}
+
+.share-btn{
+  position:fixed;top:1.2rem;right:6.2rem;z-index:1000;
+  background:rgba(29,22,17,.85);color:var(--cream);
+  border:1px solid var(--gold);border-radius:30px;
+  padding:.5rem .9rem;font-family:'Heebo',sans-serif;font-size:.85rem;
+  cursor:pointer;letter-spacing:.05em;font-weight:500;
+  backdrop-filter:blur(8px);transition:all .2s;
+  display:inline-flex;align-items:center;gap:.4rem;
+}
+.share-btn:hover{background:var(--gold);color:var(--ink)}
+.share-btn svg{width:14px;height:14px;fill:currentColor;flex-shrink:0}
+html[lang="en"] .share-btn{right:auto;left:6.2rem}
+@media (max-width:480px){
+  .share-btn{padding:.5rem .7rem;right:5.5rem}
+  html[lang="en"] .share-btn{right:auto;left:5.5rem}
+}
 html[lang="en"]{direction:ltr}
 html[lang="en"] body{font-family:'Frank Ruhl Libre','Georgia',serif}
 html[lang="en"] .timeline::before{right:auto;left:50%;transform:translateX(-50%)}
@@ -646,6 +682,10 @@ html[lang="en"] .tree .gen-label{left:auto;right:1rem;writing-mode:vertical-lr}
 </head>
 <body>
 <button class="lang-toggle" id="langToggle" aria-label="Switch language">English</button>
+<button class="share-btn" id="shareBtn" aria-label="שתף את האתר">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+  <span id="shareBtnLabel">שתף</span>
+</button>
 
 <div class="tts-bar" id="ttsBar">
   <button id="ttsPause" title="השהה/המשך">⏸</button>
@@ -1352,9 +1392,28 @@ document.getElementById('langToggle').addEventListener('click', ()=>{
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
   document.getElementById('langToggle').textContent = lang === 'he' ? 'English' : 'עברית';
+  document.getElementById('shareBtnLabel').textContent = lang === 'he' ? 'שתף' : 'Share';
+  document.getElementById('shareBtn').setAttribute('aria-label', lang === 'he' ? 'שתף את האתר' : 'Share this site');
   translateBody(lang === 'en');
   // Refresh map popups in selected language
   if(window._galonRefreshMap) window._galonRefreshMap(lang);
+});
+
+document.getElementById('shareBtn').addEventListener('click', async ()=>{
+  const isEn = lang === 'en';
+  const data = {
+    title: isEn ? 'The Galun Family · From Odessa to Tel Aviv' : 'מסע משפחת גלון · מאודסה אל תל אביב',
+    text: isEn
+      ? 'A story of five generations, four languages, three homelands.'
+      : 'סיפור של חמישה דורות, ארבע שפות, שלוש מולדות.',
+    url: window.location.href
+  };
+  if(navigator.share){
+    try { await navigator.share(data); } catch(e) { /* user cancelled */ }
+  } else {
+    const wa = `https://wa.me/?text=${encodeURIComponent(data.text + '\n' + data.url)}`;
+    window.open(wa, '_blank', 'noopener');
+  }
 });
 
 const io = new IntersectionObserver((entries)=>{
